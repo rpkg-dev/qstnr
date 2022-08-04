@@ -1,0 +1,57 @@
+---
+editor_options:
+  chunk_output_type: console
+---
+
+# INTERNAL
+
+## Avoid `R CMD check` notes about undefined global objects used in magrittr pipes
+
+cf. <https://github.com/tidyverse/magrittr/issues/29#issuecomment-74313262>
+
+```{r}
+utils::globalVariables(names = c("."))
+```
+
+## Constants
+
+```{r}
+this_pkg <- utils::packageName()
+```
+
+### Value prototypes
+
+```{r}
+date <- as.Date(NULL)
+int <- integer()
+float <- numeric()
+string <- character()
+```
+
+### Value scales
+
+```{r}
+value_scales <- c("nominal",
+                  "binary",
+                  "ordinal_ascending",
+                  "ordinal_descending",
+                  "interval",
+                  "ratio")
+```
+
+# ...
+
+```{r}
+
+```
+
+# EXPORTED
+
+## `val_ptype`
+
+```{r}
+val_ptype <- function(type,
+                      size = NULL) {
+  # TODO
+}
+```
