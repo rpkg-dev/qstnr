@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://rpkg.dev/qstnr/qstnr-footnotes.schema.json",
+  "title": "qstnr item footnotes specification",
+  "description": "qstnr specification part: Markdown questionnaire item footnotes",
+  "type": "object",
+  "properties": {
+    "footnote": {
+      "description": "questionnaire item footnotes",
+      "type": "array",
+      "items": {
+        "description": "questionnaire item footnote definition",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "label that uniquely identifies the Markdown footnote; cf. https://pandoc.org/MANUAL.html#footnotes",
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "description": "footnote content in Markdown format",
+            "type": "object",
+            "patternProperties": {
+              "^[a-z]{2}$": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "minProperties": 1,
+            "additionalProperties": false
+          }
+        },
+        "required": ["id", "value"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["footnote"],
+  "additionalProperties": false
+}

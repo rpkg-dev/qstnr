@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://rpkg.dev/qstnr/qstnr-survey.schema.json",
+  "title": "qstnr survey configuration",
+  "description": "qstnr survey configuration defining the questionnaire items to be included",
+  "type": "object",
+  "properties": {
+    "qstnr": {
+      "description": "qstnr survey configuration container",
+      "type": "object",
+      "properties": {
+        "items": {
+          "description": "questionnaire items",
+          "type": "object",
+          "properties": {
+            "ids": {
+              "description": "questionnaire item IDs to include in survey",
+              "type": "object",
+              "patternProperties": {
+                "^[A-Za-z_][A-Za-z0-9_]*$": {
+                  "type": "array",
+                  "items": { "$ref": "https://rpkg.dev/qstnr/qstnr-item-id.schema.json" },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "minProperties": 1,
+              "additionalProperties": false
+            },
+            "source": { "$ref": "#/$defs/source" }
+          },
+          "required": ["ids", "source"],
+          "additionalProperties": false
+        },
+        "targets": {
+          "description": "questionnaire item targets",
+          "type": "object",
+          "properties": {
+            "source": { "$ref": "#/$defs/source" }
+          },
+          "required": ["source"],
+          "additionalProperties": false
+        },
+        "values": {
+          "description": "questionnaire item values",
+          "type": "object",
+          "properties": {
+            "source": { "$ref": "#/$defs/source" }
+          },
+          "required": ["source"],
+          "additionalProperties": false
+        },
+        "footnotes": {
+          "description": "questionnaire item footnotes",
+          "type": "object",
+          "properties": {
+            "source": { "$ref": "#/$defs/source" }
+          },
+          "required": ["source"],
+          "additionalProperties": false
+        },
+        "links": {
+          "description": "questionnaire item links",
+          "type": "object",
+          "properties": {
+            "source": { "$ref": "#/$defs/source" }
+          },
+          "required": ["source"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["items"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["qstnr"],
+  "additionalProperties": true,
+
+  "$defs": {
+    "source": {
+      "description": "qstnr specification part sources",
+      "type": "array",
+      "items": {
+        "description": "qstnr specification part source definition",
+        "type": "object",
+        "properties": {
+          "list": {
+            "description": "R expression yielding a TOML qstnr specification part as a list",
+            "type": "string",
+            "minLength": 1
+          },
+          "file": {
+            "description": "path to a TOML qstnr specification part file",
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "description": "URL to a TOML qstnr specification part file",
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1,
+        "maxProperties": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

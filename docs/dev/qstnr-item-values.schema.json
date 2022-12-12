@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://rpkg.dev/qstnr/qstnr-item-values.schema.json",
+  "title": "qstnr item values specification",
+  "description": "item values",
+  "oneOf": [
+    {
+      "type": "string",
+      "minLength": 1
+    },
+    {
+      "type": "object",
+      "properties": {
+        "int": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "patternProperties": {
+        "^[a-z]{2}$": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": ["int"],
+      "minProperties": 2,
+      "additionalProperties": false
+    }
+  ]
+}

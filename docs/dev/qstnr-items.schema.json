@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://rpkg.dev/qstnr/qstnr-items.schema.json",
+  "title": "qstnr items specification",
+  "description": "qstnr specification part: questionnaire items",
+  "type": "object",
+  "patternProperties": {
+    "^[A-Za-z_][A-Za-z0-9_]*$": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "https://rpkg.dev/qstnr/qstnr-item-id.schema.json" },
+        "name": {
+          "description": "item name",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
+        "description": {
+          "description": "item description",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
+        "question": {
+          "description": "item question",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
+        "values": { "$ref": "https://rpkg.dev/qstnr/qstnr-item-values.schema.json" },
+        "value_scale": { "$ref": "https://rpkg.dev/qstnr/qstnr-item-value_scale.schema.json" },
+        "value_ref": {
+          "description": "reference to a value definition identifier",
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+        },
+        "target": {
+          "description": "reference to a value definition identifier",
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+        },
+        "is_mandatory": {
+          "description": "whether answering the item is mandatory or can be skipped",
+          "type": "boolean",
+          "default": false
+        },
+        "allow_multiple_answers": {
+          "description": "whether multiple answer choices are allowed or the item is limited to a single answer choice",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "patternProperties": {
+        "^i[0-9]+$": {
+          "description": "iterator",
+          "oneOf": [
+            { "type": "array" },
+            { "type": "string", "minLength": 1 }
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {"values": {}, "value_scale": {}},
+          "required": ["values", "value_scale"]
+        },
+        {
+          "allOf": [
+            {
+              "properties": {"value_ref": {}},
+              "required": ["value_ref"]
+            },
+            {
+              "not": {
+                "properties": {"values": {}},
+                "required": ["values"]
+              }
+            },
+            {
+              "not": {
+                "properties": {"value_scale": {}},
+                "required": ["value_scale"]
+              }
+            }
+          ]
+        }
+      ],
+      "required": ["id", "name", "description", "target"],
+      "additionalProperties": false
+    }
+  },
+  "minProperties": 1,
+  "additionalProperties": false
+}

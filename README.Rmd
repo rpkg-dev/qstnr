@@ -4,20 +4,35 @@ output: pal::gitlab_document
 
 # `r paste0(pal::desc_value("Package"), ": ", pal::desc_value("Title"))`
 
+`r paste0('[![CRAN Status](https://r-pkg.org/badges/version/', pal::desc_value(key = "Package"), ')](https://cran.r-project.org/package=', pal::desc_value(key = "Package"), '){.pkgdown-release}')`
+
 `r pal::desc_value("Description")`
 
-```{r, pkgdown, eval = !isTRUE(getOption("pal.build_readme.is_pkgdown")), results = "asis", echo = FALSE}
+```{r}
+#| label: documentation
+#| eval: !expr '!isTRUE(getOption("pal.build_readme.is_pkgdown"))'
+#| results: asis
+#| echo: false
 pkgsnip::md_snip(name = "pkgdown_notice") %>%
-  paste0("## Documentation\n\n", .) %>%
+  paste0("## Documentation\n\n",
+         "[![Netlify Status](https://api.netlify.com/api/v1/badges/a774b842-fd8e-4794-a7db-5e76c28aea26/deploy-status)]",
+         "(https://app.netlify.com/sites/clinquant-melba-9c7eb3/deploys)\n\n",
+         .) %>%
   pal::cat_lines()
 ```
 
 ## Installation
 
-```{r, install-snippet-dev, child = pkgsnip::snip_path("installation-notice_dev-version_gitlab.Rmd")}
+```{r}
+#| label: install-snippet-dev
+#| child: !expr pkgsnip::snip_path("installation-notice_dev-version_gitlab.Rmd")
 ```
 
-```{r, usage, eval = isTRUE(getOption("pal.build_readme.is_pkgdown")), results = "asis", echo = FALSE}
+```{r}
+#| label: usage
+#| eval: !expr isTRUE(getOption("pal.build_readme.is_pkgdown"))
+#| results: asis
+#| echo: false
 pkgsnip::md_snip(name = "usage_notice") %>%
   paste0("## Usage\n\n", .) %>%
   pal::cat_lines()
@@ -27,14 +42,14 @@ pkgsnip::md_snip(name = "usage_notice") %>%
 
 ### R Markdown format
 
-```{r, rmd-pkg-snippet, child = pkgsnip::snip_path("rmd-package-notice.Rmd")}
+```{r}
+#| label: rmd-format
+#| child: !expr pkgsnip::snip_path("rmd-package-notice.Rmd")
 ```
 
 ### Coding style
 
-```{r, coding-style-snippet, child = pkgsnip::snip_path("coding-style-notice.Rmd")}
+```{r}
+#| label: coding-style
+#| child: !expr pkgsnip::snip_path("coding-style-notice.Rmd")
 ```
-
-## See also
-
-- ...
