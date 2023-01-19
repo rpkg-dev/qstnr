@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "https://rpkg.dev/qstnr/qstnr-targets.schema.json",
+  "id": "https://qstnr.rpkg.dev/dev/schemas/qstnr-targets.schema.json",
   "title": "qstnr targets specification",
   "description": "qstnr specification part: respondent target groups",
   "type": "object",
   "patternProperties": {
     "^[A-Za-z_][A-Za-z0-9_]*$": {
-      "description": "target group identifier",
+      "description": "target group definition",
       "type": "object",
       "properties": {
         "id": {
@@ -14,8 +14,8 @@
           "type": "string",
           "pattern": "^[A-Za-z_][A-Za-z0-9_.{}]*$"
         },
-        "value": {
-          "description": "target group value",
+        "name": {
+          "description": "target group name",
           "type": "object",
           "patternProperties": {
             "^[a-z]{2}$": {
@@ -66,7 +66,7 @@
           ]
         }
       },
-      "required": ["id", "value", "description", "filter"],
+      "required": ["id", "name", "description", "filter"],
       "additionalProperties": false
     }
   },

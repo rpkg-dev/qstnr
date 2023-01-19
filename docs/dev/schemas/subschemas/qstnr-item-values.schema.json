@@ -1,9 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "https://rpkg.dev/qstnr/qstnr-item-values.schema.json",
+  "id": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-values.schema.json",
   "title": "qstnr item values specification",
   "description": "item values",
   "oneOf": [
+    {
+      "type": "null"
+    },
     {
       "type": "string",
       "minLength": 1
@@ -16,7 +19,8 @@
           "items": { "type": "integer" },
           "minItems": 1,
           "uniqueItems": true
-        }
+        },
+        "targets": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-targets.schema.json" }
       },
       "patternProperties": {
         "^[a-z]{2}$": {

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "https://rpkg.dev/qstnr/qstnr-items.schema.json",
+  "id": "https://qstnr.rpkg.dev/dev/schemas/qstnr-items.schema.json",
   "title": "qstnr items specification",
   "description": "qstnr specification part: questionnaire items",
   "type": "object",
@@ -8,7 +8,7 @@
     "^[A-Za-z_][A-Za-z0-9_]*$": {
       "type": "object",
       "properties": {
-        "id": { "$ref": "https://rpkg.dev/qstnr/qstnr-item-id.schema.json" },
+        "id": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-id.schema.json" },
         "name": {
           "description": "item name",
           "type": "object",
@@ -33,6 +33,10 @@
           "minProperties": 1,
           "additionalProperties": false
         },
+        "question_block":  {
+          "description": "item question block",
+          "allOf": [{ "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-id_ref.schema.json" }]
+        },
         "question": {
           "description": "item question",
           "type": "object",
@@ -45,18 +49,16 @@
           "minProperties": 1,
           "additionalProperties": false
         },
-        "values": { "$ref": "https://rpkg.dev/qstnr/qstnr-item-values.schema.json" },
-        "value_scale": { "$ref": "https://rpkg.dev/qstnr/qstnr-item-value_scale.schema.json" },
-        "value_ref": {
-          "description": "reference to a value definition identifier",
-          "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+        "values": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-values.schema.json" },
+        "value_scale": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-value_scale.schema.json" },
+        "value_sets": {
+          "description": "reference(s) to value set identifier(s)",
+          "oneOf": [
+            { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-id_ref.schema.json" },
+            { "type": "array", "items": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-id_ref.schema.json" }, "minItems": 1, "uniqueItems": true }
+          ]
         },
-        "target": {
-          "description": "reference to a value definition identifier",
-          "type": "string",
-          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
-        },
+        "targets": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-targets.schema.json" },
         "is_mandatory": {
           "description": "whether answering the item is mandatory or can be skipped",
           "type": "boolean",
@@ -66,44 +68,26 @@
           "description": "whether multiple answer choices are allowed or the item is limited to a single answer choice",
           "type": "boolean",
           "default": false
+        },
+        "remarks": {
+          "description": "additional remarks about the item",
+          "type": "string"
         }
       },
       "patternProperties": {
         "^i[0-9]+$": {
           "description": "iterator",
           "oneOf": [
-            { "type": "array" },
+            { "type": "array", "minItems": 1, "uniqueItems": true },
             { "type": "string", "minLength": 1 }
           ]
         }
       },
-      "oneOf": [
-        {
-          "properties": {"values": {}, "value_scale": {}},
-          "required": ["values", "value_scale"]
-        },
-        {
-          "allOf": [
-            {
-              "properties": {"value_ref": {}},
-              "required": ["value_ref"]
-            },
-            {
-              "not": {
-                "properties": {"values": {}},
-                "required": ["values"]
-              }
-            },
-            {
-              "not": {
-                "properties": {"value_scale": {}},
-                "required": ["value_scale"]
-              }
-            }
-          ]
-        }
-      ],
-      "required": ["id", "name", "description", "target"],
+      "dependencies": {
+        "values": ["value_scale"],
+        "value_scale": ["values"]
+      },
+      "required": ["id", "name", "description", "targets"],
       "additionalProperties": false
     }
   },
