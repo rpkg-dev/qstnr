@@ -28,7 +28,7 @@ NOTES:
 fs::dir_create("inst/asciicasts")
 tmp_file <- fs::file_temp(ext = "R")
 
-c('SOME_R_CODE_TO_CAST() %>%
+c('SOME_R_CODE_TO_CAST()') %>%
   readr::write_lines(file = tmp_file)
 
 asciicast::record(script = tmp_file,
