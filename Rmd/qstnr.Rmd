@@ -3,6 +3,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+# NOTES
+
+-   While the qstnr format is supposed to be written in the TOML file format, its schemas are written in the [JSON Schema](https://json-schema.org/) format.
+
+    qstnr validates its TOML files using `pal::toml_validate()` which relies on the external [Taplo CLI](https://taplo.tamasfe.dev/cli/introduction.html)[\^2],
+    which is available as a standalone binary for all common platforms [from here](https://github.com/tamasfe/taplo/releases/latest). Taplo allows to define the
+    schema to be used directly in the TOML file using the [`schema` header
+    directive](https://taplo.tamasfe.dev/configuration/directives.html#the-schema-directive).
+
 # INTERNAL
 
 ## Avoid `R CMD check` notes about undefined global objects used in magrittr pipes
