@@ -1,0 +1,8 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-id.schema.json",
+  "title": "qstnr item identifier specification",
+  "description": "item identifier",
+  "type": "string",
+  "pattern": "^[A-Za-z_.][A-Za-z0-9_.]*$"
+}

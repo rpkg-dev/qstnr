@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://qstnr.rpkg.dev/dev/schemas/qstnr-targets.schema.json",
+  "title": "qstnr targets specification",
+  "description": "qstnr specification part: respondent target groups",
+  "type": "object",
+  "patternProperties": {
+    "^[A-Za-z_][A-Za-z0-9_]*$": {
+      "description": "target group definition",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "target group identifier",
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_.{}]*$"
+        },
+        "name": {
+          "description": "target group name",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
+        "description": {
+          "description": "target group description",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
+        "filter": {
+          "description": "target group `dplyr::filter()` expressions",
+          "type": "object",
+          "properties": {
+            "positive": {
+              "description": "`dplyr::filter()` R expression including target group only",
+              "type": "string",
+              "minLength": 1
+            },
+            "negative": {
+              "description": "`dplyr::filter()` R expression excluding target group only",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        }
+      },
+      "patternProperties": {
+        "^i[0-9]+$": {
+          "description": "iterator",
+          "oneOf": [
+            { "type": "array", "minItems": 1, "uniqueItems": true },
+            { "type": "string", "minLength": 1 }
+          ]
+        }
+      },
+      "required": ["id", "name", "description", "filter"],
+      "additionalProperties": false
+    }
+  },
+  "minProperties": 1,
+  "additionalProperties": false
+}

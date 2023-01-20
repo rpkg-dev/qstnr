@@ -1,0 +1,8 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-value_scale.schema.json",
+  "title": "qstnr item value scale specification",
+  "description": "item value scale",
+  "type": "string",
+  "enum": ["none", "nominal", "ordinal_ascending", "ordinal_descending", "interval", "ratio"]
+}

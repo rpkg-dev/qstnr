@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://qstnr.rpkg.dev/dev/schemas/qstnr-value_sets.schema.json",
+  "title": "qstnr item value sets specification",
+  "description": "qstnr specification part: questionnaire item value sets",
+  "type": "object",
+  "patternProperties": {
+    "^[A-Za-z_][A-Za-z0-9_]*$": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "value set identifier",
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9_.{}]*$"
+        },
+        "values": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-values.schema.json" },
+        "value_scale": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-value_scale.schema.json" }
+      },
+      "required": ["id", "values", "value_scale"],
+      "additionalProperties": false
+    }
+  },
+  "minProperties": 1,
+  "additionalProperties": false
+}
