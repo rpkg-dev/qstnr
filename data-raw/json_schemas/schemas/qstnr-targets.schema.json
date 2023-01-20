@@ -9,6 +9,12 @@
       "description": "target group definition",
       "type": "object",
       "properties": {
+        "iterators": {
+          "description": "target iterator(s)",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true
+        },
         "id": {
           "description": "target group identifier",
           "type": "string",
@@ -55,15 +61,6 @@
           },
           "minProperties": 1,
           "additionalProperties": false
-        }
-      },
-      "patternProperties": {
-        "^i[0-9]+$": {
-          "description": "iterator",
-          "oneOf": [
-            { "type": "array", "minItems": 1, "uniqueItems": true },
-            { "type": "string", "minLength": 1 }
-          ]
         }
       },
       "required": ["id", "name", "description", "filter"],

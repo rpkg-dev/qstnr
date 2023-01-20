@@ -52,6 +52,8 @@
 <li>all <code>values</code> subkeys are of the same length (JSON Schema unfortunately <a href="https://stackoverflow.com/questions/54973793/check-that-two-arrays-in-json-have-the-same-size" class="external-link">doesn’t provide any means to do such validation</a>).</li>
 <li>if <code>values</code> and <code>value_sets</code> are provided, the latter contains <code>"values"</code> (we can’t do that in the schema since the <a href="https://json-schema.org/understanding-json-schema/reference/array.html?highlight=contains#contains" class="external-link"><code>contains</code> keyword</a> was only added with draft 6).</li>
 <li>all items in the same <code>question_block</code> have the same <code>value_set</code> (we could also allow differing sets, but is that actually a use case?)</li>
+<li>
+<code>iterators</code> (an array of iterators) are sensible</li>
 </ul></li>
 <li>
 <p>write up general questionnaire principles</p>

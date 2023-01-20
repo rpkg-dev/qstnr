@@ -9,6 +9,7 @@
     -   if `values` and `value_sets` are provided, the latter contains `"values"` (we can't do that in the schema since the [`contains`
         keyword](https://json-schema.org/understanding-json-schema/reference/array.html?highlight=contains#contains) was only added with draft 6).
     -   all items in the same `question_block` have the same `value_set` (we could also allow differing sets, but is that actually a use case?)
+    -   `iterators` (an array of iterators) are sensible
 
 -   write up general questionnaire principles
 

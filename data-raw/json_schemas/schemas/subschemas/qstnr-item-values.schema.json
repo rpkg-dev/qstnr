@@ -3,39 +3,28 @@
   "id": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-values.schema.json",
   "title": "qstnr item values specification",
   "description": "item values",
-  "oneOf": [
-    {
-      "type": "null"
+  "type": "object",
+  "properties": {
+    "int": {
+      "type": "array",
+      "items": { "type": "integer" },
+      "minItems": 1,
+      "uniqueItems": true
     },
-    {
-      "type": "string",
-      "minLength": 1
-    },
-    {
-      "type": "object",
-      "properties": {
-        "int": {
-          "type": "array",
-          "items": { "type": "integer" },
-          "minItems": 1,
-          "uniqueItems": true
-        },
-        "targets": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-targets.schema.json" }
+    "targets": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-targets.schema.json" }
+  },
+  "patternProperties": {
+    "^[a-z]{2}$": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
       },
-      "patternProperties": {
-        "^[a-z]{2}$": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "minItems": 1,
-          "uniqueItems": true
-        }
-      },
-      "required": ["int"],
-      "minProperties": 2,
-      "additionalProperties": false
+      "minItems": 1,
+      "uniqueItems": true
     }
-  ]
+  },
+  "required": ["int"],
+  "minProperties": 2,
+  "additionalProperties": false
 }
