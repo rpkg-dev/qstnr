@@ -4,5 +4,5 @@
   "title": "qstnr item value scale specification",
   "description": "item value scale",
   "type": "string",
-  "enum": ["nominal", "ordinal_ascending", "ordinal_descending", "interval", "ratio"]
+  "enum": ["none", "nominal", "ordinal_ascending", "ordinal_descending", "interval", "ratio"]
 }
