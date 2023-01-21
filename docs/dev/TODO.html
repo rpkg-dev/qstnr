@@ -62,7 +62,7 @@
 </ul></li>
 <li>schema restrictions, rules etc.
 <ul><li>allowed characters for footnote <code>id</code>s are based on the MDN recommendations found in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" class="external-link"><code>id</code> attribute article</a> (starting with numbers is allowed since the markdown processors usually prepend the <code>id</code>s with a string like <code>fn-</code> anyways)</li>
-<li>allowed characters for link <code>id</code>s (“labels” in Pandoc terminology): because <a href="https://pandoc.org/MANUAL.html#reference-links" class="external-link">“link labels are not case sensitive”</a>, only lowercase letters are allowed; <code>@</code> is forbidden to prevent clashes with citation keys (which take parsing precedence)</li>
+<li>allowed characters for link <code>id</code>s (“labels” in Pandoc terminology): <code>@</code> is forbidden to prevent clashes with citation keys (which take parsing precedence)</li>
 <li>iterators defined via the <code>i</code> array are referrable in inline R code by appending the iterator index (starting by <code>1</code> as it is the convention for vectors in R), i.e. the first iterator is <code>i1</code>, the second <code>i2</code> etc.</li>
 </ul></li>
 </ul></li>

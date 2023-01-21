@@ -19,9 +19,8 @@
         -   allowed characters for footnote `id`s are based on the MDN recommendations found in the [`id` attribute
             article](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id) (starting with numbers is allowed since the markdown processors
             usually prepend the `id`s with a string like `fn-` anyways)
-        -   allowed characters for link `id`s ("labels" in Pandoc terminology): because ["link labels are not case
-            sensitive"](https://pandoc.org/MANUAL.html#reference-links), only lowercase letters are allowed; `@` is forbidden to prevent clashes with citation
-            keys (which take parsing precedence)
+        -   allowed characters for link `id`s ("labels" in Pandoc terminology): `@` is forbidden to prevent clashes with citation keys (which take parsing
+            precedence)
         -   iterators defined via the `i` array are referrable in inline R code by appending the iterator index (starting by `1` as it is the convention for
             vectors in R), i.e. the first iterator is `i1`, the second `i2` etc.
 
