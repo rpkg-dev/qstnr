@@ -82,8 +82,7 @@
         }
       },
       "dependencies": {
-        "values": ["value_scale"],
-        "value_scale": ["values"]
+        "values": ["value_scale"]
       },
       "required": ["id", "name", "description", "targets"],
       "additionalProperties": false

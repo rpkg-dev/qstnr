@@ -49,3 +49,7 @@
 -   implement "`value_scale` inference" for `value_scale` arrays (error in case of contradicting info, e.g. asc vs. desc values sets)
 
 -   implement some kind of sentinel (like `free_text:`) to signify free text fields? (label would follow)
+
+-   should we introduce another item key `values_ptype` (or the like) to specify what we first wanted via `values = "{ val_ptype(type = date, size = 1L) }"`
+    (which the schema doesn't allow anymore)? or come up with a better/proper syntax for value *validation*, depending on ptype (to e.g. ensure a date lies in
+    between a specific range), i.e. maybe directly use checkmate?
