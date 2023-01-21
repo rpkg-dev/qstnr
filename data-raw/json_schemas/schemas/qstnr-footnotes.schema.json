@@ -5,7 +5,7 @@
   "description": "qstnr specification part: Markdown reference-style footnotes",
   "type": "object",
   "patternProperties": {
-    "^[A-Za-z_][A-Za-z0-9_]*$": {
+    "^[A-Za-z0-9_-]+$": {
       "description": "questionnaire footnote definition",
       "type": "object",
       "properties": {

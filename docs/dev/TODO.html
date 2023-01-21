@@ -56,8 +56,13 @@
 <code>iterators</code> (an array of iterators) are sensible</li>
 </ul></li>
 <li>
-<p>write up general questionnaire principles</p>
+<p>write documentation</p>
+<ul><li>general questionnaire principles
 <ul><li>all vars that have translatable values <em>must</em> also have <code>values.int</code> defined (in order for <code>as_int_vals</code> target filters to work)</li>
+</ul></li>
+<li>schema restrictions
+<ul><li>allowed chracters for footnote <code>id</code>s are based on the MDN recommendations found in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" class="external-link"><code>id</code> attribute article</a> (starting with numbers is allowed since the markdown processors usually prepend the <code>id</code>s with a string like <code>fn-</code> anyways)</li>
+</ul></li>
 </ul></li>
 <li>
 <p>publish stable release</p>
