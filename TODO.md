@@ -16,9 +16,12 @@
     -   general questionnaire principles
         -   all vars that have translatable values *must* also have `values.int` defined (in order for `as_int_vals` target filters to work)
     -   schema restrictions
-        -   allowed chracters for footnote `id`s are based on the MDN recommendations found in the [`id` attribute
+        -   allowed characters for footnote `id`s are based on the MDN recommendations found in the [`id` attribute
             article](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id) (starting with numbers is allowed since the markdown processors
             usually prepend the `id`s with a string like `fn-` anyways)
+        -   allowed characters for link `id`s ("labels" in Pandoc terminology): because ["link labels are not case
+            sensitive"](https://pandoc.org/MANUAL.html#reference-links), only lowercase letters are allowed; `@` is forbidden to prevent clashes with citation
+            keys (which take parsing precedence)
 
 -   publish stable release
 

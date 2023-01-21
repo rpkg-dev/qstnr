@@ -5,7 +5,7 @@
   "description": "qstnr specification part: Markdown reference-style links",
   "type": "object",
   "patternProperties": {
-    "^[A-Za-z_][A-Za-z0-9_]*$": {
+    "^[^@]+$": {
       "description": "questionnaire item link definition",
       "type": "object",
       "properties": {

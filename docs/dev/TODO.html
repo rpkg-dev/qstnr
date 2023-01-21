@@ -61,7 +61,8 @@
 <ul><li>all vars that have translatable values <em>must</em> also have <code>values.int</code> defined (in order for <code>as_int_vals</code> target filters to work)</li>
 </ul></li>
 <li>schema restrictions
-<ul><li>allowed chracters for footnote <code>id</code>s are based on the MDN recommendations found in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" class="external-link"><code>id</code> attribute article</a> (starting with numbers is allowed since the markdown processors usually prepend the <code>id</code>s with a string like <code>fn-</code> anyways)</li>
+<ul><li>allowed characters for footnote <code>id</code>s are based on the MDN recommendations found in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id" class="external-link"><code>id</code> attribute article</a> (starting with numbers is allowed since the markdown processors usually prepend the <code>id</code>s with a string like <code>fn-</code> anyways)</li>
+<li>allowed characters for link <code>id</code>s (“labels” in Pandoc terminology): because <a href="https://pandoc.org/MANUAL.html#reference-links" class="external-link">“link labels are not case sensitive”</a>, only lowercase letters are allowed; <code>@</code> is forbidden to prevent clashes with citation keys (which take parsing precedence)</li>
 </ul></li>
 </ul></li>
 <li>
