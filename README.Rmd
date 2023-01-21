@@ -16,7 +16,7 @@ output: pal::gitlab_document
 pkgsnip::md_snip(name = "pkgdown_notice") %>%
   paste0("## Documentation\n\n",
          "[![Netlify Status](https://api.netlify.com/api/v1/badges/a774b842-fd8e-4794-a7db-5e76c28aea26/deploy-status)]",
-         "(https://app.netlify.com/sites/clinquant-melba-9c7eb3/deploys)\n\n",
+         "(https://app.netlify.com/sites/qstnr-rpkg-dev/deploys)\n\n",
          .) %>%
   pal::cat_lines()
 ```
