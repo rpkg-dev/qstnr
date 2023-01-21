@@ -11,9 +11,14 @@
     -   all items in the same `question_block` have the same `value_set` (we could also allow differing sets, but is that actually a use case?)
     -   `iterators` (an array of iterators) are sensible
 
--   write up general questionnaire principles
+-   write documentation
 
-    -   all vars that have translatable values *must* also have `values.int` defined (in order for `as_int_vals` target filters to work)
+    -   general questionnaire principles
+        -   all vars that have translatable values *must* also have `values.int` defined (in order for `as_int_vals` target filters to work)
+    -   schema restrictions
+        -   allowed chracters for footnote `id`s are based on the MDN recommendations found in the [`id` attribute
+            article](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id) (starting with numbers is allowed since the markdown processors
+            usually prepend the `id`s with a string like `fn-` anyways)
 
 -   publish stable release
 
