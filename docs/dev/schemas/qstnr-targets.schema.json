@@ -9,7 +9,7 @@
       "description": "target group definition",
       "type": "object",
       "properties": {
-        "iterators": {
+        "i": {
           "description": "target iterator(s)",
           "type": "array",
           "minItems": 1,
