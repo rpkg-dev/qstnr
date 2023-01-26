@@ -2,7 +2,7 @@
 # See `README.md#r-markdown-format` for more information on the literate programming approach used applying the R Markdown format.
 
 # qstnr: Helps Creating and Maintaining Survey Questionnaires
-# Copyright (C) 2022 Salim Brüggemann
+# Copyright (C) 2023 Salim Brüggemann
 # 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free
 # Software Foundation, either version 3 of the License, or any later version.
@@ -16,10 +16,26 @@ utils::globalVariables(names = c("."))
 
 this_pkg <- utils::packageName()
 
-date <- as.Date(NULL)
-int <- integer()
-float <- numeric()
-string <- character()
+all_spec_parts <- c("links",
+                    "footnotes",
+                    "value_sets",
+                    "targets",
+                    "question_blocks",
+                    "items")
+
+source_spec <- list("[[{.strong source}]]" = list("{.strong list},{.strong file},{.strong url} = {.emph EXPR},{.emph PATH},{.emph URL}"))
+
+qstnr_spec_scheme <- list("{.strong qstnr}" = list(
+  "{.strong items}" = c(source_spec,
+                        list("{.strong ids}" = list("{.strong {'<questionnaire_block>'}} = [ {.emph id_1}, {.emph id_2}, {.emph ...} ]"))),
+  "{.strong question_blocks}" = source_spec,
+  "{.strong value_sets}" = source_spec,
+  "{.strong targets}" = source_spec,
+  "{.strong footnotes}" = source_spec,
+  "{.strong links}" = source_spec
+))
+
+rm(source_spec)
 
 value_scales <- c("nominal",
                   "binary",
@@ -28,9 +44,168 @@ value_scales <- c("nominal",
                   "interval",
                   "ratio")
 
+date <- as.Date(NULL)
+int <- integer()
+float <- numeric()
+string <- character()
 
+gen_qstnr <- function(spec) {
+  
+  # read in and validate spec
+  spec <- spec_validate(spec)$qstnr
+  
+  # materialize spec
+  spec_parts <- list()
+  
+  for (spec_part in intersect(all_spec_parts,
+                              names(spec))) {
+    
+    spec_parts[[spec_part]] <-
+      spec %>%
+      purrr::chuck(spec_part, "source") %>%
+      purrr::map(~ {
+        
+        src_type <- names(.x)
+        
+        switch(EXPR = src_type,
+               "list" = eval(parse(text = .x[[src_type]])),
+               "file" = pal::toml_read(path = glue::glue(.x[[src_type]])),
+               cli::cli_abort("Invalid {.field qstnr.items.source} type {.val {src_type}} detected."))
+      }) %>%
+      purrr::reduce(.f = ~ purrr::list_modify(.x,
+                                              !!!.y))
+  }
+  
+  # generate questionnaire from spec
+  
+  # validate spec parts
+  
+}
+
+init_config <- function(source = NULL,
+                        type = all_spec_parts,
+                        incl_defaults = TRUE) {
+  
+  type <- rlang::arg_match(type)
+  checkmate::assert_flag(incl_defaults)
+  
+  opt_name <- paste0("qstnr.", type)
+  result <- getOption(opt_name)
+  
+  if (is.null(result)) {
+    
+    result <- purrr::map(source,
+                         pal::toml_read)
+    
+    if (incl_defaults) {
+      result %<>% c(defaults[[type]])
+    }
+    
+    # TODO!
+    result %<>% purrr::reduce(.f = purrr::list_modify,
+                              .init = list())
+    do.call(what = options,
+            args = as.list(setNames(object = result,
+                                    nm = opt_name)))
+  }
+  
+  invisible(result)
+}
+
+interpolate <- function(x,
+                        key,
+                        ...) {
+
+  # assign objects in dots to current env ensuring glue/cli fns respect them
+  rlang::env_bind(.env = rlang::current_env(),
+                  ...)
+
+  if (key %in% item_keys$key[item_keys$is_scalar]) {
+
+    result <- cli::pluralize(x,
+                             .null = NA_character_,
+                             .trim = FALSE)
+  } else {
+
+    result <-
+      x %>%
+      purrr::map(.f = glue::glue,
+                 .envir = rlang::current_env(),
+                 .null = NA_character_,
+                 .trim = FALSE) %>%
+      unlist()
+  }
+
+  result
+}
+
+#' Convert question values to codes
+#'
+#' Converts character question values to their integer code counterparts. The latter are useful because they're language independent.
+#'
+#' @param var Variable holding the question values. A character vector with an `id` and `lang` attribute.
+#' @param qstnr TODO
+#'
+#' @return An integer vector of the same length as `var`.
+#' @export
+as_int_vals <- function(var,
+                        qstnr = pal::pkg_config_val(key = "cur_qstnr",
+                                                    pkg = this_pkg)) {
+  var_id <- attr(x = var,
+                 which = "id",
+                 exact = TRUE)
+  
+  var_lang <- attr(x = var,
+                   which = "lang",
+                   exact = TRUE)
+  
+  purrr::walk(c(var_id,
+                var_lang),
+              ~ if (is.null(.x)) {
+                cli::cli_abort("{.arg var} has no {.var .x} attribute set.")
+              })
+  
+  val_name <- glue::glue("value.{var_lang}")
+  lookup <- qstnr %>% dplyr::filter(id == !!var_id & !!as.symbol(val_name) %in% var)
+  checkmate::assert_subset(var,
+                           choices = lookup[[val_name]])
+  
+  result <- lookup$value.int[match(var, lookup[[val_name]])]
+  attr(result, "id") <- var_id
+  result
+}
+
+init_survey <- function(path) {
+  
+  spec <- pal::toml_read(path = path)
+  
+  # ensure mandatory keys are present
+  ## item IDs
+  if (is.null(spec$items$ids)) {
+    cli::cli_abort("{.field items.ids} must be set to an array of valid questionnaire item IDs.")
+  }
+  
+  # init config parts
+  purrr::walk(all_spec_parts,
+              ~ init_config(source = spec[[.x]]$source,
+                            type = .x,
+                            incl_defaults = !isFALSE(spec[[.x]]$incl_defaults)))
+  
+}
+
+gen_tibble <- function(spec) {
+  
+  
+}
 
 val_ptype <- function(type,
-                      size) {
+                      size = NULL) {
   # TODO
+}
+
+vals <- function(id) {
+  
+  init_config(type = "values")
+  
+  getOption("qstnr.values")[[id]]
 }

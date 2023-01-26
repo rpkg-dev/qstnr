@@ -1,0 +1,13 @@
+key,components,description,is_scalar,has_lang_subkeys,type,default,remarks
+i,"items,targets",iterator; used to succinctly define multiple similar items ,FALSE,FALSE,list,,"individual iterators of the `i` array are referrable by their indexed variable counterparts `i1`, `i2`, etc.; iterators are hierarchical with `i1` being at the top (""for every `i1` do {for every `i2` do {...}}""); an arbitrary number of iterators can be used"
+id,items,item identifier,TRUE,FALSE,character,,must be unique
+name,items,item name,TRUE,TRUE,character,,
+description,items,item description,TRUE,TRUE,character,,
+question_block,items,item question block,TRUE,FALSE,character,,
+question,items,item question,TRUE,TRUE,character,,
+values,"items,values",item values,FALSE,TRUE,character,,"besides the language subkeys, an `.int` subkey must be provided holding *integer* value codes; an optional `.targets` subkey holds the values' individual target respondent group `id`s "
+value_scale,"items,values","item's [scale of measure (aka ""level of measurement"")](https://en.wikipedia.org/wiki/Level_of_measurement)",TRUE,FALSE,character,,
+value_sets,items,item value set(s),FALSE,FALSE,character,"""values""",
+targets,items,item's target respondent group(s),FALSE,FALSE,character,,
+is_mandatory,items,whether answering the item is mandatory or can be skipped,TRUE,FALSE,logical,FALSE,
+allow_multiple_answers,items,whether or not giving multiple answers to the item's question is allowed,TRUE,FALSE,logical,FALSE,

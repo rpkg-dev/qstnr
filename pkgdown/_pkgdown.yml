@@ -17,3 +17,5 @@ template:
       card: summary
       creator: '@2BSalim'
 url: https://qstnr.rpkg.dev
+reference:
+- contents: as_int_vals

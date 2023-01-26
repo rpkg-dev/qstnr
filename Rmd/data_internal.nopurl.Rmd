@@ -19,10 +19,49 @@ NOTES:
     mentioned](https://coolbutuseless.github.io/2018/12/10/r-packages-internal-and-external-data/) in the book [R
     Packages](https://r-pkgs.org/data.html#data-data).
 
-## `SOME_DATASET`
+## `defaults`
+
+TODO:
+
+-   Create `question_blocks.toml` with sensible sample data (a block "demographics" etc.).
 
 ```{r}
-SOME_DATASET <- SOME_R_CODE()
+defaults                 <- list()
+defaults$items           <- pal::toml_read(input = "data-raw/default_config/items.toml")
+# defaults$question_blocks <- pal::toml_read(input = "data-raw/default_config/question_blocks.toml")
+defaults$value_sets      <- pal::toml_read(input = "data-raw/default_config/value_sets.toml")
+defaults$targets         <- pal::toml_read(input = "data-raw/default_config/targets.toml")
+defaults$footnotes       <- pal::toml_read(input = "data-raw/default_config/footnotes.toml")
+defaults$links           <- pal::toml_read(input = "data-raw/default_config/links.toml")
+```
+
+## `item_keys`
+
+Supported qstnr specification part keys.
+
+TODO:
+
+-   Extract as much of info as possible from the JSON Schemas!
+
+```{r}
+item_keys <-
+  readr::read_csv(file = "data-raw/item_keys.csv",
+                  na = "",
+                  col_types = "cccllccc") %>%
+  dplyr::mutate(components = stringr::str_split(string = components,
+                                                pattern = ","),
+                default_val = purrr::map2(.x = default,
+                                          .y = type,
+                                          .f = ~ {
+                                            if (is.na(.x)) {
+                                              eval(parse(text = glue::glue("{.y}()")))
+                                            } else {
+                                              eval(parse(text = .x))
+                                            }
+                                          }),
+                has_default = purrr::map_lgl(default_val,
+                                             length)) %>%
+  dplyr::select(-default)
 ```
 
 # Write data
@@ -31,7 +70,8 @@ Save all the small data objects as a single internal file `R/sysdata.rda`. Note 
 to package users.
 
 ```{r}
-usethis::use_data(SOME_DATASET,
+usethis::use_data(defaults,
+                  item_keys,
                   internal = TRUE,
                   overwrite = TRUE,
                   compress = "xz",

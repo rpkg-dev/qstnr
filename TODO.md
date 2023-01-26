@@ -1,5 +1,7 @@
 # TODOs
 
+-   move most of default config to pkg fokus
+
 -   during qstnr assembly, ensure that
 
     -   `targets` doesn't include anything else if `"none"` is present.

@@ -13,12 +13,12 @@
     <loc>https://qstnr.rpkg.dev/dev/index.html</loc>
   </url>
   <url>
+    <loc>https://qstnr.rpkg.dev/dev/reference/as_int_vals.html</loc>
+  </url>
+  <url>
     <loc>https://qstnr.rpkg.dev/dev/reference/index.html</loc>
   </url>
   <url>
     <loc>https://qstnr.rpkg.dev/dev/reference/qstnr-package.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/spec_part_validate.html</loc>
   </url>
 </urlset>

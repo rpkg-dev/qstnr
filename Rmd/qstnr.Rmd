@@ -5,12 +5,31 @@ editor_options:
 
 # NOTES
 
+## qstnr format
+
 -   While the qstnr format is supposed to be written in the TOML file format, its schemas are written in the [JSON Schema](https://json-schema.org/) format.
 
     qstnr validates its TOML files using `pal::toml_validate()` which relies on the external [Taplo CLI](https://taplo.tamasfe.dev/cli/introduction.html)[\^2],
     which is available as a standalone binary for all common platforms [from here](https://github.com/tamasfe/taplo/releases/latest). Taplo allows to define the
     schema to be used directly in the TOML file using the [`schema` header
     directive](https://taplo.tamasfe.dev/configuration/directives.html#the-schema-directive).
+
+## LimeSurvey R clients
+
+Relevant R packages:
+
+-   [LimeRick](https://github.com/kalimu/LimeRick) (abandoned since 2017)
+-   [limer](https://github.com/cloudyr/limer) (abandoned since 2018)
+-   [**limonaid**](https://r-packages.gitlab.io/limonaid/) (partially based on the work of the limer developer)
+
+## Further information
+
+### Survey design best practices
+
+-   [*Questionnaire Design Tip Sheet* by Harvard University Program on Survey Research](https://psr.iq.harvard.edu/book/questionnaire-design-tip-sheet)
+-   [*Writing Survey Questions* by Pew Research Center](https://www.pewresearch.org/our-methods/u-s-surveys/writing-survey-questions/)
+-   [*How to design a good survey (guide)* in the LimeSurvey Manual](https://manual.limesurvey.org/How_to_design_a_good_survey_(guide))
+-   [*Survey design tips & tricks* by LimeSurvey Consulting](https://limesurvey-consulting.com/survey-design-tips-tricks/)
 
 # INTERNAL
 
@@ -28,16 +47,57 @@ utils::globalVariables(names = c("."))
 this_pkg <- utils::packageName()
 ```
 
-### Value prototypes
+### `all_spec_parts`
+
+In the order they should be processed.
 
 ```{r}
-date <- as.Date(NULL)
-int <- integer()
-float <- numeric()
-string <- character()
+all_spec_parts <- c("links",
+                    "footnotes",
+                    "value_sets",
+                    "targets",
+                    "question_blocks",
+                    "items")
 ```
 
-### Value scales
+### `survey_config_`
+
+TODO:
+
+-   Figure out whether it would be feasible to generate the key hierarchy tree(s) directly from the JSON schemas.
+
+NOTES:
+
+-   Pretty-print using:
+
+    ``` r
+    qstnr_spec_scheme |>
+      pal::flatten_path_tree() |>
+      purrr::map_chr(cli::format_inline) |>
+      pal::draw_path_tree()
+    ```
+
+-   Use `cli::ansi_strip()` after `pal::flatten_path_tree()` to remove the cli formatting.
+
+```{r}
+source_spec <- list("[[{.strong source}]]" = list("{.strong list},{.strong file},{.strong url} = {.emph EXPR},{.emph PATH},{.emph URL}"))
+
+qstnr_spec_scheme <- list("{.strong qstnr}" = list(
+  "{.strong items}" = c(source_spec,
+                        list("{.strong ids}" = list("{.strong {'<questionnaire_block>'}} = [ {.emph id_1}, {.emph id_2}, {.emph ...} ]"))),
+  "{.strong question_blocks}" = source_spec,
+  "{.strong value_sets}" = source_spec,
+  "{.strong targets}" = source_spec,
+  "{.strong footnotes}" = source_spec,
+  "{.strong links}" = source_spec
+))
+
+rm(source_spec)
+```
+
+### `value_scales`
+
+TODO: read from `data-raw/json_schemas/schemas/subschemas/qstnr-item-value_scale.schema.json` schema
 
 ```{r}
 value_scales <- c("nominal",
@@ -48,19 +108,216 @@ value_scales <- c("nominal",
                   "ratio")
 ```
 
-# ...
+### Value prototypes
 
 ```{r}
+date <- as.Date(NULL)
+int <- integer()
+float <- numeric()
+string <- character()
+```
 
+## Functions
+
+### `gen_qstnr`
+
+EXPERIMENTAL!
+
+Test using: `pal::toml_read("/home/salim/Code/own/salim_b/r/pkgs/qstnr/tests/testthat/surveys/simple.toml") |> gen_qstnr()`
+
+```{r}
+gen_qstnr <- function(spec) {
+  
+  # read in and validate spec
+  spec <- spec_validate(spec)$qstnr
+  
+  # materialize spec
+  spec_parts <- list()
+  
+  for (spec_part in intersect(all_spec_parts,
+                              names(spec))) {
+    
+    spec_parts[[spec_part]] <-
+      spec %>%
+      purrr::chuck(spec_part, "source") %>%
+      purrr::map(~ {
+        
+        src_type <- names(.x)
+        
+        switch(EXPR = src_type,
+               "list" = eval(parse(text = .x[[src_type]])),
+               "file" = pal::toml_read(path = glue::glue(.x[[src_type]])),
+               cli::cli_abort("Invalid {.field qstnr.items.source} type {.val {src_type}} detected."))
+      }) %>%
+      purrr::reduce(.f = ~ purrr::list_modify(.x,
+                                              !!!.y))
+  }
+  
+  # generate questionnaire from spec
+  
+  # validate spec parts
+  
+}
+```
+
+### `init_config`
+
+```{r}
+init_config <- function(source = NULL,
+                        type = all_spec_parts,
+                        incl_defaults = TRUE) {
+  
+  type <- rlang::arg_match(type)
+  checkmate::assert_flag(incl_defaults)
+  
+  opt_name <- paste0("qstnr.", type)
+  result <- getOption(opt_name)
+  
+  if (is.null(result)) {
+    
+    result <- purrr::map(source,
+                         pal::toml_read)
+    
+    if (incl_defaults) {
+      result %<>% c(defaults[[type]])
+    }
+    
+    # TODO!
+    result %<>% purrr::reduce(.f = purrr::list_modify,
+                              .init = list())
+    do.call(what = options,
+            args = as.list(setNames(object = result,
+                                    nm = opt_name)))
+  }
+  
+  invisible(result)
+}
+```
+
+### `interpolate`
+
+NOTES:
+
+-   `cli::pluralize()` collapses substituted vectors into a comma-separated string, so we have to fall back to `glue::glue()` for arrays.
+
+```{r}
+interpolate <- function(x,
+                        key,
+                        ...) {
+
+  # assign objects in dots to current env ensuring glue/cli fns respect them
+  rlang::env_bind(.env = rlang::current_env(),
+                  ...)
+
+  if (key %in% item_keys$key[item_keys$is_scalar]) {
+
+    result <- cli::pluralize(x,
+                             .null = NA_character_,
+                             .trim = FALSE)
+  } else {
+
+    result <-
+      x %>%
+      purrr::map(.f = glue::glue,
+                 .envir = rlang::current_env(),
+                 .null = NA_character_,
+                 .trim = FALSE) %>%
+      unlist()
+  }
+
+  result
+}
 ```
 
 # EXPORTED
 
-## `val_ptype`
+## `as_int_vals`
+
+```{r}
+#' Convert question values to codes
+#'
+#' Converts character question values to their integer code counterparts. The latter are useful because they're language independent.
+#'
+#' @param var Variable holding the question values. A character vector with an `id` and `lang` attribute.
+#' @param qstnr TODO
+#'
+#' @return An integer vector of the same length as `var`.
+#' @export
+as_int_vals <- function(var,
+                        qstnr = pal::pkg_config_val(key = "cur_qstnr",
+                                                    pkg = this_pkg)) {
+  var_id <- attr(x = var,
+                 which = "id",
+                 exact = TRUE)
+  
+  var_lang <- attr(x = var,
+                   which = "lang",
+                   exact = TRUE)
+  
+  purrr::walk(c(var_id,
+                var_lang),
+              ~ if (is.null(.x)) {
+                cli::cli_abort("{.arg var} has no {.var .x} attribute set.")
+              })
+  
+  val_name <- glue::glue("value.{var_lang}")
+  lookup <- qstnr %>% dplyr::filter(id == !!var_id & !!as.symbol(val_name) %in% var)
+  checkmate::assert_subset(var,
+                           choices = lookup[[val_name]])
+  
+  result <- lookup$value.int[match(var, lookup[[val_name]])]
+  attr(result, "id") <- var_id
+  result
+}
+```
+
+## !`init_survey`
+
+```{r}
+init_survey <- function(path) {
+  
+  spec <- pal::toml_read(path = path)
+  
+  # ensure mandatory keys are present
+  ## item IDs
+  if (is.null(spec$items$ids)) {
+    cli::cli_abort("{.field items.ids} must be set to an array of valid questionnaire item IDs.")
+  }
+  
+  # init config parts
+  purrr::walk(all_spec_parts,
+              ~ init_config(source = spec[[.x]]$source,
+                            type = .x,
+                            incl_defaults = !isFALSE(spec[[.x]]$incl_defaults)))
+  
+}
+```
+
+## !`gen_tibble`
+
+```{r}
+gen_tibble <- function(spec) {
+  
+  
+}
+```
+
+## !`val_ptype`
 
 ```{r}
 val_ptype <- function(type,
                       size = NULL) {
   # TODO
+}
+```
+
+## !`vals`
+
+```{r}
+vals <- function(id) {
+  
+  init_config(type = "values")
+  
+  getOption("qstnr.values")[[id]]
 }
 ```
