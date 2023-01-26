@@ -141,9 +141,9 @@ interpolate <- function(x,
 
 #' Convert question values to codes
 #'
-#' Converts character question values to their integer code counterparts. The latter are useful because they're language independent.
+#' Converts character question values to their integer code counterparts. The latter are useful mainly because they're language-independent.
 #'
-#' @param var Variable holding the question values. A character vector with an `id` and `lang` attribute.
+#' @param var Variable holding the question values. A character vector with an `id` and a `lang` attribute.
 #' @param qstnr TODO
 #'
 #' @return An integer vector of the same length as `var`.

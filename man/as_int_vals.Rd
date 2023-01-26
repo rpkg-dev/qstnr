@@ -10,7 +10,7 @@ as_int_vals(
 )
 }
 \arguments{
-\item{var}{Variable holding the question values. A character vector with an \code{id} and \code{lang} attribute.}
+\item{var}{Variable holding the question values. A character vector with an \code{id} and a \code{lang} attribute.}
 
 \item{qstnr}{TODO}
 }
@@ -18,5 +18,5 @@ as_int_vals(
 An integer vector of the same length as \code{var}.
 }
 \description{
-Converts character question values to their integer code counterparts. The latter are useful because they're language independent.
+Converts character question values to their integer code counterparts. The latter are useful mainly because they're language-independent.
 }
