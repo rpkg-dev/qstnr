@@ -3,7 +3,7 @@ code:
 development:
   mode: auto
 template:
-  assets: data-raw/json_schemas
+  assets: data-raw/qstnr
   bootstrap: 5
   bslib:
     link-color: '#246abf'

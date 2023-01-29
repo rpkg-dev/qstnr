@@ -1,0 +1,52 @@
+# ---- Markdown reference-style footnote definitions ----
+
+[anon]
+id = "anon"
+value.en = "This variable is deleted permanently once the survey is completed for the purpose of anonymizing the participants."
+value.de = "Diese Variable wird zwecks Anonymisierung der TeilnehmerInnen nach Befragungsende unwiderruflich gelöscht."
+[anon-ext]
+id = "anon-ext"
+value.en = "This variable is only delivered to the survey institute and is deleted once the survey is completed for the purpose of anonymizing the participants, i.e. the ZDA does not have access to it at any time."
+value.de = "Diese Variable wird nur ans Umfrageinstitut geliefert und zwecks Anonymisierung der TeilnehmerInnen nach Befragungsende unwiderruflich gelöscht, d. h. das ZDA hat zu keinem Zeitpunkt Zugriff auf sie."
+[no-data]
+id = "no-data"
+value.de = "Leider erhalten wir für den Abstimmungstermin vom { stringi::stri_datetime_format(time = ballot_date, format = 'date_long', locale = lang_to_locale('de')) } die für diese Variable notwendigen Registerdaten vom kantonalen Statistikamt (noch) nicht."
+[dup]
+id = "dup"
+value.de = "In darauffolgenden Abstimmungsterminen wurden bei dieser Variable Mehrfachnennungen zugelassen (`Mehrfachnennungen = 'ja'`)."
+[no-party]
+id = "no-party"
+value.de = "Diese Variable wurde erst in darauffolgenden Abstimmungsterminen um die Antwortoption `keine` mit Variablenausprägung `0` ergänzt. In der Analyse wurde diese Ausprägung nachträglich auch für den { ballot_date } gebildet. Dafür wurden ihr einerseits alle `custom answer`s mit entsprechender Aussage (\"keine Partei\", \"parteilos\" etc.) und andererseits alle `don't know`-Antworten zugewiesen. Letzteres Vorgehen führt natürlich dazu, dass die Anzahl Respondenten, welche keine Parteisympathie aufweisen, künstlich zu hoch eingeschätzt wird."
+[main-emp]
+id = "main-emp"
+value.de = """
+Um Mehrfachnennungen im Print-Fragebogen vorzubeugen, wurde diese Frage in darauffolgenden Abstimmungsterminen leicht umformuliert in:
+
+    _Was ist Ihre aktuelle **Haupt**beschäftigung?_"""
+[att-econ]
+id = "att-econ"
+value.de = """
+Diese Frage wurde in darauffolgenden Abstimmungsterminen leicht umformuliert in: _{
+   fokus:::qstnr_item_val(ballot_date = "2018-11-25",
+                          canton = canton,
+                          branch_path = "05_political_attitudes",
+                          var_name = "attitude_regulation_vs_free_market",
+                          key = "question") %>%
+     stringr::str_replace(pattern = "stärker",
+                          replacement = "**stärker**")
+}_"""
+[pseudon]
+id = "pseudon"
+value.de = "Diese Variable wird vom kantonalen Statistikamt (bspw. [Statistik Aargau](https://www.ag.ch/statistik) direkt ans ZDA geliefert und ist über den eineindeutigen Identifikator `id_cantonal_statistical_office` den vom Umfrageinstitut gelieferten Daten zuordenbar."
+[statag-household]
+id = "statag-household"
+value.de = "Diese Angabe erhalten wir beginnend mit dem Wahltermin 2019-10-20 auch direkt aus dem Einwohnerregister vom kantonalen Statistikamt (Variable `household_size_official`)."
+[statag-kids]
+id = "statag-kids"
+value.de = "Diese Angabe erhalten wir beginnend mit dem Wahltermin 2019-10-20 auch direkt aus dem Einwohnerregister vom kantonalen Statistikamt (Variable `n_kids_in_household_official`)."
+[legacy-occ-sect]
+id = "legacy-occ-sect"
+value.de = "Beginnend mit dem Wahltermin 2019-10-20 wurde in `occupational_sector` die dritte Antwortkategorie `anderes (z. B. gemischtwirtschaftlich)` aufgeteilt in die zwei Kategorien `gemeinnützig/nicht-gewinnorientiert (z. B. WWF, Caritas)` und `gemischtwirtschaftlich (z. B. Swisscom oder SNB)`, weshalb diese Variable nachträglich in `legacy_occupational_sector` umbenannt wurde."
+[irt-params]
+id = "irt-params"
+value.de = "Wenn immer möglich wird ein 3-Parameter-Modell geschätzt. Bieten die Daten dem [Schätzalgorithmus](https://rdrr.io/cran/mirt/man/mirt.html) dafür nicht genug Freiheitsgrade, wird automatisch auf ein 2-Parameter-Modell ausgewichen."

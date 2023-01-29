@@ -66,6 +66,15 @@
           "required": ["ids", "source"],
           "additionalProperties": false
         },
+        "question_blocks": {
+          "description": "questionnaire item question blocks",
+          "type": "object",
+          "properties": {
+            "source": { "$ref": "#/$defs/source" }
+          },
+          "required": ["source"],
+          "additionalProperties": false
+        },
         "targets": {
           "description": "questionnaire item targets",
           "type": "object",

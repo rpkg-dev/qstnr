@@ -1,0 +1,121 @@
+# ---- Value sets ----
+
+## special
+[dunno]
+id = "dunno"
+values.en = [ "don't know" ]
+values.de = [ "weiss nicht" ]
+values.fr = [ "ne sais pas" ]
+values.it = [ "non so" ]
+values.int = [ 99 ]
+value_scale = "none"
+
+[dunno_anymore]
+id = "dunno_anymore"
+values.en = [ "can't remember" ]
+values.de = [ "weiss nicht mehr" ]
+values.fr = [ "ne me souviens plus" ]
+values.it = [ "non ricordo" ]
+values.int = [ 99 ]
+value_scale = "none"
+
+[free_text_none]
+id = "free_text_none"
+values.en = [ "none of that, but: ✍ (free text field)" ]
+values.de = [ "nichts davon, sondern: ✍ (Freitextfeld)" ]
+values.int = [ 90 ]
+value_scale = "none"
+
+[free_text_other]
+id = "free_text_other"
+values.en = [ "something else, namely: ✍ (free text field)" ]
+values.de = [ "etwas anderes, nämlich: ✍ (Freitextfeld)" ]
+values.int = [ 90 ]
+value_scale = "none"
+
+[inapplicable]
+id = "inapplicable"
+values.en = [ "not applicable" ]
+values.de = [ "nicht zutreffend" ]
+values.int = [ 98 ]
+value_scale = "none"
+
+## rest
+[agreement_4_scale]
+id = "agreement_4_scale"
+values.en = [ "strongly disagree",          "rather disagree",                    "rather agree",              "fully agree" ]
+values.de = [ "stimme gar nicht zu",        "stimme eher nicht zu",               "stimme eher zu",            "stimme voll und ganz zu" ]
+values.fr = [ "pas du tout d'accord",       "plutôt pas d'accord",                "plutôt d'accord",           "tout à fait d'accordt" ]
+values.it = [ "non sono affatto d'accordo", "tendenzialmente non sono d'accordo", "tendenzialmente d'accordo", "pienamente d'accordo" ]
+values.int = [ 1, 2, 3, 4 ]
+value_scale = "ordinal_ascending"
+
+[applicability_2_scale]
+id = "applicability_2_scale"
+values.en = [ "is not true",     "is true" ]
+values.de = [ "trifft nicht zu", "trifft zu" ]
+values.int = [ 0, 1 ]
+value_scale = "ordinal_ascending"
+
+[applicability_4_scale]
+id = "applicability_4_scale"
+values.en = [ "not at all true",           "rather not true",                "rather true",                "entirely true" ]
+values.de = [ "trifft überhaupt nicht zu", "trifft eher nicht zu",           "trifft eher zu",             "trifft voll und ganz zu" ]
+values.fr = [ "pas du tout vrai",          "plûtôt pas vrai",                "plutôt vrai",                "tout à fait vrai" ]
+values.it = [ "non si applica affatto",    "non si applica tendenzialmente", "si applica tendenzialmente", "si applica pienamente" ]
+values.int = [ 1, 2, 3, 4 ]
+value_scale = "ordinal_ascending"
+
+[frequency_3_scale]
+id = "frequency_3_scale"
+values.en = [ "never",  "sometimes",         "often" ]
+values.de = [ "nie",    "gelegentlich",      "häufig" ]
+values.fr = [ "jamais", "occasionnellement", "occasionalmente" ]
+values.it = [ "mai",    "souvent",           "spesso" ]
+values.int = [ 1, 2, 3 ]
+value_scale = "ordinal_ascending"
+
+[importance_4_scale]
+id = "importance_4_scale"
+values.en = [ "irrelevant",      "rather unimportant",     "rather important",     "very important" ]
+values.de = [ "bedeutungslos",   "eher unwichtig",         "eher wichtig",         "sehr wichtig" ]
+values.fr = [ "sans importance", "plutôt sans importance", "plutôt important",     "très important" ]
+values.it = [ "irrilevante",     "piuttosto irrilevante",  "piuttosto importante", "molto importante" ]
+values.int = [ 1, 2, 3, 4 ]
+value_scale = "ordinal_ascending"
+
+[interest_4_scale]
+id = "interest_4_scale"
+values.en = [ "not interested at all",        "rather uninterested",     "rather interested",        "very interested" ]
+values.de = [ "überhaupt nicht interessiert", "eher nicht interessiert", "eher interessiert",        "sehr interessiert" ]
+values.fr = [ "pas du tout intéressé(e)",     "plutôt pas intéressé(e)", "plutôt intéressé(e)",      "très intéressé(e)" ]
+values.it = [ "per niente interessato/a",     "poco interessato/a",      "abbastanza interessato/a", "molto interessato/a" ]
+values.int = [ 1, 2, 3, 4 ]
+value_scale = "ordinal_ascending"
+
+[satisfaction_4_scale]
+id = "satisfaction_4_scale"
+values.en = [ "very unhappy",           "rather unhappy",          "rather happy",          "very happy" ]
+values.de = [ "sehr unzufrieden",       "eher unzufrieden",        "eher zufrieden",        "sehr zufrieden" ]
+values.fr = [ "pas du tout satisfait",  "plutôt insatisfait(e)",   "plutôt satisfait(e)",   "très satisfait" ]
+values.it = [ "per niente soddisfatto", "piuttosto insoddisfatto", "piuttosto soddisfatto", "molto soddisfatto" ]
+values.int = [ 1, 2, 3, 4 ]
+value_scale = "ordinal_ascending"
+
+[yes_no_2_scale]
+id = "yes_no_2_scale"
+values.en = [ "no",   "yes" ]
+values.de = [ "nein", "ja" ]
+values.fr = [ "non",  "oui" ]
+values.it = [ "no",   "sì" ]
+values.int = [ 0, 1 ]
+value_scale = "ordinal_ascending"
+
+[yes_no_4_scale]
+id = "yes_no_4_scale"
+values.en = [ "no, absolutely not",    "rather no",    "rather yes",   "yes, absolutely" ]
+values.de = [ "nein, auf keinen Fall", "eher nein",    "eher ja",      "ja, absolut" ]
+values.fr = [ "non, absolument pas",   "plutôt non",   "plutôt oui",   "oui, absolument" ]
+values.it = [ "no, assolutamente no",  "piuttosto no", "piuttosto sì", "sì, assolutamente" ]
+values.int = [ 1, 2, 3, 4 ]
+value_scale = "ordinal_ascending"
