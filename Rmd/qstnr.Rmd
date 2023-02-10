@@ -76,18 +76,19 @@ all_spec_parts <- c("links",
                     "items")
 ```
 
-### `survey_config_`
+### `struct_survey`
 
 TODO:
 
--   Figure out whether it would be feasible to generate the key hierarchy tree(s) directly from the JSON schemas.
+-   Figure out whether it would be feasible to generate the key hierarchy tree(s) directly from the JSON schemas and add specification schemes for the remaining
+    parts
 
 NOTES:
 
 -   Pretty-print using:
 
     ``` r
-    qstnr_spec_scheme |>
+    struct_survey |>
       pal::flatten_path_tree() |>
       purrr::map_chr(cli::format_inline) |>
       pal::draw_path_tree()
@@ -96,19 +97,19 @@ NOTES:
 -   Use `cli::ansi_strip()` after `pal::flatten_path_tree()` to remove the cli formatting.
 
 ```{r}
-source_spec <- list("[[{.strong source}]]" = list("{.strong list},{.strong file},{.strong url} = {.emph EXPR},{.emph PATH},{.emph URL}"))
+struct_source <- list("[[{.strong source}]]" = list("{.strong list},{.strong file},{.strong url} = {.emph EXPR},{.emph PATH},{.emph URL}"))
 
-qstnr_spec_scheme <- list("{.strong qstnr}" = list(
-  "{.strong items}" = c(source_spec,
+struct_survey <- list("{.strong qstnr}" = list(
+  "{.strong items}" = c(struct_source,
                         list("{.strong ids}" = list("{.strong {'<questionnaire_block>'}} = [ {.emph id_1}, {.emph id_2}, {.emph ...} ]"))),
-  "{.strong question_blocks}" = source_spec,
-  "{.strong value_sets}" = source_spec,
-  "{.strong targets}" = source_spec,
-  "{.strong footnotes}" = source_spec,
-  "{.strong links}" = source_spec
+  "{.strong question_blocks}" = struct_source,
+  "{.strong value_sets}" = struct_source,
+  "{.strong targets}" = struct_source,
+  "{.strong footnotes}" = struct_source,
+  "{.strong links}" = struct_source
 ))
 
-rm(source_spec)
+rm(struct_source)
 ```
 
 ### `value_scales`
