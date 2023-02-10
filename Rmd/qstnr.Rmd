@@ -114,15 +114,8 @@ rm(struct_source)
 
 ### `value_scales`
 
-TODO: read from `data-raw/json_schemas/schemas/subschemas/qstnr-item-value_scale.schema.json` schema
-
 ```{r}
-value_scales <- c("nominal",
-                  "binary",
-                  "ordinal_ascending",
-                  "ordinal_descending",
-                  "interval",
-                  "ratio")
+value_scales <- jsonlite::fromJSON(txt = "data-raw/qstnr/schemas/subschemas/qstnr-item-value_scale.schema.json")$enum
 ```
 
 ### Value prototypes
