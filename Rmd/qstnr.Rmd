@@ -14,6 +14,22 @@ editor_options:
     schema to be used directly in the TOML file using the [`schema` header
     directive](https://taplo.tamasfe.dev/configuration/directives.html#the-schema-directive).
 
+## qstnr terminology
+
+qstnr specification
+
+:   Entirety of all qstnr specification parts.
+
+qstnr specification part
+
+:   One of `r cli::ansi_collapse(pal::wrap_chr(all_spec_parts, "`"), last =" or ")\` defining the respective qstnr elements. A part must adhere to its
+    respective schema.
+
+qstnr survey configuration
+
+:   Definition of a concrete survey instance using the qstnr framework. This includes all relevant qstnr specification part sources as well as the (grouped)
+    qstnr item identifiers in the desired order. Must adhere to the `survey` schema.
+
 ## LimeSurvey R clients
 
 Relevant R packages:
