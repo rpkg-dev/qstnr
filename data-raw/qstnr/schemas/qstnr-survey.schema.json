@@ -127,7 +127,7 @@
         "description": "qstnr specification part source definition",
         "type": "object",
         "properties": {
-          "list": {
+          "expr": {
             "description": "R expression yielding a TOML qstnr specification part as a list",
             "type": "string",
             "minLength": 1
