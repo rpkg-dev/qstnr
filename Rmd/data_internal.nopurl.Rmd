@@ -26,13 +26,18 @@ TODO:
 -   Create `question_blocks.toml` with sensible sample data (a block "demographics" etc.).
 
 ```{r}
-defaults                 <- list()
-defaults$items           <- pal::toml_read(input = "data-raw/default_config/items.toml")
-# defaults$question_blocks <- pal::toml_read(input = "data-raw/default_config/question_blocks.toml")
-defaults$value_sets      <- pal::toml_read(input = "data-raw/default_config/value_sets.toml")
-defaults$targets         <- pal::toml_read(input = "data-raw/default_config/targets.toml")
-defaults$footnotes       <- pal::toml_read(input = "data-raw/default_config/footnotes.toml")
-defaults$links           <- pal::toml_read(input = "data-raw/default_config/links.toml")
+spec_parts <-
+  fs::dir_ls(path = "data-raw/qstnr/configs",
+             type = "directory") %>%
+  rlang::set_names(nm = fs::path_file(.)) %>%
+  purrr::map(~ fs::dir_ls(path = .x,
+                          type = "file",
+                          glob = "*.toml") %>%
+               rlang::set_names(nm = fs::path_ext_remove(fs::path_file(.))) %>%
+               purrr::map(pal::toml_read))
+
+# TODO: remove this once items are moved to pkg fokus
+spec_parts$default$items_TODO <- NULL
 ```
 
 ## `item_keys`
@@ -41,7 +46,7 @@ Supported qstnr specification part keys.
 
 TODO:
 
--   Extract as much of info as possible from the JSON Schemas!
+-   Extract as much of the info as possible from the JSON Schemas!
 
 ```{r}
 item_keys <-
@@ -64,14 +69,31 @@ item_keys <-
   dplyr::select(-default)
 ```
 
+## `survey_config_keys`
+
+```{r}
+survey_config_keys <- names(jsonlite::fromJSON(txt = "data-raw/qstnr/schemas/qstnr-survey.schema.json")$properties$qstnr$properties)
+```
+
+## `value_scales*`
+
+```{r}
+value_scales <- jsonlite::fromJSON(txt = "data-raw/qstnr/schemas/subschemas/qstnr-item-value_scale.schema.json")$enum
+value_scales_strict <- setdiff(value_scales,
+                               "none")
+```
+
 # Write data
 
 Save all the small data objects as a single internal file `R/sysdata.rda`. Note that when documenting them, they must be explicitly `@export`ed to be available
 to package users.
 
 ```{r}
-usethis::use_data(defaults,
-                  item_keys,
+usethis::use_data(item_keys,
+                  spec_parts,
+                  survey_config_keys,
+                  value_scales,
+                  value_scales_strict,
                   internal = TRUE,
                   overwrite = TRUE,
                   compress = "xz",

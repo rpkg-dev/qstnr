@@ -19,6 +19,18 @@
           "minItems": 1,
           "uniqueItems": true
         },
+        "title": {
+          "description": "questionnaire title",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
         "intro": {
           "description": "questionnaire introduction",
           "type": "object",

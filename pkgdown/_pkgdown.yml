@@ -18,4 +18,18 @@ template:
       creator: '@2BSalim'
 url: https://qstnr.rpkg.dev
 reference:
-- contents: as_int_vals
+- title: Survey preparation
+  desc: Function to process raw and uncombined survey configurations.
+- contents: read_survey
+- title: Questionnaire generation
+  desc: Functions to generate different representations of a questionnaire from a
+    combined survey configuration.
+- contents:
+  - gen_qstnr
+  - unnest_qstnr
+  - gen_qmd_qstnr
+- title: Auxiliary
+- contents:
+  - as_int_vals
+  - common_val_scale
+  - val_set

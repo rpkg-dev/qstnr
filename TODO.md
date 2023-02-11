@@ -2,6 +2,8 @@
 
 -   move most of default config to pkg fokus
 
+-   add fn to restore common col order, cf. `c2d:::order_rfrnd_cols()`
+
 -   during qstnr assembly, ensure that
 
     -   `targets` doesn't include anything else if `"none"` is present.
@@ -43,11 +45,9 @@
 -   make `value_sets` part "directionless" by
 
     -   [x] always sorting the definitions ascendingly (must be ), allow new sentinel `desc:` in `value_sets`
-    -   [ ] implementing `desc:` interpretation
+    -   [x] implementing `desc:` interpretation
     -   [ ] communicating new requirement/guarantee in doc
     -   [ ] validating new requirement in code!
-
--   implement "`value_scale` inference" for `value_scale` arrays (error in case of contradicting info, e.g. asc vs. desc values sets)
 
 -   implement some kind of sentinel (like `free_text:`) to signify free text fields? (label would follow)
 

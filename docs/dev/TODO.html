@@ -44,6 +44,7 @@
 <div id="todos" class="section level1">
 
 <ul><li><p>move most of default config to pkg fokus</p></li>
+<li><p>add fn to restore common col order, cf. <code>c2d:::order_rfrnd_cols()</code></p></li>
 <li>
 <p>during qstnr assembly, ensure that</p>
 <ul><li>
@@ -86,13 +87,12 @@
 <input type="checkbox" checked>always sorting the definitions ascendingly (must be ), allow new sentinel <code>desc:</code> in <code>value_sets</code>
 </li>
 <li>
-<input type="checkbox">implementing <code>desc:</code> interpretation</li>
+<input type="checkbox" checked>implementing <code>desc:</code> interpretation</li>
 <li>
 <input type="checkbox">communicating new requirement/guarantee in doc</li>
 <li>
 <input type="checkbox">validating new requirement in code!</li>
 </ul></li>
-<li><p>implement “<code>value_scale</code> inference” for <code>value_scale</code> arrays (error in case of contradicting info, e.g. asc vs. desc values sets)</p></li>
 <li><p>implement some kind of sentinel (like <code>free_text:</code>) to signify free text fields? (label would follow)</p></li>
 <li><p>should we introduce another item key <code>values_ptype</code> (or the like) to specify what we first wanted via <code>values = "{ val_ptype(type = date, size = 1L) }"</code> (which the schema doesn’t allow anymore)? or come up with a better/proper syntax for value <em>validation</em>, depending on ptype (to e.g. ensure a date lies in between a specific range), i.e. maybe directly use checkmate?</p></li>
 </ul></div>

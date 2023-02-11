@@ -12,7 +12,21 @@
 # 
 # You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-utils::globalVariables(names = c("."))
+utils::globalVariables(names = c(".",
+                                 ":=",
+                                 "all_of",
+                                 "description",
+                                 "group",
+                                 "id",
+                                 "init_config",
+                                 "name",
+                                 "path",
+                                 "question",
+                                 "question_block",
+                                 "question_block_filled",
+                                 "value_scale",
+                                 "value_sets",
+                                 "values"))
 
 this_pkg <- utils::packageName()
 
@@ -23,120 +37,406 @@ all_spec_parts <- c("links",
                     "question_blocks",
                     "items")
 
-source_spec <- list("[[{.strong source}]]" = list("{.strong list},{.strong file},{.strong url} = {.emph EXPR},{.emph PATH},{.emph URL}"))
+ptype_date <- as.Date(NULL)
+ptype_int <- integer()
+ptype_float <- numeric()
+ptype_string <- character()
 
-qstnr_spec_scheme <- list("{.strong qstnr}" = list(
-  "{.strong items}" = c(source_spec,
+struct_source <- list("[[{.strong source}]]" = list("{.strong list},{.strong file},{.strong url} = {.emph EXPR},{.emph PATH},{.emph URL}"))
+
+struct_survey <- list("{.strong qstnr}" = list(
+  "{.strong items}" = c(struct_source,
                         list("{.strong ids}" = list("{.strong {'<questionnaire_block>'}} = [ {.emph id_1}, {.emph id_2}, {.emph ...} ]"))),
-  "{.strong question_blocks}" = source_spec,
-  "{.strong value_sets}" = source_spec,
-  "{.strong targets}" = source_spec,
-  "{.strong footnotes}" = source_spec,
-  "{.strong links}" = source_spec
+  "{.strong question_blocks}" = struct_source,
+  "{.strong value_sets}" = struct_source,
+  "{.strong targets}" = struct_source,
+  "{.strong footnotes}" = struct_source,
+  "{.strong links}" = struct_source
 ))
 
-rm(source_spec)
+rm(struct_source)
 
-value_scales <- c("nominal",
-                  "binary",
-                  "ordinal_ascending",
-                  "ordinal_descending",
-                  "interval",
-                  "ratio")
-
-date <- as.Date(NULL)
-int <- integer()
-float <- numeric()
-string <- character()
-
-gen_qstnr <- function(spec) {
+combine_spec_part_srcs <- function(srcs,
+                                   spec_part,
+                                   dir,
+                                   validate) {
+  result <- list()
   
-  # read in and validate spec
-  spec <- spec_validate(spec)$qstnr
-  
-  # materialize spec
-  spec_parts <- list()
-  
-  for (spec_part in intersect(all_spec_parts,
-                              names(spec))) {
+  for (i in seq_along(srcs)) {
     
-    spec_parts[[spec_part]] <-
-      spec %>%
-      purrr::chuck(spec_part, "source") %>%
-      purrr::map(~ {
-        
-        src_type <- names(.x)
-        
-        switch(EXPR = src_type,
-               "list" = eval(parse(text = .x[[src_type]])),
-               "file" = pal::toml_read(path = glue::glue(.x[[src_type]])),
-               cli::cli_abort("Invalid {.field qstnr.items.source} type {.val {src_type}} detected."))
-      }) %>%
-      purrr::reduce(.f = ~ purrr::list_modify(.x,
-                                              !!!.y))
+    src_type <- names(srcs[[i]])
+    src_content <- switch(EXPR = src_type,
+                          "expr" = spec_part_expr(expr = srcs[[i]]$expr),
+                          "file" = spec_part_file(file = srcs[[i]]$file,
+                                                  dir = dir,
+                                                  spec_part = spec_part,
+                                                  validate = validate),
+                          "url"  = spec_part_url(url = srcs[[i]]$url,
+                                                 spec_part = spec_part,
+                                                 validate = validate))
+    result %<>% purrr::list_modify(!!!src_content)
   }
   
-  # generate questionnaire from spec
-  
-  # validate spec parts
-  
+  result
 }
 
-init_config <- function(source = NULL,
-                        type = all_spec_parts,
-                        incl_defaults = TRUE) {
+gen_qstnr_row <- function(item,
+                          ...) {
   
-  type <- rlang::arg_match(type)
-  checkmate::assert_flag(incl_defaults)
+  result <- tibble::tibble(.rows = 1L)
   
-  opt_name <- paste0("qstnr.", type)
-  result <- getOption(opt_name)
-  
-  if (is.null(result)) {
+  for (key in setdiff(item_keys$key, "i")) {
     
-    result <- purrr::map(source,
-                         pal::toml_read)
+    val <- item[[key]]
+    is_list_col <- !item_keys$is_scalar[item_keys$key == key] || item_keys$has_lang_subkeys[item_keys$key == key]
     
-    if (incl_defaults) {
-      result %<>% c(defaults[[type]])
+    if (is.null(val)) {
+      
+      # assign explicit default val if present
+      if (item_keys$has_default[item_keys$key == key]) {
+        val <- unlist(item_keys$default_val[item_keys$key == key],
+                      recursive = FALSE)
+        
+        # assign NA of proper type if non-list col
+      } else if (!is_list_col) {
+        val <- unlist(item_keys$default_val[item_keys$key == key],
+                      recursive = FALSE)[NA]
+      }
+      # perform possible string interpolation
+    } else if (item_keys$type[item_keys$key == key] == "character") {
+      
+      val %<>% purrr::modify_tree(leaf = \(x1) purrr::map_chr(x1, \(x2) interpolate(x2, ...)),
+                                  is_node = is.list)
     }
     
-    # TODO!
-    result %<>% purrr::reduce(.f = purrr::list_modify,
-                              .init = list())
-    do.call(what = options,
-            args = as.list(setNames(object = result,
-                                    nm = opt_name)))
+    if (is_list_col) {
+      val %<>% list()
+    }
+    
+    result %<>% tibble::add_column(!!key := val)
   }
   
-  invisible(result)
+  result
 }
 
 interpolate <- function(x,
-                        key,
                         ...) {
 
-  # assign objects in dots to current env ensuring glue/cli fns respect them
+  # assign objects in dots to current env ensuring `cli::pluralize()` finds them
   rlang::env_bind(.env = rlang::current_env(),
                   ...)
-
-  if (key %in% item_keys$key[item_keys$is_scalar]) {
-
-    result <- cli::pluralize(x,
-                             .null = NA_character_,
-                             .trim = FALSE)
-  } else {
-
-    result <-
-      x %>%
-      purrr::map(.f = glue::glue,
-                 .envir = rlang::current_env(),
+  
+  cli::pluralize(x,
                  .null = NA_character_,
-                 .trim = FALSE) %>%
-      unlist()
-  }
+                 .trim = FALSE)
+}
 
-  result
+spec_part_expr <- function(expr) {
+  
+  eval(expr = parse(text = expr),
+       # eval in empty env to avoid unintended results
+       envir = emptyenv()) %>%
+    checkmate::assert_list(any.missing = FALSE)
+}
+
+spec_part_file <- function(file,
+                           dir,
+                           spec_part,
+                           validate) {
+  if (validate) {
+    
+    pal::toml_validate(input = path,
+                       from_file = TRUE,
+                       schema = glue::glue("https://qstnr.rpkg.dev/dev/schemas/qstnr-{spec_part}.schema.json"))
+  }
+  
+  pal::toml_read(input = fs::path(dir, file),
+                 from_file = TRUE)
+}
+
+spec_part_url <- function(url,
+                          spec_part,
+                          validate) {
+  
+  toml_content <-
+    httr::RETRY(verb = "GET",
+              url = url) %>%
+    httr::content(as = "text", encoding = "UTF-8")
+  
+  if (validate) {
+    
+    pal::toml_validate(input = toml_content,
+                       from_file = FALSE,
+                       schema = glue::glue("https://qstnr.rpkg.dev/dev/schemas/qstnr-{spec_part}.schema.json"))
+  }
+  
+  pal::toml_read(input = toml_content,
+                 from_file = FALSE)
+}
+
+#' Read in survey config
+#'
+#' @param path Path to the survey config TOML file. A character scalar.
+#' @param validate Whether or not to validate all input TOML files, i.e. ensure that they adhere to their respective schemas.
+#'
+#' @return A list containing the combined survey configuration. Additionally, 
+#' @export
+read_survey <- function(path,
+                        validate = FALSE) {
+  
+  checkmate::assert_flag(validate)
+  
+  if (validate) {
+    pal::toml_validate(input = path,
+                       schema = "https://qstnr.rpkg.dev/dev/schemas/qstnr-survey.schema.json")
+  }
+  
+  dir <- fs::path_dir(path) %>% fs::path_abs()
+  survey_config_raw <- pal::toml_read(input = path)
+  spec_parts <-
+    names(survey_config_raw$qstnr) %>%
+    intersect(all_spec_parts) %>%
+    pal::order_by(by = all_spec_parts) %>%
+    rlang::set_names() %>%
+    purrr::map(~ {
+      combine_spec_part_srcs(srcs = survey_config_raw$qstnr[[.x]]$source,
+                             spec_part = .x,
+                             dir = dir,
+                             validate = validate)
+    })
+  # keep only items that are actually needed
+  spec_parts$items %<>% purrr::keep_at(at = unlist(purrr::map_depth(.x = survey_config_raw$qstnr$items$group,
+                                                                    .depth = 1L,
+                                                                    .f = \(x) x$item_ids)))
+  # extract non-spec-part stuff
+  other <- survey_config_raw$qstnr %>% purrr::keep_at(at = setdiff(survey_config_keys,
+                                                                   all_spec_parts))
+  # create final list struct
+  rlang::list2(item_groups = survey_config_raw$qstnr$items$group,
+               !!!spec_parts,
+               !!!other)
+}
+
+#' Generate questionnaire tibble
+#'
+#' @param survey_config Survey configuration list as returned by [read_survey()].
+#'
+#' @return `r pkgsnip::return_label("data")`
+#' @export
+gen_qstnr <- function(survey_config) {
+  
+  survey_config$item_groups %>%
+    rlang::set_names(nm = purrr::map_depth(., 1L, \(x) x$id)) %>%
+    # for each item group
+    purrr::map(
+      # for each item ID
+      \(group) {
+        purrr::map(
+          group$item_ids,
+          \(id) {
+            item <- survey_config$items[[id]]
+            
+            # TODO: implement proper recursive iterator processing
+            if (utils::hasName(item, "i")) {
+              result <- dplyr::bind_rows(gen_qstnr_row(item = item,
+                                                       i1 = unlist(item$i)[1L]),
+                                         gen_qstnr_row(item = item,
+                                                       i1 = unlist(item$i)[2L]))
+            } else {
+              result <- gen_qstnr_row(item = item)
+            }
+            result
+          }) %>%
+          purrr::list_rbind()
+      }) %>%
+    purrr::list_rbind(names_to = "group") %>%
+    # add overall item numbering
+    tibble::rowid_to_column(var = "order") %>%
+    # replace `value_sets` with actual `values`
+    dplyr::group_by(id) %>%
+    dplyr::group_modify(\(d, k) {
+      
+      val_set_ids <- unlist(d$value_sets)
+      
+      # return early in case of no ext value sets
+      if (length(val_set_ids) == 1L && val_set_ids == "values") {
+        return(d %>% dplyr::select(-value_sets))
+      }
+      
+      # combine all (int and ext) value sets
+      d_new <-
+        val_set_ids %>%
+        purrr::map(\(id) {
+          # handle internal value set
+          if (id == "values") return(d %>% dplyr::select(value_scale, values))
+          # handle external value sets
+          val_set <- val_set(id = id,
+                             survey_config = survey_config)
+          gen_qstnr_row(val_set) %>% dplyr::select(all_of(setdiff(names(val_set), "id")))
+        }) %>%
+        purrr::reduce(\(d1, d2) {
+          list(value_scale = common_val_scale(d1$value_scale, d2$value_scale),
+               values = purrr::list_merge(d1$values, !!!d2$values))
+        })
+      
+      d %<>% dplyr::select(-value_sets)
+      d$value_scale <- d_new$value_scale
+      d$values <- d_new$values
+      
+      d
+    }) %>%
+    dplyr::ungroup() %>%
+    # reduce to English `name` and `description` only for now
+    dplyr::mutate(name = purrr::map_chr(name, \(x) x$en),
+                  description = purrr::map_chr(description, \(x) x$en)) %>%
+    # restore original order
+    dplyr::arrange(order)
+}
+
+#' Unnest questionnaire tibble
+#'
+#' @param qstnr Nested questionnaire tibble as returned by [gen_qstnr()].
+#'
+#' @return `r pkgsnip::return_label("data")`
+#' @export
+unnest_qstnr <- function(qstnr) {
+  
+  qstnr %>%
+    dplyr::group_by(id) %>%
+    dplyr::group_modify(\(d, k) {
+      
+      lang_specific_subset <-
+        d %>%
+        dplyr::select(question) %>%
+        # unnest lang-subkey `question`
+        tidyr::unnest_longer(col = question,
+                             indices_to = "lang",
+                             keep_empty = TRUE,
+                             simplify = FALSE)
+      
+      d$values_int <- list(d$values[[1L]]$int)
+      d$values_targets <- list(d$values[[1L]]$targets)
+      d$values <- list(d$values[[1L]] %>% purrr::keep_at(at = nchar(names(.)) == 2L))
+      
+      lang_specific_subset <-
+        d %>%
+        dplyr::select(values) %>%
+        # unnest lang-subkey `values`
+        tidyr::unnest_longer(col = values,
+                             indices_to = "lang",
+                             keep_empty = TRUE,
+                             simplify = FALSE) %>%
+        dplyr::full_join(y = lang_specific_subset,
+                         by = "lang")
+      d %>%
+        dplyr::select(-c(question, values)) %>%
+        dplyr::cross_join(y = lang_specific_subset)
+    }) %>%
+    dplyr::ungroup() %>%
+    dplyr::arrange(order)
+}
+
+#' Generate Quarto Markdown questionnaire
+#'
+#' @inheritParams gen_qstnr
+#' @param qstnr Unnested questionnaire tibble as returned by [unnest_qstnr()].
+#' @param lang Language in which to output the questionnaire. A character scalar.
+#' @param path Path to write the generated questionnaire file to. A character scalar.
+#'
+#' @return `qstnr`, invisibly.
+#' @export
+gen_qmd_qstnr <- function(qstnr,
+                          survey_config,
+                          lang,
+                          path) {
+  
+  notice_mandatory <- c("*Diese Frage muss zwingend beantwortet und kann nicht \u00fcbersprungen werden.*",
+                        "")
+  notice_multiple_answers <- c("*Bei dieser Frage sind mehrere Antworten m\u00f6glich.*",
+                               "")
+  survey_blocks <-
+    qstnr %>%
+    dplyr::filter(lang == !!lang) %>%
+    # fill missing `question_block`s with `id`s to avoid order mess up further below
+    dplyr::mutate(question_block_filled = dplyr::if_else(is.na(question_block),
+                                                         id,
+                                                         question_block),
+                  # note that we need to rely on factors to avoid alphabetical group key ordering further below
+                  dplyr::across(c(group, question_block_filled, id),
+                                \(x) factor(x,
+                                            levels = unique(x)))) %>%
+    dplyr::group_by(group) %>%
+    dplyr::group_map(\(d1, k1) {
+      
+      question_blocks <-
+        d1 %>%
+        dplyr::group_by(question_block_filled) %>%
+        dplyr::group_map(\(d2, k2) {
+          
+          is_question_block <- length(unique(d2$id)) > 1L
+          
+          questions <-
+            d2 %>%
+            dplyr::group_by(id) %>%
+            dplyr::group_map(\(d3, k3) {
+              
+              q_text <- unlist(d3$question)
+              
+              if (!stringr::str_detect(q_text, "\\n")) {
+                q_text %<>% pal::wrap_chr("**")
+              }
+              
+              # display is conditional on whether the question is part of a block or not
+              if (is.na(d3$question_block)) {
+                question <- c(q_text,
+                              "",
+                              paste0("- ", unlist(d3$values)),
+                              "",
+                              notice_mandatory[lang == "de" && d3$is_mandatory],
+                              notice_multiple_answers[lang == "de" && d3$allow_multiple_answers])
+              } else {
+                question <- c(paste0("- ", q_text))
+              }
+              
+              question
+            }) %>%
+            purrr::list_c(ptype = character())
+          
+          c(survey_config$question_blocks[[as.character(k2$question_block_filled)]]$intro[[lang]][is_question_block],
+            ""[is_question_block],
+            questions,
+            ""[is_question_block],
+            paste0("Es kann jeweils mit ", pal::prose_ls(unlist(d2$values[1L]), last_sep = " oder ", wrap = '"'), " geantwortet werden.")[is_question_block],
+            ""[is_question_block],
+            notice_mandatory[lang == "de" && is_question_block && d2$is_mandatory[1L]],
+            notice_multiple_answers[lang == "de" && is_question_block && d2$allow_multiple_answers[1L]])
+        }) %>%
+        purrr::list_c(ptype = character())
+      
+      pretty_group <-
+        k1$group %>%
+        stringr::str_replace_all("_", " ") %>%
+        stringr::str_to_title() %>%
+        pal::wrap_chr("**")
+      
+      c(paste0("## Block ", pretty_group),
+        "",
+        question_blocks,
+        "",
+        "{{< pagebreak >}}",
+        "")
+    }) %>%
+    purrr::list_c(ptype = character())
+  
+  c(paste0("# ", survey_config$title[[lang]]),
+    "",
+    survey_config$intro[[lang]],
+    "",
+    "{{< pagebreak >}}",
+    "",
+    survey_blocks,
+    survey_config$outro[[lang]]) %>%
+    brio::write_lines(path = path)
 }
 
 #' Convert question values to codes
@@ -175,27 +475,75 @@ as_int_vals <- function(var,
   result
 }
 
-init_survey <- function(path) {
+#' Get common value scale
+#'
+#' Determines the greatest common [values scale](https://en.wikipedia.org/wiki/Level_of_measurement) between two value scales `x` and `y` in the hierarchy
+#' `r setdiff(value_scales_strict, "ordinal_descending") %>% stringr::str_remove("(?<=^ordinal).+") %>% pal::wrap_chr("*") %>% paste0(collapse = " < ")`.
+#'
+#' Note that
+#' - the value scales *interval* and *ratio* are assumed to always be in **ascending** order.
+#' - the value scale *none* is treated specially in the sense that it is ignored when finding the common value scale between *none* and any other value scale.
+#'
+#' @param x First value scale.
+#' @param y Second value scale.
+#'
+#' @return A character scalar.
+#' @export
+#'
+#' @examples
+#' qstnr::common_val_scale("interval", "nominal")
+#' qstnr::common_val_scale("interval", "ratio")
+#' qstnr::common_val_scale("ordinal_ascending", "ordinal_descending")
+#' 
+#' try(
+#'   qstnr::common_val_scale("ordinal_descending", "ratio")
+#' )
+common_val_scale <- function(x,
+                             y) {
+  rlang::arg_match0(arg = x,
+                    values = value_scales)
+  rlang::arg_match0(arg = y,
+                    values = value_scales)
   
-  spec <- pal::toml_read(path = path)
-  
-  # ensure mandatory keys are present
-  ## item IDs
-  if (is.null(spec$items$ids)) {
-    cli::cli_abort("{.field items.ids} must be set to an array of valid questionnaire item IDs.")
+  if ("ordinal_descending" %in% c(x, y) && any(c("interval", "ratio") %in% c(x, y))) {
+    cli::cli_abort("Incompatible value scales {.val {y}} and {.val y} provided.")
+    
+  } else if (x == "none" && y == "none") {
+    return("none")
+    
+  } else if (all(c("ordinal_ascending", "ordinal_descending") %in% c(x, y))) {
+    return("nominal")
+    
+  } else {
+    return(intersect(value_scales_strict, c(x,y))[1L])
   }
-  
-  # init config parts
-  purrr::walk(all_spec_parts,
-              ~ init_config(source = spec[[.x]]$source,
-                            type = .x,
-                            incl_defaults = !isFALSE(spec[[.x]]$incl_defaults)))
-  
 }
 
-gen_tibble <- function(spec) {
+#' Get value set
+#'
+#' Returns the value set identified by the provided `id`. The prefix `"desc:"` can be used to reverse the order of the set's values.
+#'
+#' @inheritParams gen_qstnr
+#' @param id String that uniquely identifies the value set.
+#'
+#' @return A list.
+#' @export
+val_set <- function(id,
+                    survey_config) {
   
+  is_desc <- startsWith(id, "desc:")
+  id %<>% stringr::str_remove("^desc:")
+  rlang::arg_match0(arg = id,
+                    values = names(survey_config$value_sets))
   
+  result <- survey_config$value_sets[[id]]
+  
+  if (is_desc) {
+    result$values %<>% purrr::modify_tree(leaf = rev,
+                                          is_node = is.list)
+  }
+  
+  result
 }
 
 val_ptype <- function(type,
