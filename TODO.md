@@ -1,5 +1,7 @@
 # TODOs
 
+-   update survey schema to latest changes in item block syntax
+
 -   move most of default config to pkg fokus
 
 -   add fn to restore common col order, cf. `c2d:::order_rfrnd_cols()`
