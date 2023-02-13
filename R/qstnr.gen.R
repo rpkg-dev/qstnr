@@ -361,13 +361,17 @@ unnest_qstnr <- function(qstnr) {
 #' @param qstnr Unnested questionnaire tibble as returned by [unnest_qstnr()].
 #' @param lang Language in which to output the questionnaire. A character scalar.
 #' @param path Path to write the generated questionnaire file to. A character scalar.
+#' @param add_item_ids Whether or not to add questionnaire item identifiers next to the question texts.
 #'
 #' @return `qstnr`, invisibly.
 #' @export
 gen_qmd_qstnr <- function(qstnr,
                           survey_config,
                           lang,
-                          path) {
+                          path,
+                          add_item_ids = FALSE) {
+  
+  checkmate::assert_flag(add_item_ids)
   
   notice_mandatory <- c("*Diese Frage muss zwingend beantwortet und kann nicht \u00fcbersprungen werden.*",
                         "")
@@ -401,17 +405,19 @@ gen_qmd_qstnr <- function(qstnr,
               
               q_text <- emph_md(unlist(d3$question),
                                 emph = "**")
+              q_id <- paste0("^`", unlist(k3), "`^")
               
               # layout is conditional on whether the question is part of a block or not
               if (is.na(d3$question_block)) {
-                question <- c(q_text,
+                question <- c(paste0(q_text, "  "[add_item_ids]),
+                              q_id[add_item_ids],
                               "",
                               paste0("- ", unlist(d3$values)),
                               "",
                               notice_mandatory[lang == "de" && d3$is_mandatory],
                               notice_multiple_answers[lang == "de" && d3$allow_multiple_answers])
               } else {
-                question <- c(paste0("- ", q_text))
+                question <- c(paste0("- ", q_text, " ", q_id[add_item_ids]))
               }
               
               question

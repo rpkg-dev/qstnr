@@ -4,7 +4,7 @@
 \alias{gen_qmd_qstnr}
 \title{Generate Quarto Markdown questionnaire}
 \usage{
-gen_qmd_qstnr(qstnr, survey_config, lang, path)
+gen_qmd_qstnr(qstnr, survey_config, lang, path, add_item_ids = FALSE)
 }
 \arguments{
 \item{qstnr}{Unnested questionnaire tibble as returned by \code{\link[=unnest_qstnr]{unnest_qstnr()}}.}
@@ -14,6 +14,8 @@ gen_qmd_qstnr(qstnr, survey_config, lang, path)
 \item{lang}{Language in which to output the questionnaire. A character scalar.}
 
 \item{path}{Path to write the generated questionnaire file to. A character scalar.}
+
+\item{add_item_ids}{Whether or not to add questionnaire item identifiers next to the question texts.}
 }
 \value{
 \code{qstnr}, invisibly.
