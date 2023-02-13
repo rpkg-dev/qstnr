@@ -545,7 +545,7 @@ common_val_scale <- function(x,
 #' @return A list.
 #' @export
 val_set <- function(id,
-                    survey_config) {
+                    survey_config = survey_config) {
   
   is_desc <- startsWith(id, "desc:")
   id %<>% stringr::str_remove("^desc:")

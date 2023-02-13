@@ -4,7 +4,7 @@
 \alias{val_set}
 \title{Get value set}
 \usage{
-val_set(id, survey_config)
+val_set(id, survey_config = survey_config)
 }
 \arguments{
 \item{id}{String that uniquely identifies the value set.}
