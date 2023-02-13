@@ -80,6 +80,28 @@ combine_spec_part_srcs <- function(srcs,
   result
 }
 
+emph_md <- function(x,
+                    emph = "*") {
+  
+  x %>%
+    purrr::map_chr(\(x) {
+      
+      x %>%
+        stringr::str_split(pattern = "\n") %>%
+        purrr::map(\(x2) {
+          x2 %>%
+            stringr::str_replace_all(pattern = paste0(stringr::str_escape(emph), "(.*)", stringr::str_escape(emph)),
+                                     replacement = "\\1") %>%
+            stringr::str_replace_all(pattern = "^(.)",
+                                     replacement = paste0(emph, "\\1")) %>%
+            stringr::str_replace_all(pattern = "(.)$",
+                                     replacement = paste0("\\1", emph))
+        }) %>%
+        purrr::list_c(ptype = character()) %>%
+        stringr::str_flatten(collapse = "\n")
+    })
+}
+
 gen_qstnr_row <- function(item,
                           ...) {
   
@@ -380,13 +402,10 @@ gen_qmd_qstnr <- function(qstnr,
             dplyr::group_by(id) %>%
             dplyr::group_map(\(d3, k3) {
               
-              q_text <- unlist(d3$question)
+              q_text <- emph_md(unlist(d3$question),
+                                emph = "**")
               
-              if (!stringr::str_detect(q_text, "\\n")) {
-                q_text %<>% pal::wrap_chr("**")
-              }
-              
-              # display is conditional on whether the question is part of a block or not
+              # layout is conditional on whether the question is part of a block or not
               if (is.na(d3$question_block)) {
                 question <- c(q_text,
                               "",
@@ -417,7 +436,7 @@ gen_qmd_qstnr <- function(qstnr,
         k1$group %>%
         stringr::str_replace_all("_", " ") %>%
         stringr::str_to_title() %>%
-        pal::wrap_chr("**")
+        emph_md(emph = "**")
       
       c(paste0("## Block ", pretty_group),
         "",
