@@ -276,7 +276,6 @@ spec_part_file <- function(file,
                            spec_part,
                            validate) {
   if (validate) {
-    
     pal::toml_validate(input = path,
                        from_file = TRUE,
                        schema = glue::glue("https://qstnr.rpkg.dev/dev/schemas/qstnr-{spec_part}.schema.json"))
@@ -297,14 +296,12 @@ NOTES:
 spec_part_url <- function(url,
                           spec_part,
                           validate) {
-  
   toml_content <-
     httr::RETRY(verb = "GET",
               url = url) %>%
     httr::content(as = "text", encoding = "UTF-8")
   
   if (validate) {
-    
     pal::toml_validate(input = toml_content,
                        from_file = FALSE,
                        schema = glue::glue("https://qstnr.rpkg.dev/dev/schemas/qstnr-{spec_part}.schema.json"))
