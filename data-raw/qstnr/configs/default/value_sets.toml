@@ -77,10 +77,10 @@ value_scale = "ordinal_ascending"
 
 [importance_4_scale]
 id = "importance_4_scale"
-values.en = [ "irrelevant",      "rather unimportant",     "rather important",     "very important" ]
-values.de = [ "bedeutungslos",   "eher unwichtig",         "eher wichtig",         "sehr wichtig" ]
-values.fr = [ "sans importance", "plutôt sans importance", "plutôt important",     "très important" ]
-values.it = [ "irrilevante",     "piuttosto irrilevante",  "piuttosto importante", "molto importante" ]
+values.en = [ "irrelevant",              "rather unimportant",     "rather important",     "very important" ]
+values.de = [ "überhaupt nicht wichtig", "eher unwichtig",         "eher wichtig",         "sehr wichtig" ]
+values.fr = [ "sans importance",         "plutôt sans importance", "plutôt important",     "très important" ]
+values.it = [ "irrilevante",             "piuttosto irrilevante",  "piuttosto importante", "molto importante" ]
 values.int = [ 1, 2, 3, 4 ]
 value_scale = "ordinal_ascending"
 
