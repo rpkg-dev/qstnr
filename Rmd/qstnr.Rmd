@@ -240,6 +240,48 @@ gen_qstnr_row <- function(item,
 }
 ```
 
+### `gen_qstnr_rows`
+
+Recursively iterates over all the item iterators.
+
+```{r}
+gen_qstnr_rows <- function(item,
+                           i = 1L,
+                           i_list = list()) {
+  
+  if (i < length(item$i)) {
+    
+    result <-
+      purrr::map(item$i[[i]],
+                 \(cur_i) {
+                   
+                   i_list %<>% c(rlang::list2("i{i}" := cur_i))
+                   
+                   gen_qstnr_rows(item = item,
+                                  i = i + 1L,
+                                  i_list = i_list)
+                 }) %>%
+      purrr::list_rbind()
+    
+  } else {
+    
+    result <-
+      purrr::map(item$i[[i]],
+                 \(cur_i) {
+                   
+                   i_list %<>% c(rlang::list2("i{i}" := cur_i))
+                   
+                   gen_qstnr_row(item = item,
+                                 !!!i_list)
+                   
+                 }) %>%
+      purrr::list_rbind()
+  }
+  
+  result
+}
+```
+
 ### `interpolate`
 
 ```{r}
@@ -393,18 +435,14 @@ gen_qstnr <- function(survey_config) {
         purrr::map(
           group$item_ids,
           \(id) {
+            
             item <- survey_config$items[[id]]
             
-            # TODO: implement proper recursive iterator processing
-            if (utils::hasName(item, "i")) {
-              result <- dplyr::bind_rows(gen_qstnr_row(item = item,
-                                                       i1 = unlist(item$i)[1L]),
-                                         gen_qstnr_row(item = item,
-                                                       i1 = unlist(item$i)[2L]))
+            if (length(item[["i"]]) > 0L) {
+              return(gen_qstnr_rows(item = item))
             } else {
-              result <- gen_qstnr_row(item = item)
+              return(gen_qstnr_row(item = item))
             }
-            result
           }) %>%
           purrr::list_rbind()
       }) %>%
