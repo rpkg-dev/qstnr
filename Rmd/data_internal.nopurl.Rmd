@@ -19,27 +19,6 @@ NOTES:
     mentioned](https://coolbutuseless.github.io/2018/12/10/r-packages-internal-and-external-data/) in the book [R
     Packages](https://r-pkgs.org/data.html#data-data).
 
-## `defaults`
-
-TODO:
-
--   Create `question_blocks.toml` with sensible sample data (a block "demographics" etc.).
-
-```{r}
-spec_parts <-
-  fs::dir_ls(path = "data-raw/qstnr/configs",
-             type = "directory") %>%
-  rlang::set_names(nm = fs::path_file(.)) %>%
-  purrr::map(~ fs::dir_ls(path = .x,
-                          type = "file",
-                          glob = "*.toml") %>%
-               rlang::set_names(nm = fs::path_ext_remove(fs::path_file(.))) %>%
-               purrr::map(pal::toml_read))
-
-# TODO: remove this once items are moved to pkg fokus
-spec_parts$default$items_TODO <- NULL
-```
-
 ## `item_keys`
 
 Supported qstnr specification part keys.
@@ -69,6 +48,40 @@ item_keys <-
   dplyr::select(-default)
 ```
 
+## `notice`
+
+```{r}
+notice <- list(mandatory = list(de = "Diese Frage muss zwingend beantwortet und kann nicht \u00fcbersprungen werden.",
+                                en = "This question is mandatory and cannot be skipped.",
+                                fr = "Il faut obligatoirement répondre à cette question et on ne peut pas la sauter.",
+                                it = "A questa domanda è obbligatorio rispondere e non può essere saltata."),
+               multiple_answers = list(de = "Bei dieser Frage sind mehrere Antworten m\u00f6glich.",
+                                       en = "More than one answer is possible for this question.",
+                                       fr = "Il y a plus d'une réponse possible à cette question.",
+                                       it = "Per questa domanda è possibile più di una risposta."))
+```
+
+## `spec_parts`
+
+TODO:
+
+-   Create `question_blocks.toml` with sensible sample data (a block "demographics" etc.).
+
+```{r}
+spec_parts <-
+  fs::dir_ls(path = "data-raw/qstnr/configs",
+             type = "directory") %>%
+  rlang::set_names(nm = fs::path_file(.)) %>%
+  purrr::map(~ fs::dir_ls(path = .x,
+                          type = "file",
+                          glob = "*.toml") %>%
+               rlang::set_names(nm = fs::path_ext_remove(fs::path_file(.))) %>%
+               purrr::map(pal::toml_read))
+
+# TODO: remove this once items are moved to pkg fokus
+spec_parts$default$items_TODO <- NULL
+```
+
 ## `survey_config_keys`
 
 ```{r}
@@ -90,6 +103,7 @@ to package users.
 
 ```{r}
 usethis::use_data(item_keys,
+                  notice,
                   spec_parts,
                   survey_config_keys,
                   value_scales,

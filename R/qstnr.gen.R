@@ -24,6 +24,7 @@ utils::globalVariables(names = c(".",
                                  "question",
                                  "question_block",
                                  "question_block_filled",
+                                 "title",
                                  "value_scale",
                                  "value_sets",
                                  "values"))
@@ -436,9 +437,15 @@ gen_qmd_qstnr <- function(qstnr,
                                     overwrite = TRUE)
   checkmate::assert_flag(add_item_ids)
   
-  notice_mandatory <- c("*Diese Frage muss zwingend beantwortet und kann nicht \u00fcbersprungen werden.*",
+  notice_mandatory <- c(pal::wrap_chr(survey_config$notice$mandatory[[lang]] %||%
+                                        notice$mandatory[[lang]] %||%
+                                        notice$mandatory$en,
+                                      wrap = "*"),
                         "")
-  notice_multiple_answers <- c("*Bei dieser Frage sind mehrere Antworten m\u00f6glich.*",
+  notice_multiple_answers <- c(pal::wrap_chr(survey_config$notice$multiple_answers[[lang]] %||%
+                                               notice$multiple_answers[[lang]] %||%
+                                               notice$multiple_answers$en,
+                                             wrap = "*"),
                                "")
   survey_blocks <-
     qstnr %>%
@@ -478,8 +485,8 @@ gen_qmd_qstnr <- function(qstnr,
                               "",
                               paste0("- ", unlist(d3$values)),
                               "",
-                              notice_mandatory[lang == "de" && d3$is_mandatory],
-                              notice_multiple_answers[lang == "de" && d3$allow_multiple_answers])
+                              notice_mandatory[d3$is_mandatory],
+                              notice_multiple_answers[d3$allow_multiple_answers])
               } else {
                 question <- c(paste0("- ", q_text, " ", q_id[add_item_ids]))
                 
@@ -499,8 +506,8 @@ gen_qmd_qstnr <- function(qstnr,
             paste0("Es kann jeweils mit ", pal::prose_ls(unlist(d2$values[1L]), last_sep = " oder ", wrap = '"'),
                    " geantwortet werden.")[is_question_block_compact],
             ""[is_question_block],
-            notice_mandatory[lang == "de" && is_question_block && d2$is_mandatory[1L]],
-            notice_multiple_answers[lang == "de" && is_question_block && d2$allow_multiple_answers[1L]])
+            notice_mandatory[is_question_block && d2$is_mandatory[1L]],
+            notice_multiple_answers[is_question_block && d2$allow_multiple_answers[1L]])
         }) %>%
         purrr::list_c(ptype = character())
       

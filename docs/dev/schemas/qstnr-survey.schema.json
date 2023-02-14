@@ -55,6 +55,24 @@
           "minProperties": 1,
           "additionalProperties": false
         },
+        "notice": {
+          "description": "questionnaire items",
+          "type": "object",
+          "properties": {
+            "mandatory": {
+              "description": "notice for mandatory items (`is_mandatory = TRUE`)",
+              "type": "string",
+              "minLength": 1
+            },
+            "multiple_answers": {
+              "description": "notice for items which allow multiple answers (`allow_multiple_answers = TRUE`)",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
         "items": {
           "description": "questionnaire items",
           "type": "object",
