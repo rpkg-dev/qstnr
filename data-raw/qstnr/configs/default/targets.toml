@@ -2,8 +2,8 @@
 
 [all]
 id = "all"
-name.en = "all"
-name.de = "alle"
+title.en = "all"
+title.de = "alle"
 description.en = "all respondents"
 description.de = "alle Respondent:innen"
 filter.positive = "dplyr::filter(TRUE)"
@@ -11,24 +11,24 @@ filter.negative = "dplyr::filter(FALSE)"
 
 [online]
 id = "online"
-name.en = "online respondents"
-name.de = "Online-Respondent:innen"
+title.en = "online respondents"
+title.de = "Online-Respondent:innen"
 description.de = "Respondent:innen, welche den Fragebogen online ausfüllten"
 filter.positive = "dplyr::filter(questionnaire_channel == 'online')"
 filter.negative = "dplyr::filter(questionnaire_channel != 'online')"
 
 [print]
 id = "print"
-name.en = "print respondents"
-name.de = "Print-Respondent:innen"
+title.en = "print respondents"
+title.de = "Print-Respondent:innen"
 description.de = "Respondent:innen, welche den Fragebogen auf Papier ausfüllten"
 filter.positive = "dplyr::filter(questionnaire_channel == 'print')"
 filter.negative = "dplyr::filter(questionnaire_channel != 'print')"
 
 [voters]
 id = "voters"
-name.en = "voters"
-name.de = "Stimmende"
+title.en = "voters"
+title.de = "Stimmende"
 description.en = "respondents who have participated at the current ballot"
 description.de = "Respondent:innen, welche am aktuellen Urnengang teilgenommen haben"
 filter.positive = "dplyr::filter(as_int_vals(has_voted) == 1L)"
@@ -36,8 +36,8 @@ filter.negative = "dplyr::filter(as_int_vals(has_voted) == 0L)"
 
 [non_voters]
 id = "non_voters"
-name.en = "non-voters"
-name.de = "Nicht-Stimmende"
+title.en = "non-voters"
+title.de = "Nicht-Stimmende"
 description.en = "respondents who have not participated at the current ballot"
 description.de = "Respondent:innen, welche nicht am aktuellen Urnengang teilgenommen haben"
 filter.positive = "dplyr::filter(as_int_vals(has_voted) == 0L)"
@@ -45,8 +45,8 @@ filter.negative = "dplyr::filter(as_int_vals(has_voted) == 1L)"
 
 [non_voters_qualified]
 id = "non_voters_qualified"
-name.en = "qualified non-voters"
-name.de = "qualifizierte Nicht-Stimmende"
+title.en = "qualified non-voters"
+title.de = "qualifizierte Nicht-Stimmende"
 description.de = "Nicht-Stimmende, welche sich aufgrund der Antworten zu den Fragen bezüglich der Gründe der Nicht-Teilnahme für eine hypothetische Teilnahme nicht völlig disqualifizieren (`any(reason_non_participation_(hindrance|ineffectiveness|insignificance|forgetfulness|no_chance) = 1`)."
 filter.positive = """
 dplyr::filter(as_int_vals(has_voted) == 0L
@@ -60,8 +60,8 @@ dplyr::full_join(x = . %>% dplyr::filter(dplyr::if_all(matches('^reason_non_part
 
 [voters_online]
 id = "voters_online"
-name.en = "voting online respondents"
-name.de = "stimmende Online-Respondent:innen"
+title.en = "voting online respondents"
+title.de = "stimmende Online-Respondent:innen"
 description.en = "online respondents who have participated at the current ballot"
 description.de = "Online-Respondent:innen, welche am aktuellen Urnengang teilgenommen haben"
 filter.positive = "dplyr::filter(questionnaire_channel == 'online' & as_int_vals(has_voted) == 1L)"
@@ -69,8 +69,8 @@ filter.negative = "dplyr::filter(as_int_vals(has_voted) == 0L | (as_int_vals(has
 
 [voters_cantonal_online]
 id = "voters_cantonal_online"
-name.en = "cantonal non-voting online respondents"
-name.de = "kantonal nicht-stimmende Online-Respondent:innen"
+title.en = "cantonal non-voting online respondents"
+title.de = "kantonal nicht-stimmende Online-Respondent:innen"
 description.de = "Online-Respondent:innen (`questionnaire_channel = 1`), welche die Frage zur Teilnahme (`has_voted`) mit _teilgenommen_ (`1`) beantwortet haben, sich jedoch an keiner _kantonalen_ Abstimmung/Wahl beteiligten (`all(voting_decision_cantonal_proposal/*_election_# = 3/88)`)."
 filter.positive = """
 dplyr::filter(dplyr::if_all(matches('^voting_decision_cantonal_((proposal|proportional_election)|majoritarian_election_\\\\d+_seat)_\\\\d+$'),
@@ -81,8 +81,8 @@ dplyr::filter(dplyr::if_any(matches('^voting_decision_cantonal_((proposal|propor
 
 [voters_federal_cantonal]
 id = "voters_federal_cantonal"
-name.en = "federal and cantonal voters"
-name.de = "eidgenössisch und kantonal Stimmende"
+title.en = "federal and cantonal voters"
+title.de = "eidgenössisch und kantonal Stimmende"
 description.de = "Respondent:innen, welche sich sowohl an den _eidgenössischen_ wie auch den _kantonalen_ Abstimmungen/Wahlen beteiligten (`has_voted = 1 & any(voting_decision_federal_proposal/*_election_# != 3/88) & any(voting_decision_cantonal_proposal/*_election_# != 3/88)`)."
 filter.positive = """
 dplyr::filter(as_int_vals(has_voted) == 1L
@@ -99,16 +99,16 @@ dplyr::filter(as_int_vals(has_voted) == 0L
 
 [voters_past_federal_proportional_election]
 id = "voters_past_federal_proportional_election"
-name.en = "participants in past federal proportional election"
-name.de = "Stimmende vergangene eidgenössische Verhältniswahl"
+title.en = "participants in past federal proportional election"
+title.de = "Stimmende vergangene eidgenössische Verhältniswahl"
 description.de = "Respondent:innen, welche die Frage zur Teilnahme an den vergangenen eidgenössischen Wahlen (`participation_past_federal_elections`) mit _teilgenommen_ (`1`) beantwortet haben."
 filter.positive = "dplyr::filter(participation_past_federal_elections == 'teilgenommen')"
 filter.negative = "dplyr::filter(participation_past_federal_elections == 'nicht teilgenommen oder leer eingelegt')"
 
 [voters_past_cantonal_proportional_election]
 id = "voters_past_cantonal_proportional_election"
-name.en = "participants in past cantonal proportional election"
-name.de = "Stimmende vergangene kantonale Verhältniswahl"
+title.en = "participants in past cantonal proportional election"
+title.de = "Stimmende vergangene kantonale Verhältniswahl"
 description.de = "Respondent:innen, welche die Frage zur Teilnahme an den vergangenen kantonalen Wahlen (`participation_past_cantonal_elections`) mit _teilgenommen_ (`1`) beantwortet haben."
 filter.positive = "dplyr::filter(participation_past_cantonal_elections == 'teilgenommen')"
 filter.negative = "dplyr::filter(participation_past_cantonal_elections == 'nicht teilgenommen oder leer eingelegt')"
@@ -116,8 +116,8 @@ filter.negative = "dplyr::filter(participation_past_cantonal_elections == 'nicht
 [yes_voters_federal_proposals]
 i = [ "{ proposal_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton) }" ]
 id = "yes_voters_federal_proposal_{i1}"
-name.en = "yes-voters of federal proposal {i1}"
-name.de = "Ja-Stimmende eidgenössische Vorlage {i1}"
+title.en = "yes-voters of federal proposal {i1}"
+title.de = "Ja-Stimmende eidgenössische Vorlage {i1}"
 description.de = "Respondent:innen, welche die Frage zum Stimmentscheid bei{ ifelse(proposal_name_gender(ballot_date = ballot_date, lvl = 'federal', canton = canton, proposal_nr = i, type = 'short') == 'feminine', ' der', 'm') } eidgenössischen _{ proposal_name(ballot_date = ballot_date, lvl = 'federal', canton = canton, proposal_nr = i, lang = 'de', type = 'short') }_ mit _Ja (angenommen)_ (`1`) beantwortet haben."
 filter.positive = "dplyr::filter(voting_decision_federal_proposal_{i1} == 'Ja (angenommen)')"
 filter.negative = "dplyr::filter(voting_decision_federal_proposal_{i1} %in% c('Nein (abgelehnt)', NA))"
@@ -125,8 +125,8 @@ filter.negative = "dplyr::filter(voting_decision_federal_proposal_{i1} %in% c('N
 [no_voters_federal_proposals]
 i = [ "{ proposal_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton) }" ]
 id = "no_voters_federal_proposal_{i1}"
-name.en = "no-voters of federal proposal {i1}"
-name.de = "Nein-Stimmende eidgenössische Vorlage {i1}"
+title.en = "no-voters of federal proposal {i1}"
+title.de = "Nein-Stimmende eidgenössische Vorlage {i1}"
 description.de = "Respondent:innen, welche die Frage zum Stimmentscheid bei{ ifelse(proposal_name_gender(ballot_date = ballot_date, lvl = 'federal', canton = canton, proposal_nr = i, type = 'short') == 'feminine', ' der', 'm') } eidgenössischen _{ proposal_name(ballot_date = ballot_date, lvl = 'federal', canton = canton, proposal_nr = i, lang = 'de', type = 'short') }_ mit _Nein (abgelehnt)_ (`2`) beantwortet haben."
 filter.positive = "dplyr::filter(voting_decision_federal_proposal_{i1} == 'Nein (abgelehnt)')"
 filter.negative = "dplyr::filter(voting_decision_federal_proposal_{i1} %in% c('Ja (angenommen)', NA))"
@@ -134,8 +134,8 @@ filter.negative = "dplyr::filter(voting_decision_federal_proposal_{i1} %in% c('J
 [yes_voters_cantonal_proposals]
 i = [ "{ proposal_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton) }" ]
 id = "yes_voters_cantonal_proposal_{i1}"
-name.en = "yes-voters of cantonal proposal {i1}"
-name.de = "Ja-Stimmende kantonale Vorlage {i1}"
+title.en = "yes-voters of cantonal proposal {i1}"
+title.de = "Ja-Stimmende kantonale Vorlage {i1}"
 description.de = "Respondent:innen, welche die Frage zum Stimmentscheid bei{ ifelse(proposal_name_gender(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, proposal_nr = i, type = 'short') == 'feminine', ' der', 'm') } kantonalen _{ proposal_name(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, proposal_nr = i, lang = 'de', type = 'short') }_ mit _Ja (angenommen)_ (`1`) beantwortet haben."
 filter.positive = "dplyr::filter(voting_decision_cantonal_proposal_{i1} == 'Ja (angenommen)')"
 filter.negative = "dplyr::filter(voting_decision_cantonal_proposal_{i1} %in% c('Nein (abgelehnt)', NA))"
@@ -143,40 +143,40 @@ filter.negative = "dplyr::filter(voting_decision_cantonal_proposal_{i1} %in% c('
 [no_voters_cantonal_proposals]
 i = [ "{ proposal_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton) }" ]
 id = "no_voters_cantonal_proposal_{i1}"
-name.en = "no-voters of cantonal proposal {i1}"
-name.de = "Nein-Stimmende kantonale Vorlage {i1}"
+title.en = "no-voters of cantonal proposal {i1}"
+title.de = "Nein-Stimmende kantonale Vorlage {i1}"
 description.de = "Respondent:innen, welche die Frage zum Stimmentscheid bei{ ifelse(proposal_name_gender(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, proposal_nr = i, type = 'short') == 'feminine', ' der', 'm') } kantonalen _{ proposal_name(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, proposal_nr = i, lang = 'de', type = 'short') }_ mit _Nein (abgelehnt)_ (`2`) beantwortet haben."
 filter.positive = "dplyr::filter(voting_decision_cantonal_proposal_{i1} == 'Nein (abgelehnt)')"
 filter.negative = "dplyr::filter(voting_decision_cantonal_proposal_{i1} %in% c('Ja (angenommen)', NA))"
 
 [economically_active]
 id = "economically_active"
-name.en = "economically active persons"
-name.de = "Erwerbstätige"
+title.en = "economically active persons"
+title.de = "Erwerbstätige"
 description.de = "Respondent:innen, welche entweder die Frage zur Beschäftigungssituation (`employment_situation`) mit einer der ersten vier Antwortoptionen (`1`–`4`) beantwortet haben oder die Zusatzfrage zum Teilzeiterwerb (`employment_situation_routing`) mit _ja_ (`1`) beantwortet haben."
 filter.positive = "dplyr::filter(as.integer(employment_situation) < 5L | employment_situation_routing == 'ja')"
 filter.negative = "dplyr::filter(as.integer(employment_situation) > 4L & (employment_situation_routing %in% c('nein', NA)))"
 
 [economically_inactive]
 id = "economically_inactive"
-name.en = "economically inactive persons"
-name.de = "Nichterwerbstätige"
+title.en = "economically inactive persons"
+title.de = "Nichterwerbstätige"
 description.de = "Respondent:innen, welche entweder die Frage zur Beschäftigungssituation (`employment_situation`) mit einer der letzten sechs Antwortoptionen (`5`–`10`) beantwortet haben oder die Zusatzfrage zum Teilzeiterwerb (`employment_situation_routing`) mit _Nein_ (`2`) beantwortet haben."
 filter.positive = "dplyr::filter(as.integer(employment_situation) > 4L | employment_situation_routing == 'nein')"
 filter.negative = "dplyr::filter(as.integer(employment_situation) < 5L & (employment_situation_routing %in% c('ja', NA)))"
 
 [economically_inactive_online]
 id = "economically_inactive_online"
-name.en = "economically inactive online respondents"
-name.de = "nichterwerbstätige Online-Respondent:innen"
+title.en = "economically inactive online respondents"
+title.de = "nichterwerbstätige Online-Respondent:innen"
 description.de = "Online-Respondent:innen (`questionnaire_channel = 1`), welche entweder die Frage zur Beschäftigungssituation (`employment_situation`) mit einer der letzten sechs Antwortoptionen (`5`–`10`) beantwortet haben oder die Zusatzfrage zum Teilzeiterwerb (`employment_situation_routing`) mit _nein_ (`2`) beantwortet haben."
 filter.positive = "dplyr::filter(questionnaire_channel == 'online' & (as.integer(employment_situation) > 4L | employment_situation_routing == 'nein'))"
 filter.negative = "dplyr::filter(questionnaire_channel == 'print' & (as.integer(employment_situation) < 5L & (employment_situation_routing %in% c('ja', NA))))"
 
 [employed]
 id = "employed"
-name.en = "employed"
-name.de = "Angestellte"
+title.en = "employed"
+title.de = "Angestellte"
 description.en = "respondents who currently work as employees"
 description.de = "Respondent:innen, welche gegenwärtig in einem Angestelltenverhältnis stehen"
 filter.positive = "dplyr::filter(employment_situation == 'AngestellteR')"
@@ -184,8 +184,8 @@ filter.negative = "dplyr::filter(employment_situation != 'AngestellteR' | is.na(
 
 [formerly_employed_online]
 id = "formerly_employed_online"
-name.en = "formerly employed online respondents"
-name.de = "ehemals angestellte Online-Respondent:innen"
+title.en = "formerly employed online respondents"
+title.de = "ehemals angestellte Online-Respondent:innen"
 description.en = "online respondents who formerly worked as employees"
 description.de = "Online-Respondent:innen, welche in der Vergangenheit in einem Angestelltenverhältnis standen"
 filter.positive = "dplyr::filter(former_employment_situation == 'AngestellteR')"
@@ -193,8 +193,8 @@ filter.negative = "dplyr::filter(former_employment_situation != 'AngestellteR' |
 
 [not_living_alone]
 id = "not_living_alone"
-name.en = "persons not living alone"
-name.de = "Nicht-Alleinwohnende"
+title.en = "persons not living alone"
+title.de = "Nicht-Alleinwohnende"
 description.en = "respondents living in a multi-person household"
 description.de = "Respondent:innen, welche in einem Mehrpersonenhaushalt leben."
 filter.positive = "dplyr::filter(household_size > 1L)"
@@ -203,8 +203,8 @@ filter.negative = "dplyr::filter(household_size == 1L)"
 [ticket_modifiers_federal_proportional_elections]
 i = [ "{ election_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton, prcd = 'proportional') }" ]
 id = "ticket_modifiers_federal_proportional_election_{i1}"
-name.en = "ticket modifiers in federal proportional election {i1}"
-name.de = "Listenabändernde eidgenössische Verhältniswahl {i1}"
+title.en = "ticket modifiers in federal proportional election {i1}"
+title.de = "Listenabändernde eidgenössische Verhältniswahl {i1}"
 description.de = "Stimmende (`has_voted = 1`), welche die Frage zur Listenabänderung bei der eidgenössischen Verhältniswahl {i1} (`ticket_modification_federal_proportional_election_{i1}`) mit _bestehende Liste verändert oder eigene Liste zusammengestellt_ (`2`) beantwortet haben."
 filter.positive = """
 dplyr::filter(as_int_vals(has_voted) == 1L
@@ -217,8 +217,8 @@ dplyr::filter(as_int_vals(has_voted) == 0L
 [ticket_modifiers_cantonal_proportional_elections]
 i = [ "{ election_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, prcd = 'proportional') }" ]
 id = "ticket_modifiers_cantonal_proportional_election_{i1}"
-name.en = "ticket modifiers in cantonal proportional election {i1}"
-name.de = "Listenabändernde kantonale Verhältniswahl {i1}"
+title.en = "ticket modifiers in cantonal proportional election {i1}"
+title.de = "Listenabändernde kantonale Verhältniswahl {i1}"
 description.de = "Stimmende (`has_voted = 1`), welche die Frage zur Listenabänderung bei der kantonalen Verhältniswahl {i1} (`ticket_modification_cantonal_proportional_election_{i1}`) mit _bestehende Liste verändert oder eigene Liste zusammengestellt_ (`2`) beantwortet haben."
 filter.positive = """
 dplyr::filter(as_int_vals(has_voted) == 1L
@@ -231,8 +231,8 @@ dplyr::filter(as_int_vals(has_voted) == 0L
 [panachers_federal_proportional_elections]
 i = [ "{ election_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton, prcd = 'proportional') }" ]
 id = "panachers_federal_proportional_election_{i1}"
-name.en = "panachers in federal proportional election {i1}"
-name.de = "Panaschierende eidgenössische Verhältniswahl {i1}"
+title.en = "panachers in federal proportional election {i1}"
+title.de = "Panaschierende eidgenössische Verhältniswahl {i1}"
 description.de = "Listenabändernde bei der eidgenössischen Verhältniswahl {i1} (`has_voted = 1 & ticket_modification_federal_proportional_election_{i1} = 2`), welche die Frage zum Panaschieren (`ticket_modification_federal_proportional_election_{i1}_panached`) mit _trifft zu_ (`1`) beantwortet haben."
 filter.positive = """
 dplyr::filter(as_int_vals(has_voted) == 1L
@@ -249,8 +249,8 @@ dplyr::filter(as_int_vals(has_voted) == 0L
 [panachers_cantonal_proportional_elections]
 i = [ "{ election_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, prcd = 'proportional') }" ]
 id = "panachers_cantonal_proportional_election_{i1}"
-name.en = "panachers in cantonal proportional election {i1}"
-name.de = "Panaschierende kantonale Verhältniswahl {i1}"
+title.en = "panachers in cantonal proportional election {i1}"
+title.de = "Panaschierende kantonale Verhältniswahl {i1}"
 description.de = "Listenabändernde bei der kantonalen Verhältniswahl {i1} (`has_voted = 1 & ticket_modification_cantonal_proportional_election_{i1} = 2`), welche die Frage zum Panaschieren (`ticket_modification_cantonal_proportional_election_{i1}_panached`) mit _trifft zu_ (`1`) beantwortet haben."
 filter.positive = """
 dplyr::filter(as_int_vals(has_voted) == 1L
@@ -266,8 +266,8 @@ dplyr::filter(as_int_vals(has_voted) == 0L
 
 [climate_neutrals]
 id = "climate_neutrals"
-name.en = "climate neutrals"
-name.de = "Klimaneutrale"
+title.en = "climate neutrals"
+title.de = "Klimaneutrale"
 description.de = "Respondent:innen, welche die Frage zur Schweizer Klimaneutralität bejahten (`attitude_climate_neutral_switzerland in (1, 2, 3)`.)"
 filter.positive = "dplyr::filter(attitude_climate_neutral_switzerland %in% c('ja, so schnell wie nur möglich', 'ja, bis spätestens 2035', 'ja, bis spätestens 2050'))"
 filter.negative = "dplyr::filter(attitude_climate_neutral_switzerland %in% c('no', NA))"

@@ -20,8 +20,8 @@
           "type": "string",
           "pattern": "^[A-Za-z_][A-Za-z0-9_.{}]*$"
         },
-        "name": {
-          "description": "target group name",
+        "title": {
+          "description": "target group title",
           "type": "object",
           "patternProperties": {
             "^[a-z]{2}$": {
@@ -63,7 +63,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["id", "name", "description", "filter"],
+      "required": ["id", "title", "description", "filter"],
       "additionalProperties": false
     }
   },

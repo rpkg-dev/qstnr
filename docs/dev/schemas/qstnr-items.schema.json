@@ -15,8 +15,8 @@
           "uniqueItems": true
         },
         "id": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-id.schema.json" },
-        "name": {
-          "description": "item name",
+        "title": {
+          "description": "item title",
           "type": "object",
           "patternProperties": {
             "^[a-z]{2}$": {
@@ -84,7 +84,7 @@
       "dependencies": {
         "values": ["value_scale"]
       },
-      "required": ["id", "name", "description", "targets"],
+      "required": ["id", "title", "description", "targets"],
       "additionalProperties": false
     }
   },

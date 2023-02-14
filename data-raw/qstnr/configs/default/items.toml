@@ -3,15 +3,15 @@
 # ballot-related metadata
 [ballot_date]
 id = "ballot_date"
-name.en = "ballot date"
-name.de = "Abstimmungs-/Wahltermin"
+title.en = "ballot date"
+title.de = "Abstimmungs-/Wahltermin"
 description.en = "date of the ballot"
 value_scale = "interval"
 targets = [ "none" ]
 [ballot_type]
 id = "ballot_type"
-name.en = "ballot type"
-name.de = "Urnengang-Typ"
+title.en = "ballot type"
+title.de = "Urnengang-Typ"
 description.en = "type of the ballot"
 values.en = [ "referendum", "election", "both" ]
 values.de = [ "Abstimmung", "Wahl", "beides" ]
@@ -22,57 +22,57 @@ targets = [ "none" ]
 # official register data
 [last_name_official]
 id = "last_name_official"
-name.en = "last name (official information)[^anon]"
-name.de = "Nachname (amtliche Information)[^anon]"
+title.en = "last name (official information)[^anon]"
+title.de = "Nachname (amtliche Information)[^anon]"
 description.en = "respondent's last name (official cantonal register information)"
 value_scale = "nominal"
 targets = [ "none" ]
 [first_name_official]
 id = "first_name_official"
-name.en = "first name (official information)[^anon]"
-name.de = "Vorname (amtliche Information)[^anon]"
+title.en = "first name (official information)[^anon]"
+title.de = "Vorname (amtliche Information)[^anon]"
 description.en = "respondent's first name (official cantonal register information)"
 value_scale = "nominal"
 targets = [ "none" ]
 [middle_name_official]
 id = "middle_name_official"
-name.en = "middle name(s) (official information)[^anon]"
-name.de = "Weitere Vornamen (amtliche Information)[^anon]"
+title.en = "middle name(s) (official information)[^anon]"
+title.de = "Weitere Vornamen (amtliche Information)[^anon]"
 description.en = "respondent's middle name(s) (official cantonal register information)"
 value_scale = "nominal"
 targets = [ "none" ]
 [street_official]
 id = "street_official"
-name.en = "street name (official information)[^anon]"
-name.de = "Strasse (amtliche Information)[^anon]"
+title.en = "street name (official information)[^anon]"
+title.de = "Strasse (amtliche Information)[^anon]"
 description.en = "street name of respondent's place of residence (official cantonal register information)"
 value_scale = "nominal"
 targets = [ "none" ]
 [street_number_official]
 id = "street_number_official"
-name.en = "street number (official information)[^anon]"
-name.de = "Hausnummer (amtliche Information)[^anon]"
+title.en = "street number (official information)[^anon]"
+title.de = "Hausnummer (amtliche Information)[^anon]"
 description.en = "street number of respondent's place of residence (official cantonal register information)"
 value_scale = "nominal"
 targets = [ "none" ]
 [zip_code_official]
 id = "zip_code_official"
-name.en = "zip code (official information)[^anon]"
-name.de = "Postleitzahl (amtliche Information)[^anon]"
+title.en = "zip code (official information)[^anon]"
+title.de = "Postleitzahl (amtliche Information)[^anon]"
 description.en = "zip code of respondent's place of residence (official cantonal register information)"
 value_scale = "nominal"
 targets = [ "none" ]
 [place_official]
 id = "place_official"
-name.en = "place (official information)[^anon]"
-name.de = "Ort (amtliche Information)[^anon]"
+title.en = "place (official information)[^anon]"
+title.de = "Ort (amtliche Information)[^anon]"
 description.en = "respondent's place of residence (official cantonal register information)"
 value_scale = "nominal"
 targets = [ "none" ]
 [household_type_official]
 id = "household_type_official"
-name.en = "household type (official information)[^anon]"
-name.de = "Typ des Privathaushalts (amtliche Information)[^anon]"
+title.en = "household type (official information)[^anon]"
+title.de = "Typ des Privathaushalts (amtliche Information)[^anon]"
 description.en = "type of household the respondent lives in (official cantonal register information)"
 values.en = [
   "single-person household",
@@ -97,15 +97,15 @@ value_scale = "nominal"
 targets = [ "none" ]
 [arrival_date_official]
 id = "arrival_date_official"
-name.en = "arrival date (official information)[^anon]"
-name.de = "Zuzugsdatum (amtliche Information)[^anon]"
+title.en = "arrival date (official information)[^anon]"
+title.de = "Zuzugsdatum (amtliche Information)[^anon]"
 description.en = "respondent's date of arrival in the current `canton` (official cantonal register information)"
 value_scale = "interval"
 targets = [ "none" ]
 [origin_canton_official]
 id = "origin_canton_official"
-name.en = "origin canton (official information)[^anon]"
-name.de = "Herkunftskanton (amtliche Information)[^anon]"
+title.en = "origin canton (official information)[^anon]"
+title.de = "Herkunftskanton (amtliche Information)[^anon]"
 description.en = "canton where the respondent lived before moving to the current `canton` (official cantonal register information)"
 values.en = [
   "Zurich",
@@ -168,15 +168,15 @@ value_scale = "nominal"
 targets = [ "none" ]
 [year_of_birth_official]
 id = "year_of_birth_official"
-name.en = "year of birth (official information)[^anon]"
-name.de = "Geburtsjahr (amtliche Information)[^anon]"
+title.en = "year of birth (official information)[^anon]"
+title.de = "Geburtsjahr (amtliche Information)[^anon]"
 description.en = "respondent's year of birth (official cantonal register information)"
 value_scale = "interval"
 targets = [ "none" ]
 [sex_official]
 id = "sex_official"
-name.en = "sex (official information)[^anon]"
-name.de = "Geschlecht (amtliche Information)[^anon]"
+title.en = "sex (official information)[^anon]"
+title.de = "Geschlecht (amtliche Information)[^anon]"
 description.en = "respondent's sex (official cantonal register information)"
 values.en = [ "male", "female", "indeterminate" ]
 values.de = [ "männlich", "weiblich", "unbestimmt" ]
@@ -185,8 +185,8 @@ value_scale = "nominal"
 targets = [ "none" ]
 [marital_status_official]
 id = "marital_status_official"
-name.en = "TODO"
-name.de = "Zivilstand (amtliche Information)[^anon]"
+title.en = "TODO"
+title.de = "Zivilstand (amtliche Information)[^anon]"
 description.en = "respondent's marital status (official cantonal register information)"
 values.en = [ "single", "married", "widowed", "divorced", "in civil union", "dissolved civil union" ]
 values.de = [ "ledig", "verheiratet", "verwitwet", "geschieden", "in eingetragener Partnerschaft", "aufgelöste Partnerschaft" ]
@@ -195,15 +195,15 @@ value_scale = "nominal"
 targets = [ "none" ]
 [household_size_official]
 id = "household_size_official"
-name.en = "TODO"
-name.de = "Haushaltsgrösse (amtliche Information)[^anon]"
+title.en = "TODO"
+title.de = "Haushaltsgrösse (amtliche Information)[^anon]"
 description.en = "number of persons living in respondent's household (official cantonal register information)"
 value_scale = "ratio"
 targets = [ "none" ]
 [n_kids_in_household_official]
 id = "n_kids_in_household_official"
-name.en = "TODO"
-name.de = "Anzahl Kinder im Haushalt (amtliche Information)[^anon]"
+title.en = "TODO"
+title.de = "Anzahl Kinder im Haushalt (amtliche Information)[^anon]"
 description.en = "number of underaged persons living in respondent's household (official cantonal register information)"
 value_scale = "ratio"
 targets = [ "none" ]
@@ -211,8 +211,8 @@ targets = [ "none" ]
 # personal data
 [year_of_birth]
 id = "year_of_birth"
-name.en = "TODO"
-name.de = "Geburtsjahr (Kontrollfrage)"
+title.en = "TODO"
+title.de = "Geburtsjahr (Kontrollfrage)"
 description.en = "respondent's year of birth (own statement)"
 question.de = "In welchem Jahr sind Sie geboren?"
 value_scale = "interval"
@@ -220,8 +220,8 @@ targets = [ "all" ]
 is_mandatory = true
 [sex]
 id = "sex"
-name.en = "TODO"
-name.de = "Geschlecht (Kontrollfrage)"
+title.en = "TODO"
+title.de = "Geschlecht (Kontrollfrage)"
 description.en = "respondent's sex (own statement)"
 question.de = "Welches ist Ihr Geschlecht?"
 values.en = [ "male", "female", "indeterminate/other" ]
@@ -232,8 +232,8 @@ targets = [ "all" ]
 is_mandatory = true
 [cantonal_attachment]
 id = "cantonal_attachment"
-name.en = "TODO"
-name.de = "Verbundenheit mit dem Kanton"
+title.en = "TODO"
+title.de = "Verbundenheit mit dem Kanton"
 description.en = "how attached the respondent feels to his/her current `canton` of residence"
 question.de = "Wie verbunden fühlen Sie sich mit dem Kanton { stringr::str_to_sentence(canton) } auf einer Skala von 0 (gar nicht verbunden) bis 4 (stark verbunden)?"
 # description.en = "how attached the respondent feels to the canton of { stringr::str_to_sentence(canton) }"
@@ -246,24 +246,24 @@ targets = [ "all" ]
 # basic political data
 [political_interest_cantonal]
 id = "political_interest_cantonal"
-name.en = "TODO"
-name.de = "Politisches Interesse kantonal"
+title.en = "TODO"
+title.de = "Politisches Interesse kantonal"
 description.en = "respondent's interest in cantonal politics"
 question.de = "Wie interessiert sind Sie im Allgemeinen an der Politik auf Kantonsebene? Ich bin …"
 value_sets = [ "interest_4_scale", "dunno" ]
 targets = [ "all" ]
 [political_interest]
 id = "political_interest"
-name.en = "TODO"
-name.de = "Politisches Interesse Schweiz"
+title.en = "TODO"
+title.de = "Politisches Interesse Schweiz"
 description.en = "respondent's interest in Swiss politics"
 question.de = "Wie interessiert sind Sie im Allgemeinen an der Schweizer Politik? Ich bin …"
 value_sets = [ "interest_4_scale", "dunno" ]
 targets = [ "all" ]
 [has_voted]
 id = "has_voted"
-name.en = "TODO"
-name.de = "Teilnahme"
+title.en = "TODO"
+title.de = "Teilnahme"
 description.en = "respondent's participation status at the current ballot (blank votes count as 'has participated')"
 question.de = "Gerade erst fanden Wahlen oder Abstimmungen statt. Bei solchen nimmt normalerweise weniger als die Hälfte der Stimmberechtigten teil. Haben Sie an diesem Urnengang teilgenommen (leer einlegen zählt als Teilnahme)?"
 # question.default.referendum = "Gerade erst fanden Abstimmungen statt. Bei solchen nimmt normalerweise weniger als die Hälfte der Stimmberechtigten teil. Haben Sie an der Abstimmung vom { stringi::stri_datetime_format(time = ballot_date, format = 'date_long', locale = lang_to_locale('de')) } teilgenommen oder nicht? (leer einlegen zählt als Teilnahme)"

@@ -1,7 +1,7 @@
 key,components,description,is_scalar,has_lang_subkeys,type,default,remarks
 i,"items,targets",iterator; used to succinctly define multiple similar items ,FALSE,FALSE,list,,"individual iterators of the `i` array are referrable by their indexed variable counterparts `i1`, `i2`, etc.; iterators are hierarchical with `i1` being at the top (""for every `i1` do {for every `i2` do {...}}""); an arbitrary number of iterators can be used"
 id,items,item identifier,TRUE,FALSE,character,,must be unique
-name,items,item name,TRUE,TRUE,character,,
+title,items,item title,TRUE,TRUE,character,,
 description,items,item description,TRUE,TRUE,character,,
 question_block,items,item question block,TRUE,FALSE,character,,
 question,items,item question,TRUE,TRUE,character,,

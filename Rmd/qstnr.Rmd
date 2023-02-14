@@ -484,8 +484,8 @@ gen_qstnr <- function(survey_config) {
       d
     }) %>%
     dplyr::ungroup() %>%
-    # reduce to English `name` and `description` only for now
-    dplyr::mutate(name = purrr::map_chr(name, \(x) x$en),
+    # reduce to English `title` and `description` only for now
+    dplyr::mutate(title = purrr::map_chr(title, \(x) x$en),
                   description = purrr::map_chr(description, \(x) x$en)) %>%
     # restore original order
     dplyr::arrange(order)
