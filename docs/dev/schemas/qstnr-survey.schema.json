@@ -59,23 +59,47 @@
           "description": "questionnaire items",
           "type": "object",
           "properties": {
-            "ids": {
-              "description": "questionnaire item IDs to include in survey",
-              "type": "object",
-              "patternProperties": {
-                "^[A-Za-z_][A-Za-z0-9_]*$": {
-                  "type": "array",
-                  "items": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-id.schema.json" },
-                  "minItems": 1,
-                  "uniqueItems": true
-                }
+            "group": {
+              "description": "questionnaire item groups to include in survey",
+              "type": "array",
+              "items": {
+                "description": "group of questionnaire item identifiers to be included in survey",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "item group identifier",
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+                  },
+                  "title": {
+                    "description": "item group title",
+                    "type": "object",
+                    "patternProperties": {
+                      "^[a-z]{2}$": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "minProperties": 1,
+                    "additionalProperties": false
+                  },
+                  "item_ids": {
+                    "description": "item identifiers",
+                    "type": "array",
+                    "items": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-id.schema.json" },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                },
+                "required": ["id", "item_ids"],
+                "additionalProperties": false
               },
-              "minProperties": 1,
-              "additionalProperties": false
+              "minItems": 1,
+              "uniqueItems": true
             },
             "source": { "$ref": "#/$defs/source" }
           },
-          "required": ["ids", "source"],
+          "required": ["group", "source"],
           "additionalProperties": false
         },
         "question_blocks": {
