@@ -4,7 +4,7 @@
 \alias{gen_qmd_qstnr}
 \title{Generate Quarto Markdown questionnaire}
 \usage{
-gen_qmd_qstnr(qstnr, survey_config, lang, path, add_item_ids = FALSE)
+gen_qmd_qstnr(qstnr, survey_config, lang, path, add_item_ids = TRUE)
 }
 \arguments{
 \item{qstnr}{Unnested questionnaire tibble as returned by \code{\link[=unnest_qstnr]{unnest_qstnr()}}.}

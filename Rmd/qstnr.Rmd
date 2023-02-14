@@ -570,8 +570,28 @@ gen_qmd_qstnr <- function(qstnr,
                           survey_config,
                           lang,
                           path,
-                          add_item_ids = FALSE) {
+                          add_item_ids = TRUE) {
   
+  checkmate::assert_data_frame(qstnr,
+                               all.missing = FALSE,
+                               min.rows = 1L)
+  
+  missing_cols <- setdiff(c("lang", "group", "id", "question_block", "question", "values", "is_mandatory", "allow_multiple_answers"),
+                          colnames(qstnr))
+  if (length(missing_cols) > 0L) {
+    cli::cli_abort("Mandatory columns {.var missing_cols} are missing from argument {.arg qstnr}.")
+  }
+  checkmate::assert_list(survey_config,
+                         all.missing = FALSE)
+  missing_els <- setdiff(c("question_blocks", "title", "intro", "outro"),
+                         names(survey_config))
+  if (length(missing_els) > 0L) {
+    cli::cli_abort("Mandatory elements {.var missing_els} are missing from argument {.arg survey_config}.")
+  }
+  rlang::arg_match0(arg = lang,
+                    values = unique(qstnr$lang))
+  checkmate::assert_path_for_output(path,
+                                    overwrite = TRUE)
   checkmate::assert_flag(add_item_ids)
   
   notice_mandatory <- c("*Diese Frage muss zwingend beantwortet und kann nicht \u00fcbersprungen werden.*",
@@ -598,6 +618,7 @@ gen_qmd_qstnr <- function(qstnr,
         dplyr::group_map(\(d2, k2) {
           
           is_question_block <- length(unique(d2$id)) > 1L
+          is_question_block_compact <- is_question_block && length(unique(d2$values)) == 1L
           
           questions <-
             d2 %>%
@@ -606,10 +627,10 @@ gen_qmd_qstnr <- function(qstnr,
               
               q_text <- emph_md(unlist(d3$question),
                                 emph = "**")
-              q_id <- paste0("^`", unlist(k3), "`^")
+              q_id <- paste0("^`", k3$id, "`^")
               
               # layout is conditional on whether the question is part of a block or not
-              if (is.na(d3$question_block)) {
+              if (!is_question_block) {
                 question <- c(paste0(q_text, "  "[add_item_ids]),
                               q_id[add_item_ids],
                               "",
@@ -619,6 +640,10 @@ gen_qmd_qstnr <- function(qstnr,
                               notice_multiple_answers[lang == "de" && d3$allow_multiple_answers])
               } else {
                 question <- c(paste0("- ", q_text, " ", q_id[add_item_ids]))
+                
+                if (!is_question_block_compact) {
+                  question %<>% c(paste0("  - ", unlist(d3$values)))
+                }
               }
               
               question
@@ -628,8 +653,9 @@ gen_qmd_qstnr <- function(qstnr,
           c(survey_config$question_blocks[[as.character(k2$question_block_filled)]]$intro[[lang]][is_question_block],
             ""[is_question_block],
             questions,
-            ""[is_question_block],
-            paste0("Es kann jeweils mit ", pal::prose_ls(unlist(d2$values[1L]), last_sep = " oder ", wrap = '"'), " geantwortet werden.")[is_question_block],
+            ""[is_question_block_compact],
+            paste0("Es kann jeweils mit ", pal::prose_ls(unlist(d2$values[1L]), last_sep = " oder ", wrap = '"'),
+                   " geantwortet werden.")[is_question_block_compact],
             ""[is_question_block],
             notice_mandatory[lang == "de" && is_question_block && d2$is_mandatory[1L]],
             notice_multiple_answers[lang == "de" && is_question_block && d2$allow_multiple_answers[1L]])
