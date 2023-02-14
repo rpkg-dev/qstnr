@@ -642,9 +642,7 @@ val_ptype <- function(type,
   # TODO
 }
 
-vals <- function(id) {
+vals <- function(id,
+                 survey_config = survey_config) {
   
-  init_config(type = "values")
-  
-  getOption("qstnr.values")[[id]]
 }
