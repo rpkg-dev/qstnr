@@ -280,7 +280,8 @@ read_survey <- function(path,
 #' @export
 gen_qstnr <- function(survey_config) {
   
-  survey_config$item_groups %>%
+  result <-
+    survey_config$item_groups %>%
     rlang::set_names(nm = purrr::map_depth(., 1L, \(x) x$id)) %>%
     # for each item group
     purrr::map(
@@ -342,6 +343,16 @@ gen_qstnr <- function(survey_config) {
                   description = purrr::map_chr(description, \(x) x$en)) %>%
     # restore original order
     dplyr::arrange(order)
+  
+  # warn if item and item group IDs overlap
+  ids_overlap <- intersect(result$group,
+                           result$id)
+  
+  if (length(ids_overlap) > 0L) {
+    cli::cli_warn("Item group identifiers and item identifiers must be overall unique for further processing. Overlapping IDs include {.val {ids_overlap}}.")
+  }
+  
+  result
 }
 
 #' Unnest questionnaire tibble
