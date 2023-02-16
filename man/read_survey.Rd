@@ -15,6 +15,6 @@ read_survey(path, validate = FALSE)
 A list containing the combined survey configuration.
 }
 \description{
-Read in survey config
+Assembles a raw TOML survey configuration into a combined survey configuration list.
 }
 \concept{survey_prep}

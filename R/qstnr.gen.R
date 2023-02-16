@@ -240,6 +240,8 @@ spec_part_url <- function(url,
 
 #' Read in survey config
 #'
+#' Assembles a raw TOML survey configuration into a combined survey configuration list.
+#'
 #' @param path Path to the survey config TOML file. A character scalar.
 #' @param validate Whether or not to validate all input TOML files, i.e. ensure that they adhere to their respective schemas.
 #'

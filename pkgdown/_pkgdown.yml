@@ -19,7 +19,7 @@ template:
 url: https://qstnr.rpkg.dev
 reference:
 - title: Survey preparation
-  desc: Function to process raw and uncombined survey configurations.
+  desc: Functions to process raw survey configurations.
 - contents: read_survey
 - title: Questionnaire generation
   desc: Functions to generate different representations of a questionnaire from a
