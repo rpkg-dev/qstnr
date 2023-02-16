@@ -57,6 +57,31 @@ struct_survey <- list("{.strong qstnr}" = list(
 
 rm(struct_source)
 
+assert_qstnr_tibble <- function(qstnr,
+                                cols = character()) {
+  
+  checkmate::assert_data_frame(qstnr,
+                               all.missing = FALSE,
+                               min.rows = 1L)
+  missing_cols <- setdiff(cols,
+                          colnames(qstnr))
+  if (length(missing_cols) > 0L) {
+    cli::cli_abort("Mandatory columns {.var {missing_cols}} are missing from {.arg qstnr}.")
+  }
+}
+
+assert_survey_config <- function(survey_config,
+                                 els = character()) {
+  
+  checkmate::assert_list(survey_config,
+                         all.missing = FALSE)
+  missing_els <- setdiff(els,
+                         names(survey_config))
+  if (length(missing_els) > 0L) {
+    cli::cli_abort("Mandatory elements {.var {missing_els}} are missing from {.arg survey_config}.")
+  }
+}
+
 combine_spec_part_srcs <- function(srcs,
                                    spec_part,
                                    dir,
@@ -320,6 +345,8 @@ read_survey <- function(path,
 #' @export
 gen_qstnr <- function(survey_config) {
   
+  assert_survey_config(survey_config = survey_config,
+                       els = c("items", "item_groups"))
   result <-
     survey_config$item_groups %>%
     rlang::set_names(nm = purrr::map_depth(., 1L, \(x) x$id)) %>%
@@ -509,22 +536,10 @@ gen_qmd_qstnr <- function(qstnr,
                           path,
                           add_item_ids = TRUE) {
   
-  checkmate::assert_data_frame(qstnr,
-                               all.missing = FALSE,
-                               min.rows = 1L)
-  
-  missing_cols <- setdiff(c("lang", "group", "id", "question_block", "question", "values", "is_mandatory", "allow_multiple_answers"),
-                          colnames(qstnr))
-  if (length(missing_cols) > 0L) {
-    cli::cli_abort("Mandatory columns {.var missing_cols} are missing from argument {.arg qstnr}.")
-  }
-  checkmate::assert_list(survey_config,
-                         all.missing = FALSE)
-  missing_els <- setdiff(c("question_blocks", "title", "intro", "outro"),
-                         names(survey_config))
-  if (length(missing_els) > 0L) {
-    cli::cli_abort("Mandatory elements {.var missing_els} are missing from argument {.arg survey_config}.")
-  }
+  assert_qstnr_tibble(qstnr = qstnr,
+                      cols = c("lang", "group", "id", "question_block", "question", "values", "is_mandatory", "allow_multiple_answers"))
+  assert_survey_config(survey_config = survey_config,
+                       els = c("question_blocks", "title", "intro", "outro"))
   rlang::arg_match0(arg = lang,
                     values = unique(qstnr$lang))
   checkmate::assert_path_for_output(path,
@@ -725,6 +740,10 @@ common_val_scale <- function(x,
 #' @export
 val_set <- function(id,
                     survey_config = survey_config) {
+  
+  checkmate::assert_string(id)
+  assert_survey_config(survey_config = survey_config,
+                       els = "value_sets")
   
   is_desc <- startsWith(id, "desc:")
   id %<>% stringr::str_remove("^desc:")
