@@ -32,7 +32,8 @@
 
 -   publish stable release
 
-    -   replace all occurrences of `https://qstnr.rpkg.dev/dev/` with `https://qstnr.rpkg.dev/` in schemas (and elsewhere)
+    -   replace all occurrences of `https://qstnr.rpkg.dev/dev/` with `https://qstnr.rpkg.dev/` in schemas (and elsewhere) -\> change default to
+        `schema_url(dev = FALSE)`
     -   submit to CRAN
 
 -   implement fns to *write* TOML. requires an R package providing support for this since RcppTOML only offers read support. we could write an R package that

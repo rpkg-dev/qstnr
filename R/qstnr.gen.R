@@ -195,6 +195,12 @@ interpolate <- function(x,
                  .trim = FALSE)
 }
 
+schema_url <- function(spec_part,
+                       dev = TRUE) {
+  
+  glue::glue("https://qstnr.rpkg.dev/", ifelse(dev, "dev/", ""), "schemas/qstnr-{spec_part}.schema.json")
+}
+
 spec_part_expr <- function(expr) {
   
   eval(expr = parse(text = expr),
@@ -213,7 +219,7 @@ spec_part_file <- function(file,
   if (validate) {
     pal::toml_validate(input = path,
                        from_file = TRUE,
-                       schema = glue::glue("https://qstnr.rpkg.dev/dev/schemas/qstnr-{spec_part}.schema.json"))
+                       schema = schema_url(spec_part = spec_part))
   }
   
   pal::toml_read(input = path,
@@ -231,7 +237,7 @@ spec_part_url <- function(url,
   if (validate) {
     pal::toml_validate(input = toml_content,
                        from_file = FALSE,
-                       schema = glue::glue("https://qstnr.rpkg.dev/dev/schemas/qstnr-{spec_part}.schema.json"))
+                       schema = schema_url(spec_part = spec_part))
   }
   
   pal::toml_read(input = toml_content,
@@ -255,7 +261,7 @@ read_survey <- function(path,
   
   if (validate) {
     pal::toml_validate(input = path,
-                       schema = "https://qstnr.rpkg.dev/dev/schemas/qstnr-survey.schema.json")
+                       schema = schema_url(spec_part = "survey"))
   }
   
   dir <- fs::path_dir(path) %>% fs::path_abs()
