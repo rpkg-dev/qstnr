@@ -43,11 +43,6 @@ all_spec_parts <- c("links",
                     "question_blocks",
                     "items")
 
-ptype_date <- as.Date(NULL)
-ptype_int <- integer()
-ptype_float <- numeric()
-ptype_string <- character()
-
 struct_source <- list("[[{.strong source}]]" = list("{.strong list},{.strong file},{.strong url} = {.emph EXPR},{.emph PATH},{.emph URL}"))
 
 struct_survey <- list("{.strong qstnr}" = list(
@@ -718,11 +713,6 @@ val_set <- function(id,
   }
   
   result
-}
-
-val_ptype <- function(type,
-                      size = NULL) {
-  # TODO
 }
 
 vals <- function(id,

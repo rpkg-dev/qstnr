@@ -96,15 +96,6 @@ all_spec_parts <- c("links",
                     "items")
 ```
 
-### `ptype_*`
-
-```{r}
-ptype_date <- as.Date(NULL)
-ptype_int <- integer()
-ptype_float <- numeric()
-ptype_string <- character()
-```
-
 ### `struct_survey`
 
 TODO:
@@ -900,15 +891,6 @@ val_set <- function(id,
   }
   
   result
-}
-```
-
-### !`val_ptype`
-
-```{r}
-val_ptype <- function(type,
-                      size = NULL) {
-  # TODO
 }
 ```
 
