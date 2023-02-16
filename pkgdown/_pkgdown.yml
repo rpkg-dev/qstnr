@@ -34,3 +34,5 @@ reference:
   - as_int_vals
   - common_val_scale
   - val_set
+- title: Miscellaneous
+- contents: pkg_config

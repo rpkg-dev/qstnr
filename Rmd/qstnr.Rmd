@@ -77,6 +77,20 @@ utils::globalVariables(names = c(".",
                                  "values_targets"))
 ```
 
+## Package load/unload
+
+```{r}
+.onLoad <- function(libname, pkgname) {
+  
+  # clear pkgpins cache
+  tryCatch(expr = pkgpins::clear_cache(board = pkgpins::board(pkg = pkgname,
+                                                              pkg_versioned = FALSE),
+                                       max_age = pal::pkg_config_val(key = "max_cache_lifespan",
+                                                                     pkg = pkgname)),
+           error = function(e) cli::cli_alert_warning(text = "Failed to clear pkgpins cache on load of {.pkg pkgname}. Error message: {e$message}"))
+}
+```
+
 ## Constants
 
 ```{r}
@@ -958,4 +972,28 @@ vals <- function(id,
                  survey_config = survey_config) {
   
 }
+```
+
+## Miscellaneous
+
+### `pkg_config`
+
+```{r}
+#' `r this_pkg` package configuration metadata
+#'
+#' A [tibble][tibble::tbl_df] with metadata of all possible `r this_pkg` package configuration options. See [pal::pkg_config_val()] for more information.
+#'
+#' @format `r pkgsnip::return_label("data_cols", cols = colnames(pkg_config))`
+#' @export
+#'
+#' @examples
+#' qstnr::pkg_config
+pkg_config <-
+  tibble::tibble(key = character(),
+                 default_value = list(),
+                 description = character()) %>%
+  tibble::add_row(key = "max_cache_lifespan",
+                  default_value = list("1 year"),
+                  description = paste0("Maximal timespan to preserve the package's [pkgpins](https://rpkg.dev/pkgpins/) cache. Cache entries older than this ",
+                                       "will be deleted upon package loading."))
 ```

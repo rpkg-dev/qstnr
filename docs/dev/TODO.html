@@ -77,7 +77,7 @@
 </ul></li>
 <li>
 <p>further investigate shortcomings of taplo’s schema validation</p>
-<p>e.g. adding a forbidden survey config key <code>qstnr.introo</code> doesn’t trigger a validation error in taplo (error is properly triggered by <a href="https://www.jsonschemavalidator.net/" class="external-link">this online validator</a>)</p>
+<p>e.g. adding a forbidden survey config key <code>qstnr.introo</code> doesn’t trigger a validation error in taplo (compare with <a href="https://www.jsonschemavalidator.net/" class="external-link">this online validator</a> which properly errors)</p>
 </li>
 <li>
 <p>implement fns to <em>write</em> TOML. requires an R package providing support for this since RcppTOML only offers read support. we could write an R package that offers <a href="https://docs.rs/taplo/latest/taplo/" class="external-link">taplo</a> or <a href="https://docs.rs/toml/latest/toml/" class="external-link">toml</a> crate bindings; relevant resources:</p>

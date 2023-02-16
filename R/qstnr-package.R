@@ -1,3 +1,11 @@
+#' @section Package configuration:
+#'
+#' `r pkgsnip::md_snip("pkg_config", pkg = "qstnr")`
+#'
+#' ```{r, echo = FALSE}
+#' pal::print_pkg_config("qstnr")
+#' ```
+#'
 #' @keywords internal
 #' @importFrom magrittr %>%
 #' @importFrom magrittr %<>%
