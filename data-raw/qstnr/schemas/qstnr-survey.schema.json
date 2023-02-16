@@ -166,7 +166,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["langs", "items"],
+      "required": ["langs", "items", "targets"],
       "additionalProperties": false
     }
   },
