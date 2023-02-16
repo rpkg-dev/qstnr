@@ -352,7 +352,7 @@ gen_qstnr <- function(survey_config) {
     }) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
-      # complement with default `values.targets`
+      # complement with default `values.targets` and convert `values.int` to type integer
       dplyr::across(values,
                     \(x) {
                       purrr::map(x,
@@ -360,6 +360,7 @@ gen_qstnr <- function(survey_config) {
                                    if (is.null(x2$targets)) {
                                      x2$targets <- rep("all", length(x2$int))
                                    }
+                                   x2$int %<>% as.integer()
                                    x2})}),
       # reduce to English `title` and `description` only for now
       title = purrr::map_chr(title, \(x) x$en),
