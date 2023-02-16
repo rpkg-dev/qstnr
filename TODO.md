@@ -36,6 +36,11 @@
         `schema_url(dev = FALSE)`
     -   submit to CRAN
 
+-   further investigate shortcomings of taplo's schema validation
+
+    e.g. adding a forbidden survey config key `qstnr.introo` doesn't trigger a validation error in taplo (compare with [this online
+    validator](https://www.jsonschemavalidator.net/) which properly errors)
+
 -   implement fns to *write* TOML. requires an R package providing support for this since RcppTOML only offers read support. we could write an R package that
     offers [taplo](https://docs.rs/taplo/latest/taplo/) or [toml](https://docs.rs/toml/latest/toml/) crate bindings; relevant resources:
 
