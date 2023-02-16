@@ -34,3 +34,9 @@ try(
   qstnr::common_val_scale("ordinal_descending", "ratio")
 )
 }
+\seealso{
+Other auxiliary functions:
+\code{\link{as_int_vals}()},
+\code{\link{val_set}()}
+}
+\concept{aux}

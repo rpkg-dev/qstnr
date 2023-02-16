@@ -20,3 +20,9 @@ An integer vector of the same length as \code{var}.
 \description{
 Converts character question values to their integer code counterparts. The latter are useful mainly because they're language-independent.
 }
+\seealso{
+Other auxiliary functions:
+\code{\link{common_val_scale}()},
+\code{\link{val_set}()}
+}
+\concept{aux}

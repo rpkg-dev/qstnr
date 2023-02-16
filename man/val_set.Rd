@@ -17,3 +17,9 @@ A list.
 \description{
 Returns the value set identified by the provided \code{id}. The prefix \code{"desc:"} can be used to reverse the order of the set's values.
 }
+\seealso{
+Other auxiliary functions:
+\code{\link{as_int_vals}()},
+\code{\link{common_val_scale}()}
+}
+\concept{aux}

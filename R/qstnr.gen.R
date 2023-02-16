@@ -14,11 +14,15 @@
 
 utils::globalVariables(names = c(".",
                                  ":=",
+                                 # tidyselect fns
                                  "all_of",
+                                 "starts_with",
+                                 # other
                                  "description",
                                  "group",
                                  "id",
                                  "init_config",
+                                 "lang",
                                  "name",
                                  "path",
                                  "question",
@@ -27,7 +31,8 @@ utils::globalVariables(names = c(".",
                                  "title",
                                  "value_scale",
                                  "value_sets",
-                                 "values"))
+                                 "values",
+                                 "values_targets"))
 
 this_pkg <- utils::packageName()
 
@@ -202,13 +207,16 @@ spec_part_file <- function(file,
                            dir,
                            spec_part,
                            validate) {
+  
+  path <- fs::path(dir, file)
+  
   if (validate) {
     pal::toml_validate(input = path,
                        from_file = TRUE,
                        schema = glue::glue("https://qstnr.rpkg.dev/dev/schemas/qstnr-{spec_part}.schema.json"))
   }
   
-  pal::toml_read(input = fs::path(dir, file),
+  pal::toml_read(input = path,
                  from_file = TRUE)
 }
 
@@ -235,7 +243,8 @@ spec_part_url <- function(url,
 #' @param path Path to the survey config TOML file. A character scalar.
 #' @param validate Whether or not to validate all input TOML files, i.e. ensure that they adhere to their respective schemas.
 #'
-#' @return A list containing the combined survey configuration. Additionally, 
+#' @return A list containing the combined survey configuration.
+#' @family survey_prep
 #' @export
 read_survey <- function(path,
                         validate = FALSE) {
@@ -278,6 +287,7 @@ read_survey <- function(path,
 #' @param survey_config Survey configuration list as returned by [read_survey()].
 #'
 #' @return `r pkgsnip::return_label("data")`
+#' @family qstnr_gen
 #' @export
 gen_qstnr <- function(survey_config) {
   
@@ -339,9 +349,19 @@ gen_qstnr <- function(survey_config) {
       d
     }) %>%
     dplyr::ungroup() %>%
-    # reduce to English `title` and `description` only for now
-    dplyr::mutate(title = purrr::map_chr(title, \(x) x$en),
-                  description = purrr::map_chr(description, \(x) x$en)) %>%
+    dplyr::mutate(
+      # complement with default `values.targets`
+      dplyr::across(values,
+                    \(x) {
+                      purrr::map(x,
+                                 \(x2) {
+                                   if (is.null(x2$targets)) {
+                                     x2$targets <- rep("all", length(x2$int))
+                                   }
+                                   x2})}),
+      # reduce to English `title` and `description` only for now
+      title = purrr::map_chr(title, \(x) x$en),
+      description = purrr::map_chr(description, \(x) x$en)) %>%
     # restore original order
     dplyr::arrange(order)
   
@@ -358,9 +378,12 @@ gen_qstnr <- function(survey_config) {
 
 #' Unnest questionnaire tibble
 #'
+#' Unnests a nested qstnr tibble as returned by [gen_qstnr()] into one row per question `lang` and `id`.
+#'
 #' @param qstnr Nested questionnaire tibble as returned by [gen_qstnr()].
 #'
 #' @return `r pkgsnip::return_label("data")`
+#' @family qstnr_gen
 #' @export
 unnest_qstnr <- function(qstnr) {
   
@@ -399,6 +422,46 @@ unnest_qstnr <- function(qstnr) {
     dplyr::arrange(order)
 }
 
+#' Unnest questionnaire tibble's item values
+#'
+#' Unnests a semi-unnested qstnr tibble as returned by [unnest_qstnr()] into one row per question `lang`, `id` and `value`.
+#'
+#' @param qstnr Semi-unnested questionnaire tibble as returned by [gen_qstnr()].
+#'
+#' @return `r pkgsnip::return_label("data")`
+#' @family qstnr_gen
+#' @export
+unnest_qstnr_vals <- function(qstnr) {
+  
+  qstnr %>%
+    # complement `values` with `values_int`
+    dplyr::group_by(id, lang) %>%
+    dplyr::group_modify(\(d, k) {
+      
+      if (is.null(d$values[[1L]])) {
+        d$values <- purrr::map(d$values_int,
+                               \(x) as.character(x))
+      }
+      
+      d
+    }) %>%
+    dplyr::ungroup() %>%
+    # harmonize `values_targets` struct
+    dplyr::mutate(values_targets = purrr::map(values_targets,
+                                              \(x) {
+                                                if (purrr::pluck_depth(x) < 2L) {
+                                                  x %<>% as.list()
+                                                }
+                                                x
+                                              })) %>%
+    # unnest `values*` cols
+    tidyr::unnest_longer(col = starts_with("values")) %>%
+    dplyr::rename_with(.cols = starts_with("values"),
+                       .fn = \(x) stringr::str_replace(string = x,
+                                                       pattern = "^values",
+                                                       replacement = "value"))
+}
+
 #' Generate Quarto Markdown questionnaire
 #'
 #' @inheritParams gen_qstnr
@@ -408,6 +471,7 @@ unnest_qstnr <- function(qstnr) {
 #' @param add_item_ids Whether or not to add questionnaire item identifiers next to the question texts.
 #'
 #' @return `qstnr`, invisibly.
+#' @family qstnr_gen
 #' @export
 gen_qmd_qstnr <- function(qstnr,
                           survey_config,
@@ -545,6 +609,7 @@ gen_qmd_qstnr <- function(qstnr,
 #' @param qstnr TODO
 #'
 #' @return An integer vector of the same length as `var`.
+#' @family aux
 #' @export
 as_int_vals <- function(var,
                         qstnr = pal::pkg_config_val(key = "cur_qstnr",
@@ -586,6 +651,7 @@ as_int_vals <- function(var,
 #' @param y Second value scale.
 #'
 #' @return A character scalar.
+#' @family aux
 #' @export
 #'
 #' @examples
@@ -625,6 +691,7 @@ common_val_scale <- function(x,
 #' @param id String that uniquely identifies the value set.
 #'
 #' @return A list.
+#' @family aux
 #' @export
 val_set <- function(id,
                     survey_config = survey_config) {

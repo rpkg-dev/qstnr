@@ -23,3 +23,10 @@ gen_qmd_qstnr(qstnr, survey_config, lang, path, add_item_ids = TRUE)
 \description{
 Generate Quarto Markdown questionnaire
 }
+\seealso{
+Other questionnaire generation functions:
+\code{\link{gen_qstnr}()},
+\code{\link{unnest_qstnr_vals}()},
+\code{\link{unnest_qstnr}()}
+}
+\concept{qstnr_gen}

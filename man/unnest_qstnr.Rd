@@ -13,5 +13,12 @@ unnest_qstnr(qstnr)
 A \link[tibble:tbl_df-class]{tibble}.
 }
 \description{
-Unnest questionnaire tibble
+Unnests a nested qstnr tibble as returned by \code{\link[=gen_qstnr]{gen_qstnr()}} into one row per question \code{lang} and \code{id}.
 }
+\seealso{
+Other questionnaire generation functions:
+\code{\link{gen_qmd_qstnr}()},
+\code{\link{gen_qstnr}()},
+\code{\link{unnest_qstnr_vals}()}
+}
+\concept{qstnr_gen}

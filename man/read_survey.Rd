@@ -12,8 +12,9 @@ read_survey(path, validate = FALSE)
 \item{validate}{Whether or not to validate all input TOML files, i.e. ensure that they adhere to their respective schemas.}
 }
 \value{
-A list containing the combined survey configuration. Additionally,
+A list containing the combined survey configuration.
 }
 \description{
 Read in survey config
 }
+\concept{survey_prep}
