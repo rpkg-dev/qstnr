@@ -71,9 +71,14 @@
 </ul></li>
 <li>
 <p>publish stable release</p>
-<ul><li>replace all occurrences of <code>https://qstnr.rpkg.dev/dev/</code> with <code>https://qstnr.rpkg.dev/</code> in schemas (and elsewhere)</li>
+<ul><li>replace all occurrences of <code>https://qstnr.rpkg.dev/dev/</code> with <code>https://qstnr.rpkg.dev/</code> in schemas (and elsewhere) -&gt; change default to <code>schema_url(dev = FALSE)</code>
+</li>
 <li>submit to CRAN</li>
 </ul></li>
+<li>
+<p>further investigate shortcomings of taplo’s schema validation</p>
+<p>e.g. adding a forbidden survey config key <code>qstnr.introo</code> doesn’t trigger a validation error in taplo (error is properly triggered by <a href="https://www.jsonschemavalidator.net/" class="external-link">this online validator</a>)</p>
+</li>
 <li>
 <p>implement fns to <em>write</em> TOML. requires an R package providing support for this since RcppTOML only offers read support. we could write an R package that offers <a href="https://docs.rs/taplo/latest/taplo/" class="external-link">taplo</a> or <a href="https://docs.rs/toml/latest/toml/" class="external-link">toml</a> crate bindings; relevant resources:</p>
 <ul><li><a href="https://github.com/r-rust/faq" class="external-link">Publishing R packages with Rust code on CRAN</a></li>
