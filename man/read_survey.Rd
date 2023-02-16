@@ -4,12 +4,13 @@
 \alias{read_survey}
 \title{Read in survey config}
 \usage{
-read_survey(path, validate = FALSE)
+read_survey(path, validate = NULL)
 }
 \arguments{
 \item{path}{Path to the survey config TOML file. A character scalar.}
 
-\item{validate}{Whether or not to validate all input TOML files, i.e. ensure that they adhere to their respective schemas.}
+\item{validate}{Whether or not to validate all input TOML files, i.e. ensure that they adhere to their respective schemas. Validation usually adds a
+noticeable delay. If \code{NULL}, validation is performed only for files whose content has changed since the last successful validation.}
 }
 \value{
 A list containing the combined survey configuration.

@@ -211,10 +211,11 @@ spec_part_file <- function(file,
   
   path <- fs::path(dir, file)
   
-  if (validate) {
-    pal::toml_validate(input = path,
-                       from_file = TRUE,
-                       schema = schema_url(spec_part = spec_part))
+  if (is.null(validate) || validate) {
+    toml_validate(input = path,
+                  from_file = TRUE,
+                  spec_part = spec_part,
+                  use_cache = is.null(validate))
   }
   
   pal::toml_read(input = path,
@@ -229,14 +230,35 @@ spec_part_url <- function(url,
               url = url) %>%
     httr::content(as = "text", encoding = "UTF-8")
   
-  if (validate) {
-    pal::toml_validate(input = toml_content,
-                       from_file = FALSE,
-                       schema = schema_url(spec_part = spec_part))
+  if (is.null(validate) || validate) {
+    toml_validate(input = toml_content,
+                  from_file = FALSE,
+                  spec_part = spec_part,
+                  use_cache = is.null(validate))
   }
   
   pal::toml_read(input = toml_content,
                  from_file = FALSE)
+}
+
+toml_validate <- function(input,
+                          from_file,
+                          spec_part,
+                          use_cache = TRUE) {
+  
+  hash <- if (from_file) rlang::hash_file(path = input) else rlang::hash(input)
+  
+  # cache validation based on TOML (file) content hash
+  pkgpins::with_cache(expr = pal::toml_validate(input = input,
+                                                from_file = from_file,
+                                                schema = schema_url(spec_part = spec_part)),
+                      pkg = this_pkg,
+                      from_fn = "toml_validate",
+                      from_file,
+                      hash,
+                      pkg_versioned = FALSE,
+                      use_cache = use_cache,
+                      cache_lifespan = Inf)
 }
 
 #' Read in survey config
@@ -244,19 +266,23 @@ spec_part_url <- function(url,
 #' Assembles a raw TOML survey configuration into a combined survey configuration list.
 #'
 #' @param path Path to the survey config TOML file. A character scalar.
-#' @param validate Whether or not to validate all input TOML files, i.e. ensure that they adhere to their respective schemas.
+#' @param validate Whether or not to validate all input TOML files, i.e. ensure that they adhere to their respective schemas. Validation usually adds a
+#'   noticeable delay. If `NULL`, validation is performed only for files whose content has changed since the last successful validation.
 #'
 #' @return A list containing the combined survey configuration.
 #' @family survey_prep
 #' @export
 read_survey <- function(path,
-                        validate = FALSE) {
+                        validate = NULL) {
   
-  checkmate::assert_flag(validate)
+  checkmate::assert_flag(validate,
+                         null.ok = TRUE)
   
-  if (validate) {
-    pal::toml_validate(input = path,
-                       schema = schema_url(spec_part = "survey"))
+  if (is.null(validate) || validate) {
+    toml_validate(input = path,
+                  from_file = TRUE,
+                  spec_part = "survey",
+                  use_cache = is.null(validate))
   }
   
   dir <- fs::path_dir(path) %>% fs::path_abs()
