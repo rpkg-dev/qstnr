@@ -22,7 +22,8 @@
         },
         "id": {
           "description": "item identifier",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "title": {
           "description": "item title",
@@ -49,8 +50,9 @@
           "additionalProperties": false
         },
         "question_block":  {
-          "description": "item question block",
-          "type": "string"
+          "description": "reference to item question block identifier",
+          "type": "string",
+          "minLength": 1
         },
         "question": {
           "description": "item question",
@@ -72,13 +74,23 @@
           "items": {
             "description": "reference to value set identifier",
             "type": "string",
-            "pattern": "^(desc:)?[A-Za-z_][A-Za-z0-9_]*$"
+            "minLength": 1
           },
           "minItems": 1,
           "uniqueItems": true,
           "default": [ "values" ]
         },
-        "targets": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-targets.schema.json" },
+        "targets": {
+          "description": "references to target group identifiers",
+          "type": "array",
+          "items": {
+            "description": "reference to target group identifier",
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
         "is_mandatory": {
           "description": "whether answering the item is mandatory or can be skipped",
           "type": "boolean",
