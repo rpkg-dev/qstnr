@@ -58,6 +58,7 @@ utils::globalVariables(names = c(".",
                                  ":=",
                                  # tidyselect fns
                                  "all_of",
+                                 "any_of",
                                  "starts_with",
                                  # other
                                  "description",
@@ -348,6 +349,15 @@ interpolate <- function(x,
 }
 ```
 
+### `order_qstnr_cols`
+
+```{r}
+order_qstnr_cols <- function(qstnr) {
+  
+  qstnr %>% dplyr::relocate(any_of(qstnr_cols))
+}
+```
+
 ### `schema_url`
 
 ```{r}
@@ -597,8 +607,10 @@ gen_qstnr <- function(survey_config) {
       # reduce to English `title` and `description` only for now
       title = purrr::map_chr(title, \(x) x$en),
       description = purrr::map_chr(description, \(x) x$en)) %>%
-    # restore original order
-    dplyr::arrange(order)
+    # restore original item order
+    dplyr::arrange(order) %>%
+    # harmonize col order
+    order_qstnr_cols()
   
   # warn if item and item group IDs overlap
   ids_overlap <- intersect(result$group,
@@ -613,6 +625,8 @@ gen_qstnr <- function(survey_config) {
 ```
 
 ### `unnest_qstnr`
+
+TODO: Fix `lang = NA` rows
 
 NOTES:
 
@@ -662,7 +676,9 @@ unnest_qstnr <- function(qstnr) {
         dplyr::cross_join(y = lang_specific_subset)
     }) %>%
     dplyr::ungroup() %>%
-    dplyr::arrange(order)
+    dplyr::arrange(order) %>%
+    # harmonize col order
+    order_qstnr_cols()
 }
 ```
 
@@ -706,7 +722,9 @@ unnest_qstnr_vals <- function(qstnr) {
     dplyr::rename_with(.cols = starts_with("values"),
                        .fn = \(x) stringr::str_replace(string = x,
                                                        pattern = "^values",
-                                                       replacement = "value"))
+                                                       replacement = "value")) %>%
+    # harmonize col order
+    order_qstnr_cols()
 }
 ```
 

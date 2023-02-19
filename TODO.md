@@ -2,8 +2,6 @@
 
 -   move most of default config to pkg fokus
 
--   add fn to restore common col order, cf. `c2d:::order_rfrnd_cols()`
-
 -   implement target iterators handling
 
 -   during qstnr assembly, ensure that

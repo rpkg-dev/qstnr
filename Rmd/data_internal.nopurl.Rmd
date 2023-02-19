@@ -61,11 +61,35 @@ notice <- list(mandatory = list(de = "Diese Frage muss zwingend beantwortet und 
                                        it = "Per questa domanda è possibile più di una risposta."))
 ```
 
+## `qstnr_cols`
+
+Overall canonical order of all the cols the different `qstnr` representations can have.
+
+```{r}
+qstnr_cols <-
+  item_keys$key |>
+  setdiff("i") %>%
+  c("order",
+    "group",
+    "lang",
+    .)
+
+qstnr_cols <- c(qstnr_cols[1:which(qstnr_cols == "values")],
+                "values_int",
+                "values_targets",
+                "value",
+                "value_int",
+                "value_targets",
+                qstnr_cols[which(qstnr_cols == "value_scale"):length(qstnr_cols)])
+```
+
 ## `spec_parts`
 
 TODO:
 
 -   Create `question_blocks.toml` with sensible sample data (a block "demographics" etc.).
+
+-   Rethink whether we actually need/want to incl the default config in the package, or the pkgdown-based URL sourcing is enough.
 
 ```{r}
 spec_parts <-
@@ -104,6 +128,7 @@ to package users.
 ```{r}
 usethis::use_data(item_keys,
                   notice,
+                  qstnr_cols,
                   spec_parts,
                   survey_config_keys,
                   value_scales,
