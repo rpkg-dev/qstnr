@@ -59,6 +59,7 @@ utils::globalVariables(names = c(".",
                                  # tidyselect fns
                                  "all_of",
                                  "any_of",
+                                 "matches",
                                  "starts_with",
                                  # other
                                  "description",
@@ -72,6 +73,7 @@ utils::globalVariables(names = c(".",
                                  "question_block",
                                  "question_block_filled",
                                  "title",
+                                 "value_order",
                                  "value_scale",
                                  "value_sets",
                                  "values",
@@ -676,6 +678,7 @@ unnest_qstnr <- function(qstnr) {
         dplyr::cross_join(y = lang_specific_subset)
     }) %>%
     dplyr::ungroup() %>%
+    # restore row order
     dplyr::arrange(order) %>%
     # harmonize col order
     order_qstnr_cols()
@@ -687,7 +690,12 @@ unnest_qstnr <- function(qstnr) {
 ```{r}
 #' Unnest questionnaire tibble's item values
 #'
+#' @description
 #' Unnests a semi-unnested qstnr tibble as returned by [unnest_qstnr()] into one row per question `lang`, `id` and `value`.
+#' 
+#' The columns `r val_cols <- qstnr_cols |> stringr::str_subset("^values"); val_cols |> pal::prose_ls(wrap = "\x60")` will thereby become
+#' `r val_cols |> stringr::str_replace("^values", "value") |> pal::prose_ls(wrap = "\x60")`. Additionally, a column `value_order` is added holding the intended
+#' value order as defined in the questionnaire.
 #'
 #' @param qstnr Semi-unnested questionnaire tibble as returned by [gen_qstnr()].
 #'
@@ -718,11 +726,18 @@ unnest_qstnr_vals <- function(qstnr) {
                                                 x
                                               })) %>%
     # unnest `values*` cols
-    tidyr::unnest_longer(col = starts_with("values")) %>%
+    tidyr::unnest_longer(col = starts_with("values"),
+                         indices_to = "{col}_order") %>%
     dplyr::rename_with(.cols = starts_with("values"),
                        .fn = \(x) stringr::str_replace(string = x,
                                                        pattern = "^values",
                                                        replacement = "value")) %>%
+    # remove surplus `value_*_order` cols
+    dplyr::select(-matches("^value_.+_order$")) %>%
+    # restore row order
+    dplyr::arrange(order,
+                   lang,
+                   value_order) %>%
     # harmonize col order
     order_qstnr_cols()
 }

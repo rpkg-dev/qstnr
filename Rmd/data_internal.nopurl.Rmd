@@ -77,6 +77,7 @@ qstnr_cols <-
 qstnr_cols <- c(qstnr_cols[1:which(qstnr_cols == "values")],
                 "values_int",
                 "values_targets",
+                "value_order",
                 "value",
                 "value_int",
                 "value_targets",

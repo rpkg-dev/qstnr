@@ -14,6 +14,10 @@ A \link[tibble:tbl_df-class]{tibble}.
 }
 \description{
 Unnests a semi-unnested qstnr tibble as returned by \code{\link[=unnest_qstnr]{unnest_qstnr()}} into one row per question \code{lang}, \code{id} and \code{value}.
+
+The columns \code{values}, \code{values_int} and \code{values_targets} will thereby become
+\code{value}, \code{value_int} and \code{value_targets}. Additionally, a column \code{value_order} is added holding the intended
+value order as defined in the questionnaire.
 }
 \seealso{
 Other questionnaire generation functions:

@@ -57,7 +57,7 @@
 
 -   make `value_sets` part "directionless" by
 
-    -   [x] always sorting the definitions ascendingly (must be ), allow new sentinel `desc:` in `value_sets`
+    -   [x] always sorting the definitions ascendingly, allow new sentinel `desc:` in `value_sets`
     -   [x] implementing `desc:` interpretation
     -   [ ] communicating new requirement/guarantee in doc
     -   [ ] validating new requirement in code!
