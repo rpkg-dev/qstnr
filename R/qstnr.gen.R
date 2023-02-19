@@ -57,7 +57,8 @@ struct_source <- list("[[{.strong source}]]" = list("{.strong list},{.strong fil
 
 struct_survey <- list("{.strong qstnr}" = list(
   "{.strong items}" = c(struct_source,
-                        list("{.strong ids}" = list("{.strong {'<questionnaire_block>'}} = [ {.emph id_1}, {.emph id_2}, {.emph ...} ]"))),
+                        list("[[{.strong group}]]" = list("id = {.strong {'<questionnaire_block>'}}",
+                                                          "item_ids = [ {.emph id_1}, {.emph id_2}, {.emph ...} ]"))),
   "{.strong question_blocks}" = struct_source,
   "{.strong value_sets}" = struct_source,
   "{.strong targets}" = struct_source,

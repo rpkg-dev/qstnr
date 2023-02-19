@@ -114,8 +114,13 @@ all_spec_parts <- c("links",
 
 TODO:
 
--   Figure out whether it would be feasible to generate the key hierarchy tree(s) directly from the JSON schemas and add specification schemes for the remaining
-    parts
+-   Figure out whether it's feasible to generate the key hierarchy tree(s) directly from the JSON schemas (cue: "JSON schema visualization") and only add
+    specification schemes for the remaining parts.
+
+    So far:
+
+    -   [~~tidyjson~~](https://cran.r-project.org/web/packages/tidyjson/vignettes/visualizing-json.html) *Not about JSON Schemas, but rather regular JSON!*
+    -   [JSON Schema Viewer](https://github.com/jlblcc/json-schema-viewer) (umaintained since 2017)
 
 NOTES:
 
@@ -135,7 +140,8 @@ struct_source <- list("[[{.strong source}]]" = list("{.strong list},{.strong fil
 
 struct_survey <- list("{.strong qstnr}" = list(
   "{.strong items}" = c(struct_source,
-                        list("{.strong ids}" = list("{.strong {'<questionnaire_block>'}} = [ {.emph id_1}, {.emph id_2}, {.emph ...} ]"))),
+                        list("[[{.strong group}]]" = list("id = {.strong {'<questionnaire_block>'}}",
+                                                          "item_ids = [ {.emph id_1}, {.emph id_2}, {.emph ...} ]"))),
   "{.strong question_blocks}" = struct_source,
   "{.strong value_sets}" = struct_source,
   "{.strong targets}" = struct_source,
