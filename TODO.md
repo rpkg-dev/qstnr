@@ -1,7 +1,5 @@
 # TODOs
 
--   update survey schema to latest changes in item block syntax
-
 -   move most of default config to pkg fokus
 
 -   add fn to restore common col order, cf. `c2d:::order_rfrnd_cols()`
@@ -9,13 +7,20 @@
 -   during qstnr assembly, ensure that
 
     -   `targets` doesn't include anything else if `"none"` is present.
-    -   `values` is not empty in the end (in the schema we have to allow `"type": "null"` for "reset", but then `value_sets` should still yield actual values).
+
+    -   `values` is not empty in the end (the schema neither demands `values` nor `value_scale`).
+
     -   all `values` subkeys are of the same length (JSON Schema unfortunately [doesn't provide any means to do such
         validation](https://stackoverflow.com/questions/54973793/check-that-two-arrays-in-json-have-the-same-size)).
+
+        `qstnr::unnest_qstnr_vals()` ensures this implicitly and throws a moderately meaningful error in case of a violation à la:
+
+            ! In row 575, can't recycle input of size 2 to size 3.
+
     -   if `values` and `value_sets` are provided, the latter contains `"values"` (we can't do that in the schema since the [`contains`
         keyword](https://json-schema.org/understanding-json-schema/reference/array.html?highlight=contains#contains) was only added with draft 6).
-    -   all items in the same `question_block` have the same `value_set` (we could also allow differing sets, but is that actually a use case?)
-    -   `iterators` (an array of iterators) are sensible
+
+    -   `iterators` are sensible. the schema only demands an array of arrays -- technically anything could be in those level-2 arrays...
 
 -   write documentation
 
