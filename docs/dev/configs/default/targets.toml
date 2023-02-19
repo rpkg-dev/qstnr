@@ -114,7 +114,7 @@ filter.positive = "dplyr::filter(participation_past_cantonal_elections == 'teilg
 filter.negative = "dplyr::filter(participation_past_cantonal_elections == 'nicht teilgenommen oder leer eingelegt')"
 
 [yes_voters_federal_proposals]
-i = [ "{ proposal_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton) }" ]
+i = [ ["{ proposal_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton) }"] ]
 id = "yes_voters_federal_proposal_{i1}"
 title.en = "yes-voters of federal proposal {i1}"
 title.de = "Ja-Stimmende eidgenössische Vorlage {i1}"
@@ -123,7 +123,7 @@ filter.positive = "dplyr::filter(voting_decision_federal_proposal_{i1} == 'Ja (a
 filter.negative = "dplyr::filter(voting_decision_federal_proposal_{i1} %in% c('Nein (abgelehnt)', NA))"
 
 [no_voters_federal_proposals]
-i = [ "{ proposal_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton) }" ]
+i = [ ["{ proposal_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton) }"] ]
 id = "no_voters_federal_proposal_{i1}"
 title.en = "no-voters of federal proposal {i1}"
 title.de = "Nein-Stimmende eidgenössische Vorlage {i1}"
@@ -132,7 +132,7 @@ filter.positive = "dplyr::filter(voting_decision_federal_proposal_{i1} == 'Nein 
 filter.negative = "dplyr::filter(voting_decision_federal_proposal_{i1} %in% c('Ja (angenommen)', NA))"
 
 [yes_voters_cantonal_proposals]
-i = [ "{ proposal_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton) }" ]
+i = [ ["{ proposal_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton) }"] ]
 id = "yes_voters_cantonal_proposal_{i1}"
 title.en = "yes-voters of cantonal proposal {i1}"
 title.de = "Ja-Stimmende kantonale Vorlage {i1}"
@@ -141,7 +141,7 @@ filter.positive = "dplyr::filter(voting_decision_cantonal_proposal_{i1} == 'Ja (
 filter.negative = "dplyr::filter(voting_decision_cantonal_proposal_{i1} %in% c('Nein (abgelehnt)', NA))"
 
 [no_voters_cantonal_proposals]
-i = [ "{ proposal_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton) }" ]
+i = [ ["{ proposal_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton) }"] ]
 id = "no_voters_cantonal_proposal_{i1}"
 title.en = "no-voters of cantonal proposal {i1}"
 title.de = "Nein-Stimmende kantonale Vorlage {i1}"
@@ -201,7 +201,7 @@ filter.positive = "dplyr::filter(household_size > 1L)"
 filter.negative = "dplyr::filter(household_size == 1L)"
 
 [ticket_modifiers_federal_proportional_elections]
-i = [ "{ election_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton, prcd = 'proportional') }" ]
+i = [ ["{ election_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton, prcd = 'proportional') }"] ]
 id = "ticket_modifiers_federal_proportional_election_{i1}"
 title.en = "ticket modifiers in federal proportional election {i1}"
 title.de = "Listenabändernde eidgenössische Verhältniswahl {i1}"
@@ -215,7 +215,7 @@ dplyr::filter(as_int_vals(has_voted) == 0L
                  & ticket_modification_federal_proportional_election_{i1} %in% c('unveränderte Liste', NA)))"""
 
 [ticket_modifiers_cantonal_proportional_elections]
-i = [ "{ election_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, prcd = 'proportional') }" ]
+i = [ ["{ election_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, prcd = 'proportional') }"] ]
 id = "ticket_modifiers_cantonal_proportional_election_{i1}"
 title.en = "ticket modifiers in cantonal proportional election {i1}"
 title.de = "Listenabändernde kantonale Verhältniswahl {i1}"
@@ -229,7 +229,7 @@ dplyr::filter(as_int_vals(has_voted) == 0L
                  & ticket_modification_cantonal_proportional_election_{i1} %in% c('unveränderte Liste', NA)))"""
 
 [panachers_federal_proportional_elections]
-i = [ "{ election_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton, prcd = 'proportional') }" ]
+i = [ ["{ election_nrs(ballot_date = ballot_date, lvl = 'federal', canton = canton, prcd = 'proportional') }"] ]
 id = "panachers_federal_proportional_election_{i1}"
 title.en = "panachers in federal proportional election {i1}"
 title.de = "Panaschierende eidgenössische Verhältniswahl {i1}"
@@ -247,7 +247,7 @@ dplyr::filter(as_int_vals(has_voted) == 0L
                  & ticket_modification_federal_proportional_election_{i1}_panached %in% c('trifft nicht zu', NA)))"""
 
 [panachers_cantonal_proportional_elections]
-i = [ "{ election_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, prcd = 'proportional') }" ]
+i = [ ["{ election_nrs(ballot_date = ballot_date, lvl = 'cantonal', canton = canton, prcd = 'proportional') }"] ]
 id = "panachers_cantonal_proportional_election_{i1}"
 title.en = "panachers in cantonal proportional election {i1}"
 title.de = "Panaschierende kantonale Verhältniswahl {i1}"
