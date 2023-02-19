@@ -472,7 +472,7 @@ unnest_qstnr <- function(qstnr) {
       lang_specific_subset <-
         d %>%
         dplyr::select(question) %>%
-        # unnest lang-subkey `question`
+        # unnest `question` lang-subkeys
         tidyr::unnest_longer(col = question,
                              indices_to = "lang",
                              keep_empty = TRUE,
@@ -485,11 +485,13 @@ unnest_qstnr <- function(qstnr) {
       lang_specific_subset <-
         d %>%
         dplyr::select(values) %>%
-        # unnest lang-subkey `values`
+        # unnest `values` lang-subkeys
         tidyr::unnest_longer(col = values,
                              indices_to = "lang",
                              keep_empty = TRUE,
                              simplify = FALSE) %>%
+        ## filter out unwanted unnesting result from empty `values` col
+        dplyr::filter(!is.na(lang)) %>%
         dplyr::full_join(y = lang_specific_subset,
                          by = "lang")
       d %>%
