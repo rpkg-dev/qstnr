@@ -43,20 +43,19 @@
 
 <div id="todos" class="section level1">
 
-<ul><li><p>update survey schema to latest changes in item block syntax</p></li>
-<li><p>move most of default config to pkg fokus</p></li>
+<ul><li><p>move most of default config to pkg fokus</p></li>
 <li><p>add fn to restore common col order, cf. <code>c2d:::order_rfrnd_cols()</code></p></li>
 <li>
 <p>during qstnr assembly, ensure that</p>
-<ul><li>
-<code>targets</code> doesn’t include anything else if <code>"none"</code> is present.</li>
+<ul><li><p><code>targets</code> doesn’t include anything else if <code>"none"</code> is present.</p></li>
+<li><p><code>values</code> is not empty in the end (the schema neither demands <code>values</code> nor <code>value_scale</code>).</p></li>
 <li>
-<code>values</code> is not empty in the end (in the schema we have to allow <code>"type": "null"</code> for “reset”, but then <code>value_sets</code> should still yield actual values).</li>
-<li>all <code>values</code> subkeys are of the same length (JSON Schema unfortunately <a href="https://stackoverflow.com/questions/54973793/check-that-two-arrays-in-json-have-the-same-size" class="external-link">doesn’t provide any means to do such validation</a>).</li>
-<li>if <code>values</code> and <code>value_sets</code> are provided, the latter contains <code>"values"</code> (we can’t do that in the schema since the <a href="https://json-schema.org/understanding-json-schema/reference/array.html?highlight=contains#contains" class="external-link"><code>contains</code> keyword</a> was only added with draft 6).</li>
-<li>all items in the same <code>question_block</code> have the same <code>value_set</code> (we could also allow differing sets, but is that actually a use case?)</li>
-<li>
-<code>iterators</code> (an array of iterators) are sensible</li>
+<p>all <code>values</code> subkeys are of the same length (JSON Schema unfortunately <a href="https://stackoverflow.com/questions/54973793/check-that-two-arrays-in-json-have-the-same-size" class="external-link">doesn’t provide any means to do such validation</a>).</p>
+<p><code><a href="reference/unnest_qstnr_vals.html">qstnr::unnest_qstnr_vals()</a></code> ensures this implicitly and throws a moderately meaningful error in case of a violation à la:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="sc">!</span> In row <span class="dv">575</span>, can<span class="st">'t recycle input of size 2 to size 3.</span></span></code></pre></div>
+</li>
+<li><p>if <code>values</code> and <code>value_sets</code> are provided, the latter contains <code>"values"</code> (we can’t do that in the schema since the <a href="https://json-schema.org/understanding-json-schema/reference/array.html?highlight=contains#contains" class="external-link"><code>contains</code> keyword</a> was only added with draft 6).</p></li>
+<li><p><code>iterators</code> are sensible. the schema only demands an array of arrays – technically anything could be in those level-2 arrays…</p></li>
 </ul></li>
 <li>
 <p>write documentation</p>

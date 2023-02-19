@@ -9,12 +9,21 @@
       "type": "object",
       "properties": {
         "i": {
-          "description": "item iterator(s)",
+          "description": "item iterators",
           "type": "array",
+          "items": {
+            "description": "item iterator",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true
+          },
           "minItems": 1,
           "uniqueItems": true
         },
-        "id": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-id.schema.json" },
+        "id": {
+          "description": "item identifier",
+          "type": "string"
+        },
         "title": {
           "description": "item title",
           "type": "object",
@@ -41,7 +50,7 @@
         },
         "question_block":  {
           "description": "item question block",
-          "allOf": [{ "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-id_ref.schema.json" }]
+          "type": "string"
         },
         "question": {
           "description": "item question",
@@ -58,9 +67,13 @@
         "values": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-values.schema.json" },
         "value_scale": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-value_scale.schema.json" },
         "value_sets": {
-          "description": "reference(s) to value set identifier(s)",
+          "description": "references to value set identifiers",
           "type": "array",
-          "items": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-id_ref.schema.json" },
+          "items": {
+            "description": "reference to value set identifier",
+            "type": "string",
+            "pattern": "^(desc:)?[A-Za-z_][A-Za-z0-9_]*$"
+          },
           "minItems": 1,
           "uniqueItems": true,
           "default": [ "values" ]

@@ -102,9 +102,13 @@
                     "additionalProperties": false
                   },
                   "item_ids": {
-                    "description": "item identifiers",
+                    "description": "references to item identifiers",
                     "type": "array",
-                    "items": { "$ref": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-item-id.schema.json" },
+                    "items": {
+                      "description": "reference to item identifier",
+                      "type": "string",
+                      "pattern": "^[A-Za-z_.][A-Za-z0-9_.]*$"
+                    },
                     "minItems": 1,
                     "uniqueItems": true
                   }

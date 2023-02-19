@@ -25,6 +25,5 @@
     }
   },
   "required": ["int"],
-  "minProperties": 2,
   "additionalProperties": false
 }

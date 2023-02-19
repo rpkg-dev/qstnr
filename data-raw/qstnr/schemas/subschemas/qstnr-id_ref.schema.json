@@ -1,8 +1,0 @@
-{
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "https://qstnr.rpkg.dev/dev/schemas/subschemas/qstnr-id_ref.schema.json",
-  "title": "qstnr identifier reference specification",
-  "description": "reference to identifier",
-  "type": "string",
-  "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
-}
