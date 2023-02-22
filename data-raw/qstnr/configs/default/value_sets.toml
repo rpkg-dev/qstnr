@@ -95,10 +95,10 @@ value_scale = "ordinal_ascending"
 
 [satisfaction_4_scale]
 id = "satisfaction_4_scale"
-values.en = [ "very unhappy",           "rather unhappy",          "rather happy",          "very happy" ]
-values.de = [ "sehr unzufrieden",       "eher unzufrieden",        "eher zufrieden",        "sehr zufrieden" ]
-values.fr = [ "pas du tout satisfait",  "plutôt insatisfait(e)",   "plutôt satisfait(e)",   "très satisfait" ]
-values.it = [ "per niente soddisfatto", "piuttosto insoddisfatto", "piuttosto soddisfatto", "molto soddisfatto" ]
+values.en = [ "very unhappy",             "rather unhappy",            "rather happy",            "very happy" ]
+values.de = [ "sehr unzufrieden",         "eher unzufrieden",          "eher zufrieden",          "sehr zufrieden" ]
+values.fr = [ "pas du tout satisfait(e)", "plutôt insatisfait(e)",     "plutôt satisfait(e)",     "très satisfait(e)" ]
+values.it = [ "per niente soddisfatto/a", "piuttosto insoddisfatto/a", "piuttosto soddisfatto/a", "molto soddisfatto/a" ]
 values.int = [ 1, 2, 3, 4 ]
 value_scale = "ordinal_ascending"
 
