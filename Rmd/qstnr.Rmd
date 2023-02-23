@@ -550,6 +550,11 @@ gen_qstnr <- function(survey_config) {
             
             item <- survey_config$items[[id]]
             
+            # integrity check
+            if (is.null(item)) {
+              cli::cli_abort("Item with {.var id} {.val {id}} is listed in survey configuration but missing from survey items specifications.")
+            }
+            
             if (length(item[["i"]]) > 0L) {
               return(gen_qstnr_rows(item = item))
             } else {
