@@ -142,14 +142,14 @@ emph_md <- function(x,
     })
 }
 
-gen_qstnr_row <- function(item,
+gen_qstnr_row <- function(.item,
                           ...) {
   
   result <- tibble::tibble(.rows = 1L)
   
   for (key in setdiff(item_keys$key, "i")) {
     
-    val <- item[[key]]
+    val <- .item[[key]]
     is_list_col <- !item_keys$is_scalar[item_keys$key == key] || item_keys$has_lang_subkeys[item_keys$key == key]
     
     if (is.null(val)) {
@@ -207,7 +207,7 @@ gen_qstnr_rows <- function(item,
                    
                    i_list %<>% c(rlang::list2("i{i}" := cur_i))
                    
-                   gen_qstnr_row(item = item,
+                   gen_qstnr_row(.item = item,
                                  !!!i_list)
                    
                  }) %>%
@@ -217,14 +217,14 @@ gen_qstnr_rows <- function(item,
   result
 }
 
-interpolate <- function(x,
+interpolate <- function(.x,
                         ...) {
 
   # assign objects in dots to current env ensuring `cli::pluralize()` finds them
   rlang::env_bind(.env = rlang::current_env(),
                   ...)
   
-  cli::pluralize(x,
+  cli::pluralize(.x,
                  .null = NA_character_,
                  .trim = FALSE)
 }
@@ -381,13 +381,13 @@ gen_qstnr <- function(survey_config) {
             
             # integrity check
             if (is.null(item)) {
-              cli::cli_abort("Item with {.var id} {.val {id}} is listed in survey config but missing from survey items specifications.")
+              cli::cli_abort("Item with {.var id} {.val {id}} is listed in survey configuration but missing from survey items specifications.")
             }
             
             if (length(item[["i"]]) > 0L) {
               return(gen_qstnr_rows(item = item))
             } else {
-              return(gen_qstnr_row(item = item))
+              return(gen_qstnr_row(.item = item))
             }
           }) %>%
           purrr::list_rbind()
