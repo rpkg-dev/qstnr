@@ -677,17 +677,20 @@ htmlize_qstnr <- function(qstnr,
                                          x %<>% purrr::modify_tree(is_node = is.list,
                                                                    leaf = \(x2) {
                                                                      
-                                                                     if (!checkmate::test_character(x2, null.ok = TRUE)) {
-                                                                       cli::cli_abort(paste0("Column {.var {cur_col}} specified in {.arg {ifelse(do_rm_p, ",
-                                                                                             "'cols_rm_p', 'cols')}} is not of (nested) type character."))
+                                                                     if (length(x2) > 0L) {
+                                                                       
+                                                                       if (!checkmate::test_character(x2)) {
+                                                                         cli::cli_abort(paste0("Column {.var {cur_col}} specified in {.arg {ifelse(do_rm_p, ",
+                                                                                               "'cols_rm_p', 'cols')}} is not of (nested) type character."))
+                                                                       }
+                                                                       
+                                                                       x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
+                                                                                                                              hardbreaks = hardbreaks,
+                                                                                                                              smart = smart,
+                                                                                                                              normalize = normalize,
+                                                                                                                              extensions = extensions))
+                                                                       if (do_rm_p) x2 %<>% rm_p()
                                                                      }
-                                                                     
-                                                                     x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
-                                                                                                                            hardbreaks = hardbreaks,
-                                                                                                                            smart = smart,
-                                                                                                                            normalize = normalize,
-                                                                                                                            extensions = extensions))
-                                                                     if (do_rm_p) x2 %<>% rm_p()
                                                                      
                                                                      x2
                                                                    })
