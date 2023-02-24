@@ -781,9 +781,9 @@ unnest_qstnr_vals <- function(qstnr) {
   
   assert_qstnr_tibble(qstnr = qstnr,
                       cols = c("order", "lang", "id", "values", "values_int", "values_targets"))
-  qstnr %>%
+  qstnr |>
     # complement `values` with `values_int`
-    dplyr::group_by(id, lang) %>%
+    dplyr::group_by(id, lang) |>
     dplyr::group_modify(\(d, k) {
       
       if (is.null(d$values[[1L]])) {
@@ -792,8 +792,8 @@ unnest_qstnr_vals <- function(qstnr) {
       }
       
       d
-    }) %>%
-    dplyr::ungroup() %>%
+    }) |>
+    dplyr::ungroup() |>
     # harmonize `values_targets` struct
     dplyr::mutate(values_targets = purrr::map(values_targets,
                                               \(x) {
@@ -801,20 +801,23 @@ unnest_qstnr_vals <- function(qstnr) {
                                                   x %<>% as.list()
                                                 }
                                                 x
-                                              })) %>%
+                                              })) |>
     # unnest `values*` cols
     tidyr::unnest_longer(col = starts_with("values"),
-                         indices_to = "{col}_order") %>%
+                         indices_to = "{col}_order") |>
     dplyr::rename_with(.cols = starts_with("values"),
                        .fn = \(x) stringr::str_replace(string = x,
                                                        pattern = "^values",
-                                                       replacement = "value")) %>%
+                                                       replacement = "value")) |>
     # remove surplus `value_*_order` cols
-    dplyr::select(-matches("^value_.+_order$")) %>%
+    dplyr::select(-matches("^value_.+_order$")) |>
+    # unnest `question` col if present
+    tidyr::unnest_longer(col = any_of("question"),
+                         keep_empty = TRUE) |>
     # restore row order
     dplyr::arrange(order,
                    lang,
-                   value_order) %>%
+                   value_order) |>
     # harmonize col order
     order_qstnr_cols()
 }
