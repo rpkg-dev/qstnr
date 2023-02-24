@@ -31,6 +31,19 @@
           "minProperties": 1,
           "additionalProperties": false
         },
+        "url": {
+          "description": "questionnaire URL",
+          "type": "object",
+          "patternProperties": {
+            "^[a-z]{2}$": {
+              "type": "string",
+              "format": "uri",
+              "minLength": 1
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        },
         "intro": {
           "description": "questionnaire introduction",
           "type": "object",
