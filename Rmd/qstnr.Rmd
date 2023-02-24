@@ -654,28 +654,34 @@ gen_qstnr <- function(survey_config) {
       
       # return early in case of no ext value sets
       if (length(val_set_ids) == 1L && val_set_ids == "values") {
-        return(d %>% dplyr::select(-value_sets))
+        return(d)
       }
       
       # combine all (int and ext) value sets
       d_new <-
-        val_set_ids %>%
+        val_set_ids |>
         purrr::map(\(id) {
           # handle internal value set
-          if (id == "values") return(d %>% dplyr::select(value_scale, values))
+          if (id == "values") {
+            return(d |> dplyr::mutate(value_scale,
+                                      values,
+                                      value_sets = list(rep("values", length(d$values[[1L]]$int))),
+                                      .keep = "none"))
+          }
           # handle external value sets
           val_set <- val_set(id = id,
                              survey_config = survey_config)
-          gen_qstnr_row(val_set) %>% dplyr::select(all_of(setdiff(names(val_set), "id")))
-        }) %>%
+          gen_qstnr_row(val_set)
+        }) |>
         purrr::reduce(\(d1, d2) {
           list(value_scale = common_val_scale(d1$value_scale, d2$value_scale),
-               values = purrr::list_merge(d1$values, !!!d2$values))
+               values = purrr::list_merge(d1$values, !!!d2$values),
+               value_sets = purrr::list_merge(d1$value_sets, !!!d2$id))
         })
       
-      d %<>% dplyr::select(-value_sets)
       d$value_scale <- d_new$value_scale
-      d$values <- d_new$values
+      d$values      <- d_new$values
+      d$value_sets  <- d_new$value_sets
       
       d
     }) %>%
