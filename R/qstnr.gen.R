@@ -926,7 +926,7 @@ group_title <- function(survey_config,
                            choices = purrr::map_chr(survey_config$item_groups,
                                                     \(x) purrr::chuck(x, "id")))
   survey_config$item_groups |>
-    purrr::map(\(x) if (purrr::chuck(x, "id") == group_id) purrr::chuck(x, "title") else NULL) |>
+    purrr::map(\(x) if (purrr::chuck(x, "id") == group_id) purrr::pluck(x, "title") else NULL) |>
     purrr::compact()
 }
 
