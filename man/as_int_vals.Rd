@@ -23,6 +23,7 @@ Converts character question values to their integer code counterparts. The latte
 \seealso{
 Other auxiliary functions:
 \code{\link{common_val_scale}()},
+\code{\link{group_title}()},
 \code{\link{val_set}()}
 }
 \concept{aux}

@@ -37,6 +37,7 @@ try(
 \seealso{
 Other auxiliary functions:
 \code{\link{as_int_vals}()},
+\code{\link{group_title}()},
 \code{\link{val_set}()}
 }
 \concept{aux}

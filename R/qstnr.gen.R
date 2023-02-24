@@ -21,7 +21,7 @@ utils::globalVariables(names = c(".",
                                  "starts_with",
                                  # other
                                  "description",
-                                 "group",
+                                 "group_id",
                                  "id",
                                  "init_config",
                                  "lang",
@@ -452,7 +452,7 @@ gen_qstnr <- function(survey_config) {
           }) %>%
           purrr::list_rbind()
       }) %>%
-    purrr::list_rbind(names_to = "group") %>%
+    purrr::list_rbind(names_to = "group_id") %>%
     # add overall item numbering
     tibble::rowid_to_column(var = "order") %>%
     # replace `value_sets` with actual `values`
@@ -509,7 +509,7 @@ gen_qstnr <- function(survey_config) {
     order_qstnr_cols()
   
   # warn if item and item group IDs overlap
-  ids_overlap <- intersect(result$group,
+  ids_overlap <- intersect(result$group_id,
                            result$id)
   
   if (length(ids_overlap) > 0L) {
@@ -715,7 +715,7 @@ gen_qmd_qstnr <- function(qstnr,
                           add_item_ids = TRUE) {
   
   assert_qstnr_tibble(qstnr = qstnr,
-                      cols = c("lang", "group", "id", "question_block", "question", "values", "is_mandatory", "allow_multiple_answers"))
+                      cols = c("lang", "group_id", "id", "question_block", "question", "values", "is_mandatory", "allow_multiple_answers"))
   assert_survey_config(survey_config = survey_config,
                        els = c("question_blocks", "title", "intro", "outro"))
   rlang::arg_match0(arg = lang,
@@ -742,10 +742,10 @@ gen_qmd_qstnr <- function(qstnr,
                                                          id,
                                                          question_block),
                   # note that we need to rely on factors to avoid alphabetical group key ordering further below
-                  dplyr::across(c(group, question_block_filled, id),
+                  dplyr::across(c(group_id, question_block_filled, id),
                                 \(x) factor(x,
                                             levels = unique(x)))) %>%
-    dplyr::group_by(group) %>%
+    dplyr::group_by(group_id) %>%
     dplyr::group_map(\(d1, k1) {
       
       question_blocks <-
@@ -799,7 +799,7 @@ gen_qmd_qstnr <- function(qstnr,
         purrr::list_c(ptype = character())
       
       pretty_group <-
-        k1$group %>%
+        k1$group_id %>%
         stringr::str_replace_all("_", " ") %>%
         stringr::str_to_title() %>%
         emph_md(emph = "**")
@@ -904,6 +904,30 @@ common_val_scale <- function(x,
   } else {
     return(intersect(value_scales_strict, c(x,y))[1L])
   }
+}
+
+#' Get survey group title
+#'
+#' Extracts the multilanguage group title list for the specified group from the given survey config.
+#'
+#' @inheritParams gen_qstnr
+#' @param group_id Survey group identifier to retrieve the group title of. A character scalar.
+#'
+#' @return A list.
+#' @family aux
+#' @export
+group_title <- function(survey_config,
+                        group_id) {
+  
+  assert_survey_config(survey_config = survey_config,
+                       els = c("item_groups"))
+  
+  checkmate::assert_choice(group_id,
+                           choices = purrr::map_chr(survey_config$item_groups,
+                                                    \(x) purrr::chuck(x, "id")))
+  survey_config$item_groups |>
+    purrr::map(\(x) if (purrr::chuck(x, "id") == group_id) purrr::chuck(x, "title") else NULL) |>
+    purrr::compact()
 }
 
 #' Get value set

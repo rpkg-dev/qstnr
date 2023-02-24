@@ -36,6 +36,7 @@ reference:
 - contents:
   - as_int_vals
   - common_val_scale
+  - group_title
   - val_set
 - title: Miscellaneous
 - contents: pkg_config
