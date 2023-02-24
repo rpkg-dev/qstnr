@@ -65,6 +65,7 @@ utils::globalVariables(names = c(".",
                                  "description",
                                  "group_id",
                                  "id",
+                                 "int",
                                  "init_config",
                                  "lang",
                                  "name",
@@ -72,9 +73,11 @@ utils::globalVariables(names = c(".",
                                  "question",
                                  "question_block",
                                  "question_block_filled",
+                                 "targets",
                                  "title",
                                  "value_order",
                                  "value_scale",
+                                 "value_set_id",
                                  "value_sets",
                                  "values",
                                  "values_targets"))
@@ -646,64 +649,66 @@ gen_qstnr <- function(survey_config) {
     purrr::list_rbind(names_to = "group_id") %>%
     # add overall item numbering
     tibble::rowid_to_column(var = "order") %>%
-    # replace `value_sets` with actual `values`
+    # replace `value_sets` with actual `values` and add complemented value sets as `values` subkey `value_set_id`
     dplyr::group_by(id) %>%
     dplyr::group_modify(\(d, k) {
       
-      val_set_ids <- unlist(d$value_sets)
-      
-      # return early in case of no ext value sets
-      if (length(val_set_ids) == 1L && val_set_ids == "values") {
-        return(d)
-      }
-      
       # combine all (int and ext) value sets
       d_new <-
-        val_set_ids |>
-        purrr::map(\(id) {
+        unlist(d$value_sets) |>
+        purrr::map(\(value_set_id) {
+          
           # handle internal value set
-          if (id == "values") {
-            return(d |> dplyr::mutate(value_scale,
-                                      values,
-                                      value_sets = list(rep("values", length(d$values[[1L]]$int))),
-                                      .keep = "none"))
+          if (value_set_id == "values") {
+            
+            result <-
+              d$values |>
+              dplyr::first() |>
+              tibble::as_tibble() |>
+              tibble::add_column(value_set_id = "values",
+                                 value_scale = d$value_scale) |>
+              dplyr::mutate(int = as.integer(int))
+            
+            # handle external value sets
+          } else {
+            
+            val_set <- val_set(id = value_set_id,
+                               survey_config = survey_config)
+            result <-
+              val_set$values |>
+              tibble::as_tibble() |>
+              tibble::add_column(value_set_id = value_set_id,
+                                 value_scale = val_set$value_scale)
           }
-          # handle external value sets
-          val_set <- val_set(id = id,
-                             survey_config = survey_config)
-          gen_qstnr_row(val_set)
+          
+          result
         }) |>
-        purrr::reduce(\(d1, d2) {
-          
-          d1$values %<>% purrr::list_merge(!!!list(c(set_id = d1$value_sets)))
-          d2$values %<>% purrr::list_merge(!!!list(c(set_id = rep(d2$id, length(d2$values[[1L]]$int)))))
-          
-          list(value_scale = common_val_scale(d1$value_scale, d2$value_scale),
-               values = purrr::list_merge(d1$values, !!!d2$values))
-        })
+        purrr::list_rbind()
       
-      d$value_scale <- d_new$value_scale
-      d$values      <- d_new$values
+      # complement with default `values.targets`
+      if (!("targets" %in% colnames(d_new))) {
+        d_new$targets <- "all"
+      }
       
+      # add common value scale to top level
+      d$value_scale <- purrr::reduce(unique(d_new$value_scale),
+                                     common_val_scale)
+      # harmonize col order and wrap whole tibble in list
+      d_new %<>%
+        dplyr::relocate(colnames(.) |> stringr::str_subset("^\\w{2}$") |> sort(),
+                        int, targets, value_scale, value_set_id) %>%
+        list()
+      
+      d$values <- d_new
       d
-    }) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(
-      # complement with default `values.targets` and convert `values.int` to type integer
-      dplyr::across(values,
-                    \(x) {
-                      purrr::map(x,
-                                 \(x2) {
-                                   if (is.null(x2$targets)) {
-                                     x2$targets <- rep("all", length(x2$int))
-                                   }
-                                   x2$int %<>% as.integer()
-                                   x2})}),
-      # reduce to English `title` and `description` only for now
-      title = purrr::map_chr(title, \(x) x$en),
-      description = purrr::map_chr(description, \(x) x$en)) %>%
+    }) |>
+    dplyr::ungroup() |>
+    dplyr::select(-value_sets) |>
+    # reduce to English `title` and `description` only for now
+    dplyr::mutate(title = purrr::map_chr(title, \(x) x$en),
+                  description = purrr::map_chr(description, \(x) x$en)) |>
     # restore original item order
-    dplyr::arrange(order) %>%
+    dplyr::arrange(order) |>
     # harmonize col order
     order_qstnr_cols()
   
@@ -754,20 +759,24 @@ unnest_qstnr <- function(qstnr) {
       
       d$values_int <- list(d$values[[1L]]$int)
       d$values_targets <- list(d$values[[1L]]$targets)
+      d$values_scale <- list(d$values[[1L]]$value_scale)
+      d$values_set_id <- list(d$values[[1L]]$value_set_id)
       d$values <- list(d$values[[1L]] %>% purrr::keep_at(at = nchar(names(.)) == 2L))
       
-      lang_specific_subset <-
-        d %>%
-        dplyr::select(values) %>%
-        # unnest `values` lang-subkeys
-        tidyr::unnest_longer(col = values,
-                             indices_to = "lang",
-                             keep_empty = TRUE,
-                             simplify = FALSE) %>%
-        ## filter out unwanted unnesting result from empty `values` col
-        dplyr::filter(!is.na(lang)) %>%
-        dplyr::full_join(y = lang_specific_subset,
-                         by = "lang")
+      lang_specific_subset_2 <-
+        d$values |>
+        dplyr::first() |>
+        purrr::imap(\(col, lang) tibble::tibble(lang = lang,
+                                                values = list(col))) |>
+        purrr::list_rbind()
+      
+      # NOTE: items can have no `values` and thus `lang_specific_subset_2` no rows
+      if (nrow(lang_specific_subset_2)) {
+        
+        lang_specific_subset %<>% dplyr::full_join(y = lang_specific_subset_2,
+                                                   by = "lang")
+      }
+        
       d %>%
         dplyr::select(-c(question, values)) %>%
         dplyr::cross_join(y = lang_specific_subset)
@@ -825,6 +834,8 @@ unnest_qstnr_vals <- function(qstnr) {
     # unnest `values*` cols
     tidyr::unnest_longer(col = starts_with("values"),
                          indices_to = "{col}_order") |>
+    ## remove sub-level `values_scale` col in favor of top-level `value_scale` (which should already be the least common denominator of the former col vals)
+    dplyr::select(-any_of("values_scale")) |>
     dplyr::rename_with(.cols = starts_with("values"),
                        .fn = \(x) stringr::str_replace(string = x,
                                                        pattern = "^values",
