@@ -618,7 +618,7 @@ unnest_qstnr <- function(qstnr) {
 unnest_qstnr_vals <- function(qstnr) {
   
   assert_qstnr_tibble(qstnr = qstnr,
-                      cols = c("order", "lang", "id", "values", "values_int", "values_targets"))
+                      cols = c("order", "lang", "id", "values", "values_int"))
   qstnr |>
     # complement `values` with `values_int`
     dplyr::group_by(id, lang) |>
@@ -633,13 +633,14 @@ unnest_qstnr_vals <- function(qstnr) {
     }) |>
     dplyr::ungroup() |>
     # harmonize `values_targets` struct
-    dplyr::mutate(values_targets = purrr::map(values_targets,
-                                              \(x) {
-                                                if (purrr::pluck_depth(x) < 2L) {
-                                                  x %<>% as.list()
+    dplyr::mutate(dplyr::across(any_of("values_targets"),
+                                \(x) purrr::map(x,
+                                                \(x2) {
+                                                if (purrr::pluck_depth(x2) < 2L) {
+                                                  x2 %<>% as.list()
                                                 }
-                                                x
-                                              })) |>
+                                                x2
+                                              }))) |>
     # unnest `values*` cols
     tidyr::unnest_longer(col = starts_with("values"),
                          indices_to = "{col}_order") |>
