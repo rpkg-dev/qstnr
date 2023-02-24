@@ -643,8 +643,8 @@ unnest_qstnr_vals <- function(qstnr) {
     # unnest `values*` cols
     tidyr::unnest_longer(col = starts_with("values"),
                          indices_to = "{col}_order") |>
-    ## remove sub-level `values_scale` col in favor of top-level `value_scale` (which should already be the least common denominator of the former col vals)
-    dplyr::select(-any_of("values_scale")) |>
+    ## remove top-level `value_scale` col in favor of per-value `values_scale`
+    dplyr::select(-any_of("value_scale")) |>
     dplyr::rename_with(.cols = starts_with("values"),
                        .fn = \(x) stringr::str_replace(string = x,
                                                        pattern = "^values",
