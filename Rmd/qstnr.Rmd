@@ -514,6 +514,18 @@ read_survey_config <- function(path,
                              dir = dir,
                              validate = validate)
     })
+  # validity check: ensure no value set has the reserved name/ID `values`
+  if (any(names(spec_parts$value_sets) == "values")) {
+    
+    cli::cli_abort("Value set with reserved name {.val values} detected in value set specification.")
+  }
+  if (spec_parts$value_sets |>
+      purrr::map_chr(\(x) purrr::chuck(x, "id")) |> 
+      magrittr::equals("values") |>
+      any()) {
+    
+    cli::cli_abort("Value set with reserved {.var id} {.val values} detected in value set specification.")
+  }
   # keep only items that are actually needed
   spec_parts$items %<>% purrr::keep_at(at = unlist(purrr::map_depth(.x = survey_config_raw$qstnr$items$group,
                                                                     .depth = 1L,
