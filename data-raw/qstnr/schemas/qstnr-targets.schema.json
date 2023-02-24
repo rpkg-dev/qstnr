@@ -72,21 +72,24 @@
                       "type": "string",
                       "minLength": 1
                     }
-                  }
+                  },
+                  "required": ["positive", "negative"]
                 }
               },
+              "required": ["filter"],
               "additionalProperties": true
             },
             "limesurvey": {
               "description": "target group LimeSurvey ExpressionScript relevance equation",
               "type": "string",
               "minLength": 1
-            }
+            },
+            "required": ["r"]
           },
           "additionalProperties": true
         }
       },
-      "required": ["id", "title", "description", "filter"],
+      "required": ["id", "title", "description"],
       "additionalProperties": false
     }
   },
