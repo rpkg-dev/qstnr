@@ -23,6 +23,7 @@ value order as defined in the questionnaire.
 Other questionnaire generation functions:
 \code{\link{gen_qmd_qstnr}()},
 \code{\link{gen_qstnr}()},
+\code{\link{htmlize_qstnr}()},
 \code{\link{unnest_qstnr}()}
 }
 \concept{qstnr_gen}

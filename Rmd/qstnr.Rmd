@@ -360,6 +360,17 @@ order_qstnr_cols <- function(qstnr) {
 }
 ```
 
+### `rm_p`
+
+```{r}
+rm_p <- function(x) {
+  
+  stringr::str_replace(string = x,
+                       pattern = "^<p>(.*)</p>(\n)?$",
+                       replacement = "\\1")
+}
+```
+
 ### `schema_url`
 
 ```{r}
@@ -463,7 +474,7 @@ toml_validate <- function(input,
 
 Functions to process raw survey configurations.
 
-### `read_survey`
+### `read_survey_config`
 
 ```{r}
 #' Read in survey config
@@ -477,8 +488,8 @@ Functions to process raw survey configurations.
 #' @return A list containing the combined survey configuration.
 #' @family survey_prep
 #' @export
-read_survey <- function(path,
-                        validate = NULL) {
+read_survey_config <- function(path,
+                               validate = NULL) {
   
   checkmate::assert_flag(validate,
                          null.ok = TRUE)
@@ -517,6 +528,63 @@ read_survey <- function(path,
 }
 ```
 
+### `htmlize_survey_config`
+
+```{r}
+#' Convert survey config from Markdown to HTML
+#'
+#' Recursively converts the keys at the specified pluck locations of a survey configuration from Markdown to HTML using [commonmark::markdown_html()]. Keys to
+#' be converted must be of (nested) type character.
+#'
+#' @inheritParams gen_qstnr
+#' @inheritParams commonmark::markdown_html
+#' @param ... [Pluck][purrr::pluck] locations to convert to HTML. All (sub)keys targeted here must be of type character.
+#'   `r pkgsnip::param_lbl("dyn_dots_support")`
+#' @param rm_p Whether or not to omit the outer `<p>` tag when converting values to HTML.
+#'
+#' @return `survey_config` with the specified keys recursively converted to HTML text.
+#' @family survey_prep
+#' @export
+htmlize_survey_config <- function(survey_config,
+                                  ...,
+                                  rm_p = FALSE,
+                                  hardbreaks = FALSE,
+                                  smart = TRUE,
+                                  normalize = TRUE,
+                                  extensions = c("table", "strikethrough", "tasklist")) {
+  
+  assert_survey_config(survey_config = survey_config)
+  
+  for (pl in rlang::list2(...)) {
+    
+    survey_config %<>% purrr::modify_in(.where = pl,
+                                        .f = \(x) purrr::modify_tree(x,
+                                                                     is_node = is.list,
+                                                                     leaf = \(x2) {
+                                                                       
+                                                                       if (length(2) > 0L) {
+                                                                         
+                                                                         if (!checkmate::test_character(x2)) {
+                                                                           cli::cli_abort(paste0("Key {.var {key}} at pluck location {.code {deparse(pl)}} is ",
+                                                                                                 "not of (nested) type character."))
+                                                                         }
+                                                                         
+                                                                         x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
+                                                                                                                               hardbreaks = hardbreaks,
+                                                                                                                               smart = smart,
+                                                                                                                               normalize = normalize,
+                                                                                                                               extensions = extensions))
+                                                                         if (rm_p) x2 %<>% rm_p()
+                                                                       }
+                                                                       
+                                                                       x2
+                                                                     }))
+  }
+  
+  survey_config
+}
+```
+
 ## Questionnaire generation
 
 ### DESCRIPTION
@@ -528,7 +596,7 @@ Functions to generate different representations of a questionnaire from a combin
 ```{r}
 #' Generate questionnaire tibble
 #'
-#' @param survey_config Survey configuration list as returned by [read_survey()].
+#' @param survey_config Survey configuration list as returned by [read_survey_config()].
 #'
 #' @return `r pkgsnip::return_label("data")`
 #' @family qstnr_gen
@@ -649,6 +717,8 @@ NOTES:
 #' @export
 unnest_qstnr <- function(qstnr) {
   
+  assert_qstnr_tibble(qstnr = qstnr,
+                      cols = c("order", "id", "question_block", "question", "values"))
   qstnr %>%
     dplyr::group_by(id) %>%
     dplyr::group_modify(\(d, k) {
@@ -709,6 +779,8 @@ unnest_qstnr <- function(qstnr) {
 #' @export
 unnest_qstnr_vals <- function(qstnr) {
   
+  assert_qstnr_tibble(qstnr = qstnr,
+                      cols = c("order", "lang", "id", "values", "values_int", "values_targets"))
   qstnr %>%
     # complement `values` with `values_int`
     dplyr::group_by(id, lang) %>%
@@ -745,6 +817,76 @@ unnest_qstnr_vals <- function(qstnr) {
                    value_order) %>%
     # harmonize col order
     order_qstnr_cols()
+}
+```
+
+### `htmlize_qstnr`
+
+```{r}
+#' Convert qstnr columns from Markdown to HTML
+#'
+#' Recursively converts the specified columns from Markdown to HTML using [commonmark::markdown_html()]. Columns to be converted must be of (nested) type
+#' character.
+#'
+#' @inheritParams unnest_qstnr_vals
+#' @inheritParams commonmark::markdown_html
+#' @param cols Column names to convert to HTML. All columns must be of type character. Mustn't overlap with `cols_rm_p`.
+#'   `r pkgsnip::param_lbl("tidy_select_support")`
+#' @param cols_rm_p Columns names to convert to HTML *without the outer `<p>` tag*. All columns must be of type character. Mustn't overlap with `cols`.
+#'   `r pkgsnip::param_lbl("tidy_select_support")`
+#'
+#' @return `qstnr` with values in `cols` converted to HTML text.
+#' @family qstnr_gen
+#' @export
+htmlize_qstnr <- function(qstnr,
+                          cols = c("title", "description", "question"),
+                          cols_rm_p = "values",
+                          hardbreaks = FALSE,
+                          smart = TRUE,
+                          normalize = TRUE,
+                          extensions = c("table", "strikethrough", "tasklist")) {
+  
+  assert_qstnr_tibble(qstnr = qstnr)
+  
+  # tidy selection
+  defused_cols <- rlang::enquo(cols)
+  defused_cols_rm_p <- rlang::enquo(cols_rm_p)
+  ix_cols <- tidyselect::eval_select(expr = defused_cols,
+                                     data = qstnr)
+  ix_cols_rm_p <- tidyselect::eval_select(expr = defused_cols_rm_p,
+                                          data = qstnr)
+  names_cols <- names(ix_cols)
+  names_cols_rm_p <- names(ix_cols_rm_p)
+  overlaps <- intersect(names_cols, names_cols_rm_p)
+  
+  if (length(overlaps) > 0L) {
+    cli::cli_abort("Overlapping column specifications between {.arg cols} and {.arg cols_rm_p} detected: {.val overlaps}")
+  }
+  
+  qstnr |> dplyr::mutate(dplyr::across(.cols = all_of(c(names_cols, names_cols_rm_p)),
+                                       .fns = \(x) {
+                                         
+                                         cur_col <- dplyr::cur_column()
+                                         do_rm_p <- cur_col %in% names_cols_rm_p
+                                         
+                                         x %<>% purrr::modify_tree(is_node = is.list,
+                                                                   leaf = \(x2) {
+                                                                     
+                                                                     if (!checkmate::test_character(x2, null.ok = TRUE)) {
+                                                                       cli::cli_abort(paste0("Column {.var {cur_col}} specified in {.arg {ifelse(do_rm_p, ",
+                                                                                             "'cols_rm_p', 'cols')}} is not of (nested) type character."))
+                                                                     }
+                                                                     
+                                                                     x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
+                                                                                                                            hardbreaks = hardbreaks,
+                                                                                                                            smart = smart,
+                                                                                                                            normalize = normalize,
+                                                                                                                            extensions = extensions))
+                                                                     if (do_rm_p) x2 %<>% rm_p()
+                                                                     
+                                                                     x2
+                                                                   })
+                                       }))
 }
 ```
 

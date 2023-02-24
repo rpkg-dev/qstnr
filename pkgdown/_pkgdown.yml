@@ -20,7 +20,9 @@ url: https://qstnr.rpkg.dev
 reference:
 - title: Survey preparation
   desc: Functions to process raw survey configurations.
-- contents: read_survey
+- contents:
+  - read_survey_config
+  - htmlize_survey_config
 - title: Questionnaire generation
   desc: Functions to generate different representations of a questionnaire from a
     combined survey configuration.
@@ -28,6 +30,7 @@ reference:
   - gen_qstnr
   - unnest_qstnr
   - unnest_qstnr_vals
+  - htmlize_qstnr
   - gen_qmd_qstnr
 - title: Auxiliary
 - contents:

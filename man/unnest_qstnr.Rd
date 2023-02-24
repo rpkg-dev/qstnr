@@ -19,6 +19,7 @@ Unnests a nested qstnr tibble as returned by \code{\link[=gen_qstnr]{gen_qstnr()
 Other questionnaire generation functions:
 \code{\link{gen_qmd_qstnr}()},
 \code{\link{gen_qstnr}()},
+\code{\link{htmlize_qstnr}()},
 \code{\link{unnest_qstnr_vals}()}
 }
 \concept{qstnr_gen}

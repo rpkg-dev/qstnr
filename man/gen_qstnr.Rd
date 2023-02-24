@@ -7,7 +7,7 @@
 gen_qstnr(survey_config)
 }
 \arguments{
-\item{survey_config}{Survey configuration list as returned by \code{\link[=read_survey]{read_survey()}}.}
+\item{survey_config}{Survey configuration list as returned by \code{\link[=read_survey_config]{read_survey_config()}}.}
 }
 \value{
 A \link[tibble:tbl_df-class]{tibble}.
@@ -18,6 +18,7 @@ Generate questionnaire tibble
 \seealso{
 Other questionnaire generation functions:
 \code{\link{gen_qmd_qstnr}()},
+\code{\link{htmlize_qstnr}()},
 \code{\link{unnest_qstnr_vals}()},
 \code{\link{unnest_qstnr}()}
 }

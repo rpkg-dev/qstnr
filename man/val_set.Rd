@@ -9,7 +9,7 @@ val_set(id, survey_config = survey_config)
 \arguments{
 \item{id}{String that uniquely identifies the value set.}
 
-\item{survey_config}{Survey configuration list as returned by \code{\link[=read_survey]{read_survey()}}.}
+\item{survey_config}{Survey configuration list as returned by \code{\link[=read_survey_config]{read_survey_config()}}.}
 }
 \value{
 A list.

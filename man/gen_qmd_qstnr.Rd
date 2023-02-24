@@ -9,7 +9,7 @@ gen_qmd_qstnr(qstnr, survey_config, lang, path, add_item_ids = TRUE)
 \arguments{
 \item{qstnr}{Unnested questionnaire tibble as returned by \code{\link[=unnest_qstnr]{unnest_qstnr()}}.}
 
-\item{survey_config}{Survey configuration list as returned by \code{\link[=read_survey]{read_survey()}}.}
+\item{survey_config}{Survey configuration list as returned by \code{\link[=read_survey_config]{read_survey_config()}}.}
 
 \item{lang}{Language in which to output the questionnaire. A character scalar.}
 
@@ -26,6 +26,7 @@ Generate Quarto Markdown questionnaire
 \seealso{
 Other questionnaire generation functions:
 \code{\link{gen_qstnr}()},
+\code{\link{htmlize_qstnr}()},
 \code{\link{unnest_qstnr_vals}()},
 \code{\link{unnest_qstnr}()}
 }
