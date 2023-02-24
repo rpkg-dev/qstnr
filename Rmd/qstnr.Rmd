@@ -674,14 +674,16 @@ gen_qstnr <- function(survey_config) {
           gen_qstnr_row(val_set)
         }) |>
         purrr::reduce(\(d1, d2) {
+          
+          d1$values %<>% purrr::list_merge(!!!list(c(set_id = d1$value_sets)))
+          d2$values %<>% purrr::list_merge(!!!list(c(set_id = rep(d2$id, length(d2$values[[1L]]$int)))))
+          
           list(value_scale = common_val_scale(d1$value_scale, d2$value_scale),
-               values = purrr::list_merge(d1$values, !!!d2$values),
-               value_sets = purrr::list_merge(d1$value_sets, !!!d2$id))
+               values = purrr::list_merge(d1$values, !!!d2$values))
         })
       
       d$value_scale <- d_new$value_scale
       d$values      <- d_new$values
-      d$value_sets  <- d_new$value_sets
       
       d
     }) %>%
