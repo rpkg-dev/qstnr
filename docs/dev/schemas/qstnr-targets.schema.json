@@ -83,9 +83,9 @@
               "description": "target group LimeSurvey ExpressionScript relevance equation",
               "type": "string",
               "minLength": 1
-            },
-            "required": ["r"]
+            }
           },
+          "required": ["r"],
           "additionalProperties": true
         }
       },
