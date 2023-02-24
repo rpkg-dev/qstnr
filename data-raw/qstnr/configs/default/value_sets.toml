@@ -19,6 +19,15 @@ values.it = [ "non ricordo" ]
 values.int = [ 99 ]
 value_scale = "none"
 
+[free_text]
+id = "free_text"
+values.en = [ "✍ (free text field)" ]
+values.de = [ "✍ (Freitextfeld)" ]
+values.fr = [ "✍ (champ de texte libre)" ]
+values.it = [ "✍ (campo di testo libero)" ]
+values.int = [ 90 ]
+value_scale = "nominal"
+
 [free_text_none]
 id = "free_text_none"
 values.en = [ "none of that, but: ✍ (free text field)" ]
