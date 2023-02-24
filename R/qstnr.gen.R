@@ -735,8 +735,8 @@ gen_qmd_qstnr <- function(qstnr,
                                              wrap = "*"),
                                "")
   survey_blocks <-
-    qstnr %>%
-    dplyr::filter(lang == !!lang) %>%
+    qstnr |>
+    dplyr::filter(lang == !!lang) |>
     # fill missing `question_block`s with `id`s to avoid order mess up further below
     dplyr::mutate(question_block_filled = dplyr::if_else(is.na(question_block),
                                                          id,
@@ -744,21 +744,21 @@ gen_qmd_qstnr <- function(qstnr,
                   # note that we need to rely on factors to avoid alphabetical group key ordering further below
                   dplyr::across(c(group_id, question_block_filled, id),
                                 \(x) factor(x,
-                                            levels = unique(x)))) %>%
-    dplyr::group_by(group_id) %>%
+                                            levels = unique(x)))) |>
+    dplyr::group_by(group_id) |>
     dplyr::group_map(\(d1, k1) {
       
       question_blocks <-
-        d1 %>%
-        dplyr::group_by(question_block_filled) %>%
+        d1 |>
+        dplyr::group_by(question_block_filled) |>
         dplyr::group_map(\(d2, k2) {
           
           is_question_block <- length(unique(d2$id)) > 1L
           is_question_block_compact <- is_question_block && length(unique(d2$values)) == 1L
           
           questions <-
-            d2 %>%
-            dplyr::group_by(id) %>%
+            d2 |>
+            dplyr::group_by(id) |>
             dplyr::group_map(\(d3, k3) {
               
               q_text <- emph_md(unlist(d3$question),
@@ -783,7 +783,7 @@ gen_qmd_qstnr <- function(qstnr,
               }
               
               question
-            }) %>%
+            }) |>
             purrr::list_c(ptype = character())
           
           c(survey_config$question_blocks[[as.character(k2$question_block_filled)]]$intro[[lang]][is_question_block],
@@ -795,13 +795,13 @@ gen_qmd_qstnr <- function(qstnr,
             ""[is_question_block],
             notice_mandatory[is_question_block && d2$is_mandatory[1L]],
             notice_multiple_answers[is_question_block && d2$allow_multiple_answers[1L]])
-        }) %>%
+        }) |>
         purrr::list_c(ptype = character())
       
       pretty_group <-
-        k1$group_id %>%
-        stringr::str_replace_all("_", " ") %>%
-        stringr::str_to_title() %>%
+        k1$group_id |>
+        stringr::str_replace_all("_", " ") |>
+        stringr::str_to_title() |>
         emph_md(emph = "**")
       
       c(paste0("## Block ", pretty_group),
@@ -810,7 +810,7 @@ gen_qmd_qstnr <- function(qstnr,
         "",
         "{{< pagebreak >}}",
         "")
-    }) %>%
+    }) |>
     purrr::list_c(ptype = character())
   
   c(paste0("# ", survey_config$title[[lang]]),
@@ -820,7 +820,7 @@ gen_qmd_qstnr <- function(qstnr,
     "{{< pagebreak >}}",
     "",
     survey_blocks,
-    survey_config$outro[[lang]]) %>%
+    survey_config$outro[[lang]]) |>
     brio::write_lines(path = path)
 }
 
