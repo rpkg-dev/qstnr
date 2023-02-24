@@ -50,23 +50,40 @@
           "minProperties": 1,
           "additionalProperties": false
         },
-        "filter": {
-          "description": "target group `dplyr::filter()` expressions",
+        "condition": {
+          "description": "target group programming conditions",
           "type": "object",
           "properties": {
-            "positive": {
-              "description": "`dplyr::filter()` R expression including target group only",
-              "type": "string",
-              "minLength": 1
+            "r": {
+              "description": "target group R expressions",
+              "type": "object",
+              "properties": {
+                "filter": {
+                  "description": "target group `dplyr::filter()` expressions",
+                  "type": "object",
+                  "properties": {
+                    "positive": {
+                      "description": "`dplyr::filter()` R expression including target group only",
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "negative": {
+                      "description": "`dplyr::filter()` R expression excluding target group only",
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "additionalProperties": true
             },
-            "negative": {
-              "description": "`dplyr::filter()` R expression excluding target group only",
+            "limesurvey": {
+              "description": "target group LimeSurvey ExpressionScript relevance equation",
               "type": "string",
               "minLength": 1
             }
           },
-          "minProperties": 1,
-          "additionalProperties": false
+          "additionalProperties": true
         }
       },
       "required": ["id", "title", "description", "filter"],
