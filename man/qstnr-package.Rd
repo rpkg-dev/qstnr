@@ -13,7 +13,7 @@ qstnr provides a framework to create and maintain survey questionnaires written 
 
 Some of qstnr's functionality is controlled via package-specific global configuration which can either be set via \R \link{options} or \href{https://en.wikipedia.org/wiki/Environment_variable}{environment variables} (the former take precedence). This configuration includes:\tabular{llll}{
    \strong{Description} \tab \strong{R option} \tab \strong{Environment variable} \tab \strong{Default value} \cr
-   Maximal timespan to preserve the package's \href{https://rpkg.dev/pkgpins/}{pkgpins} cache. Cache entries older than this will be deleted upon package loading. \tab \code{qstnr.max_cache_lifespan} \tab \code{QSTNR_MAX_CACHE_LIFESPAN} \tab \code{"1 year"} \cr
+   Maximal timespan to preserve the package's \href{https://pkgpins.rpkg.dev/}{pkgpins} cache. Cache entries older than this will be deleted upon package loading. \tab \code{qstnr.global_max_cache_age} \tab \code{QSTNR_GLOBAL_MAX_CACHE_AGE} \tab \code{"1 year"} \cr
 }
 }
 

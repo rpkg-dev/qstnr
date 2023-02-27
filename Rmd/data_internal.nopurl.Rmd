@@ -61,6 +61,18 @@ notice <- list(mandatory = list(de = "Diese Frage muss zwingend beantwortet und 
                                        it = "Per questa domanda è possibile più di una risposta."))
 ```
 
+## `pkg_config`
+
+```{r}
+pkg_config <-
+  tibble::tibble(key = character(),
+                 default_value = list(),
+                 description = character()) %>%
+  tibble::add_row(key = "global_max_cache_age",
+                  default_value = list("1 year"),
+                  description = pkgsnip::md_snip("opt_global_max_cache_age"))
+```
+
 ## `qstnr_cols`
 
 Overall canonical order of all the cols the different `qstnr` representations can have.
@@ -129,6 +141,7 @@ to package users.
 ```{r}
 usethis::use_data(item_keys,
                   notice,
+                  pkg_config,
                   qstnr_cols,
                   spec_parts,
                   survey_config_keys,

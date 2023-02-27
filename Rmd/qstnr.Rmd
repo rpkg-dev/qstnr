@@ -91,7 +91,7 @@ utils::globalVariables(names = c(".",
   # clear pkgpins cache
   tryCatch(expr = pkgpins::clear_cache(board = pkgpins::board(pkg = pkgname,
                                                               pkg_versioned = FALSE),
-                                       max_age = pal::pkg_config_val(key = "max_cache_lifespan",
+                                       max_age = pal::pkg_config_val(key = "global_max_cache_age",
                                                                      pkg = pkgname)),
            error = function(e) cli::cli_alert_warning(text = "Failed to clear pkgpins cache on load of {.pkg pkgname}. Error message: {e$message}"))
 }
@@ -465,7 +465,7 @@ toml_validate <- function(input,
                       hash,
                       pkg_versioned = FALSE,
                       use_cache = use_cache,
-                      cache_lifespan = Inf)
+                      max_cache_age = Inf)
 }
 ```
 
@@ -552,7 +552,7 @@ read_survey_config <- function(path,
 #' be converted must be of (nested) type character.
 #'
 #' @inheritParams gen_qstnr
-#' @inheritParams commonmark::markdown_html
+#' @inheritParams htmlize_qstnr
 #' @param ... [Pluck][purrr::pluck] locations to convert to HTML. All (sub)keys targeted here must be of type character.
 #'   `r pkgsnip::param_lbl("dyn_dots_support")`
 #' @param rm_p Whether or not to omit the outer `<p>` tag when converting values to HTML.
@@ -563,8 +563,8 @@ read_survey_config <- function(path,
 htmlize_survey_config <- function(survey_config,
                                   ...,
                                   rm_p = FALSE,
-                                  hardbreaks = FALSE,
-                                  smart = TRUE,
+                                  hard_line_breaks = FALSE,
+                                  smart_punctuation = TRUE,
                                   normalize = TRUE,
                                   extensions = c("table", "strikethrough", "tasklist")) {
   
@@ -585,8 +585,8 @@ htmlize_survey_config <- function(survey_config,
                                                                          }
                                                                          
                                                                          x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
-                                                                                                                               hardbreaks = hardbreaks,
-                                                                                                                               smart = smart,
+                                                                                                                               hardbreaks = hard_line_breaks,
+                                                                                                                               smart = smart_punctuation,
                                                                                                                                normalize = normalize,
                                                                                                                                extensions = extensions))
                                                                          if (rm_p) x2 %<>% rm_p()
@@ -869,6 +869,11 @@ unnest_qstnr_vals <- function(qstnr) {
 #'   `r pkgsnip::param_lbl("tidy_select_support")`
 #' @param cols_rm_p Columns names to convert to HTML *without the outer `<p>` tag*. All columns must be of type character. Mustn't overlap with `cols`.
 #'   `r pkgsnip::param_lbl("tidy_select_support")`
+#' @param hard_line_breaks Whether or not to interpret all newlines within a paragraph as hard line breaks instead of spaces. This setting conforms to [Pandoc's
+#'   `hard_line_breaks` extension](https://pandoc.org/MANUAL.html#extension-hard_line_breaks).
+#' @param smart_punctuation Whether or not to enable smart punctation conforming to [Pandoc's `smart` extension](https://pandoc.org/MANUAL.html#extension-smart)
+#'   which converts straight quotes to curly quotes, `---` to an em-dash (—), `--` to an en-dash (–), and `...` to ellipses (…). It also replaces regular spaces
+#'   after certain abbreviations such as `Mr.` with [non-breaking spaces](https://en.wikipedia.org/wiki/Non-breaking_space).
 #'
 #' @return `qstnr` with values in `cols` converted to HTML text.
 #' @family qstnr_gen
@@ -876,8 +881,8 @@ unnest_qstnr_vals <- function(qstnr) {
 htmlize_qstnr <- function(qstnr,
                           cols = c("title", "description", "question"),
                           cols_rm_p = "values",
-                          hardbreaks = FALSE,
-                          smart = TRUE,
+                          hard_line_breaks = FALSE,
+                          smart_punctuation = TRUE,
                           normalize = TRUE,
                           extensions = c("table", "strikethrough", "tasklist")) {
   
@@ -915,8 +920,8 @@ htmlize_qstnr <- function(qstnr,
                                                                        }
                                                                        
                                                                        x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
-                                                                                                                              hardbreaks = hardbreaks,
-                                                                                                                              smart = smart,
+                                                                                                                              hardbreaks = hard_line_breaks,
+                                                                                                                              smart = smart_punctuation,
                                                                                                                               normalize = normalize,
                                                                                                                               extensions = extensions))
                                                                        if (do_rm_p) x2 %<>% rm_p()
@@ -1240,12 +1245,5 @@ vals <- function(id,
 #'
 #' @examples
 #' qstnr::pkg_config
-pkg_config <-
-  tibble::tibble(key = character(),
-                 default_value = list(),
-                 description = character()) %>%
-  tibble::add_row(key = "max_cache_lifespan",
-                  default_value = list("1 year"),
-                  description = paste0("Maximal timespan to preserve the package's [pkgpins](https://rpkg.dev/pkgpins/) cache. Cache entries older than this ",
-                                       "will be deleted upon package loading."))
+"pkg_config"
 ```

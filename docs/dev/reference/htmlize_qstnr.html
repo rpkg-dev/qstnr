@@ -52,8 +52,8 @@
 <span>  <span class="va">qstnr</span>,</span>
 <span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"description"</span>, <span class="st">"question"</span><span class="op">)</span>,</span>
 <span>  cols_rm_p <span class="op">=</span> <span class="st">"values"</span>,</span>
-<span>  hardbreaks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  smart <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hard_line_breaks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  smart_punctuation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  normalize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  extensions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"table"</span>, <span class="st">"strikethrough"</span>, <span class="st">"tasklist"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -73,12 +73,12 @@
 <dd><p>Columns names to convert to HTML <em>without the outer <code>&lt;p&gt;</code> tag</em>. All columns must be of type character. Mustn't overlap with <code>cols</code>. <a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html" class="external-link">Tidy selections</a> are supported.</p></dd>
 
 
-<dt>hardbreaks</dt>
-<dd><p>Treat newlines as hard line breaks. If this option is specified, hard wrapping is disabled regardless of the value given with <code>width</code>.</p></dd>
+<dt>hard_line_breaks</dt>
+<dd><p>Whether or not to interpret all newlines within a paragraph as hard line breaks instead of spaces. This setting conforms to <a href="https://pandoc.org/MANUAL.html#extension-hard_line_breaks" class="external-link">Pandoc's <code>hard_line_breaks</code> extension</a>.</p></dd>
 
 
-<dt>smart</dt>
-<dd><p>Use smart punctuation. See details.</p></dd>
+<dt>smart_punctuation</dt>
+<dd><p>Whether or not to enable smart punctation conforming to <a href="https://pandoc.org/MANUAL.html#extension-smart" class="external-link">Pandoc's <code>smart</code> extension</a> which converts straight quotes to curly quotes, <code>---</code> to an em-dash (—), <code>--</code> to an en-dash (–), and <code>...</code> to ellipses (…). It also replaces regular spaces after certain abbreviations such as <code>Mr.</code> with <a href="https://en.wikipedia.org/wiki/Non-breaking_space" class="external-link">non-breaking spaces</a>.</p></dd>
 
 
 <dt>normalize</dt>

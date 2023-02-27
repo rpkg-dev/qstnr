@@ -8,8 +8,8 @@ htmlize_survey_config(
   survey_config,
   ...,
   rm_p = FALSE,
-  hardbreaks = FALSE,
-  smart = TRUE,
+  hard_line_breaks = FALSE,
+  smart_punctuation = TRUE,
   normalize = TRUE,
   extensions = c("table", "strikethrough", "tasklist")
 )
@@ -22,10 +22,11 @@ htmlize_survey_config(
 
 \item{rm_p}{Whether or not to omit the outer \verb{<p>} tag when converting values to HTML.}
 
-\item{hardbreaks}{Treat newlines as hard line breaks. If this option is specified, hard wrapping is disabled
-regardless of the value given with \code{width}.}
+\item{hard_line_breaks}{Whether or not to interpret all newlines within a paragraph as hard line breaks instead of spaces. This setting conforms to \href{https://pandoc.org/MANUAL.html#extension-hard_line_breaks}{Pandoc's \code{hard_line_breaks} extension}.}
 
-\item{smart}{Use smart punctuation. See details.}
+\item{smart_punctuation}{Whether or not to enable smart punctation conforming to \href{https://pandoc.org/MANUAL.html#extension-smart}{Pandoc's \code{smart} extension}
+which converts straight quotes to curly quotes, \verb{---} to an em-dash (—), \verb{--} to an en-dash (–), and \code{...} to ellipses (…). It also replaces regular spaces
+after certain abbreviations such as \code{Mr.} with \href{https://en.wikipedia.org/wiki/Non-breaking_space}{non-breaking spaces}.}
 
 \item{normalize}{Consolidate adjacent text nodes.}
 
