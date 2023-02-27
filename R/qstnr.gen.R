@@ -47,7 +47,7 @@ utils::globalVariables(names = c(".",
                                                               pkg_versioned = FALSE),
                                        max_age = pal::pkg_config_val(key = "global_max_cache_age",
                                                                      pkg = pkgname)),
-           error = function(e) cli::cli_alert_warning(text = "Failed to clear pkgpins cache on load of {.pkg pkgname}. Error message: {e$message}"))
+           error = function(e) cli::cli_alert_warning(text = "Failed to clear pkgpins cache on load of {.pkg {pkgname}}. Error message: {e$message}"))
 }
 
 this_pkg <- utils::packageName()
