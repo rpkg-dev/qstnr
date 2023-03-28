@@ -408,7 +408,7 @@ htmlize_survey_config <- function(survey_config,
                                                                      is_node = is.list,
                                                                      leaf = \(x2) {
                                                                        
-                                                                       if (length(2) > 0L) {
+                                                                       if (length(x2) > 0L) {
                                                                          
                                                                          if (!checkmate::test_character(x2)) {
                                                                            cli::cli_abort(paste0("Key {.var {key}} at pluck location {.code {deparse(pl)}} is ",
@@ -416,10 +416,10 @@ htmlize_survey_config <- function(survey_config,
                                                                          }
                                                                          
                                                                          x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
-                                                                                                                               hardbreaks = hard_line_breaks,
-                                                                                                                               smart = smart_punctuation,
-                                                                                                                               normalize = normalize,
-                                                                                                                               extensions = extensions))
+                                                                                                                                hardbreaks = hard_line_breaks,
+                                                                                                                                smart = smart_punctuation,
+                                                                                                                                normalize = normalize,
+                                                                                                                                extensions = extensions))
                                                                          if (rm_p) x2 %<>% rm_p()
                                                                        }
                                                                        
