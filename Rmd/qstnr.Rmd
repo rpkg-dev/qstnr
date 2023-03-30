@@ -565,10 +565,12 @@ htmlize_survey_config <- function(survey_config,
                                   rm_p = FALSE,
                                   hard_line_breaks = FALSE,
                                   smart_punctuation = TRUE,
+                                  strip_footnotes = TRUE,
                                   normalize = TRUE,
                                   extensions = c("table", "strikethrough", "tasklist")) {
   
   assert_survey_config(survey_config = survey_config)
+  checkmate::assert_flag(strip_footnotes)
   
   for (pl in rlang::list2(...)) {
     
@@ -584,10 +586,15 @@ htmlize_survey_config <- function(survey_config,
                                                                                                  "not of (nested) type character."))
                                                                          }
                                                                          
+                                                                         if (strip_footnotes) {
+                                                                           x2 %<>% pal::strip_md_footnotes()
+                                                                         }
+                                                                         
                                                                          x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
                                                                                                                                 hardbreaks = hard_line_breaks,
                                                                                                                                 smart = smart_punctuation,
                                                                                                                                 normalize = normalize,
+                                                                                                                                footnotes = !strip_footnotes,
                                                                                                                                 extensions = extensions))
                                                                          if (rm_p) x2 %<>% rm_p()
                                                                        }
@@ -874,6 +881,7 @@ unnest_qstnr_vals <- function(qstnr) {
 #' @param smart_punctuation Whether or not to enable smart punctation conforming to [Pandoc's `smart` extension](https://pandoc.org/MANUAL.html#extension-smart)
 #'   which converts straight quotes to curly quotes, `---` to an em-dash (—), `--` to an en-dash (–), and `...` to ellipses (…). It also replaces regular spaces
 #'   after certain abbreviations such as `Mr.` with [non-breaking spaces](https://en.wikipedia.org/wiki/Non-breaking_space).
+#' @param strip_footnotes Whether or not to remove Markdown footnotes.
 #'
 #' @return `qstnr` with values in `cols` converted to HTML text.
 #' @family qstnr_gen
@@ -883,10 +891,12 @@ htmlize_qstnr <- function(qstnr,
                           cols_rm_p = "values",
                           hard_line_breaks = FALSE,
                           smart_punctuation = TRUE,
+                          strip_footnotes = TRUE,
                           normalize = TRUE,
                           extensions = c("table", "strikethrough", "tasklist")) {
   
   assert_qstnr_tibble(qstnr = qstnr)
+  checkmate::assert_flag(strip_footnotes)
   
   # tidy selection
   defused_cols <- rlang::enquo(cols)
@@ -919,10 +929,15 @@ htmlize_qstnr <- function(qstnr,
                                                                                                "'cols_rm_p', 'cols')}} is not of (nested) type character."))
                                                                        }
                                                                        
+                                                                       if (strip_footnotes) {
+                                                                         x2 %<>% pal::strip_md_footnotes()
+                                                                       }
+                                                                       
                                                                        x2 %<>% purrr::map_chr(\(x3) commonmark::markdown_html(text = x3,
                                                                                                                               hardbreaks = hard_line_breaks,
                                                                                                                               smart = smart_punctuation,
                                                                                                                               normalize = normalize,
+                                                                                                                              footnotes = !strip_footnotes,
                                                                                                                               extensions = extensions))
                                                                        if (do_rm_p) x2 %<>% rm_p()
                                                                      }

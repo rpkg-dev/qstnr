@@ -54,6 +54,7 @@
 <span>  cols_rm_p <span class="op">=</span> <span class="st">"values"</span>,</span>
 <span>  hard_line_breaks <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  smart_punctuation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  strip_footnotes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  normalize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  extensions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"table"</span>, <span class="st">"strikethrough"</span>, <span class="st">"tasklist"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -79,6 +80,10 @@
 
 <dt>smart_punctuation</dt>
 <dd><p>Whether or not to enable smart punctation conforming to <a href="https://pandoc.org/MANUAL.html#extension-smart" class="external-link">Pandoc's <code>smart</code> extension</a> which converts straight quotes to curly quotes, <code>---</code> to an em-dash (—), <code>--</code> to an en-dash (–), and <code>...</code> to ellipses (…). It also replaces regular spaces after certain abbreviations such as <code>Mr.</code> with <a href="https://en.wikipedia.org/wiki/Non-breaking_space" class="external-link">non-breaking spaces</a>.</p></dd>
+
+
+<dt>strip_footnotes</dt>
+<dd><p>Whether or not to remove Markdown footnotes.</p></dd>
 
 
 <dt>normalize</dt>

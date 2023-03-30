@@ -10,6 +10,7 @@ htmlize_survey_config(
   rm_p = FALSE,
   hard_line_breaks = FALSE,
   smart_punctuation = TRUE,
+  strip_footnotes = TRUE,
   normalize = TRUE,
   extensions = c("table", "strikethrough", "tasklist")
 )
@@ -27,6 +28,8 @@ htmlize_survey_config(
 \item{smart_punctuation}{Whether or not to enable smart punctation conforming to \href{https://pandoc.org/MANUAL.html#extension-smart}{Pandoc's \code{smart} extension}
 which converts straight quotes to curly quotes, \verb{---} to an em-dash (—), \verb{--} to an en-dash (–), and \code{...} to ellipses (…). It also replaces regular spaces
 after certain abbreviations such as \code{Mr.} with \href{https://en.wikipedia.org/wiki/Non-breaking_space}{non-breaking spaces}.}
+
+\item{strip_footnotes}{Whether or not to remove Markdown footnotes.}
 
 \item{normalize}{Consolidate adjacent text nodes.}
 
