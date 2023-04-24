@@ -18,6 +18,7 @@ Generate questionnaire tibble
 \seealso{
 Other questionnaire generation functions:
 \code{\link{gen_qmd_qstnr}()},
+\code{\link{gen_qstnr_docs}()},
 \code{\link{htmlize_qstnr}()},
 \code{\link{unnest_qstnr_vals}()},
 \code{\link{unnest_qstnr}()}

@@ -948,10 +948,130 @@ htmlize_qstnr <- function(qstnr,
 }
 ```
 
+### `gen_qstnr_docs`
+
+```{r}
+#' Generate questionnaire docs
+#'
+#' Generates a [Quarto Markdown representation][gen_qmd_qstnr] of the input for each specified language, renders it to Microsoft Word (DOCX) format and
+#' optionally uploads it as a Google Doc to the specified `g_drive_dir`.
+#'
+#' @inheritParams gen_qmd_qstnr
+#' @param langs Languages in which to output the questionnaire. A subset of `survey_config$langs` or `NULL` for all languages present.
+#' @param output_dir Directory to write the generated questionnaire files to. A character scalar.
+#' @param keep_qmd Whether to keep or delete the intermediate generated Quarto Markdown files.
+#' @param keep_docx Whether to keep or delete the intermediate generated Microsoft Word files.
+#' @param create_g_docs Whether or not to turn the generated files into Google Docs placed under the Google Drive path `g_drive_dir`.
+#' @param g_drive_dir Google Drive path under which to place the generated Google Docs. By default, the file is created in the current user's "My Drive" root
+#'   folder. Ignored if `create_g_docs = FALSE`.
+#' @param quiet `r pkgsnip::param_label("quiet")`
+#'
+#' @return `output_dir`, invisibly.
+#' @family qstnr_gen
+#' @export
+gen_qstnr_docs <- function(qstnr,
+                           survey_config,
+                           langs = NULL,
+                           add_item_ids = TRUE,
+                           output_dir,
+                           keep_qmd = TRUE,
+                           keep_docx = FALSE,
+                           create_g_docs = TRUE,
+                           g_drive_dir = NULL,
+                           quiet = FALSE) {
+  
+  assert_survey_config(survey_config = survey_config,
+                       els = "langs")
+  checkmate::assert_path_for_output(output_dir,
+                                    overwrite = TRUE)
+  checkmate::assert_flag(keep_qmd)
+  checkmate::assert_flag(keep_docx)
+  checkmate::assert_flag(create_g_docs)
+  checkmate::assert_string(g_drive_dir,
+                           null.ok = TRUE)
+  checkmate::assert_flag(quiet)
+  if (is.null(langs)) {
+    langs <- survey_config$langs
+  } else {
+    rlang::arg_match0(arg = langs,
+                      values = survey_config$langs)
+  }
+  
+  # create output dir if necessary
+  fs::dir_create(path = output_dir)
+  
+  if (!quiet) {
+    status_msg <- "Generating {cli::qty(length(langs))}questionnaire{?s} in Quarto Markdown and DOCX formats..."
+    cli::cli_progress_step(msg = status_msg,
+                           msg_done = paste(status_msg, "done"),
+                           msg_failed = paste(status_msg, "failed"),
+                           .auto_close = FALSE)
+  }
+  
+  # generate questionnaire DOCX files intended for external translation/correction
+  langs %>%
+    purrr::walk(\(lang) {
+      
+      filename <- fs::path(output_dir, glue::glue("qstnr.{lang}.qmd"))
+      
+      gen_qmd_qstnr(qstnr = qstnr,
+                    survey_config = survey_config,
+                    lang = lang,
+                    path = filename,
+                    add_item_ids = add_item_ids)
+      
+      quarto::quarto_render(input = filename,
+                            output_format = "docx",
+                            execute = FALSE,
+                            quiet = TRUE)
+      if (!keep_qmd) {
+        fs::file_delete(filename)
+      }
+    })
+  
+  if (!quiet) {
+    cli::cli_progress_done()
+  }
+  
+  if (create_g_docs) {
+    
+    if (!quiet) {
+      status_msg <- "Uploading {length(langs)} DOCX questionnaire{?s} to Google Drive..."
+      cli::cli_progress_step(msg = status_msg,
+                             msg_done = paste(status_msg, "done"),
+                             msg_failed = paste(status_msg, "failed"),
+                             .auto_close = FALSE)
+    }
+    
+    # upload questionnaire DOCX files to Google Drive (and convert to Google Docs)
+    googledrive::drive_auth(path = pal::pkg_config_val(key = "gcp_key",
+                                                       pkg = this_pkg))
+    
+    fs::path(output_dir, glue::glue("qstnr.{langs}.docx")) |>
+      purrr::walk(\(f) {
+        googledrive::drive_put(media = f,
+                               path = g_drive_dir, 
+                               name = fs::path_ext_remove(fs::path_file(f)),
+                               type = "document")
+      })
+    
+    if (!quiet) cli::cli_progress_done()
+  }
+  
+  if (!keep_docx) {
+    fs::path(output_dir, glue::glue("qstnr.{langs}.docx")) |> fs::file_delete()
+  }
+  
+  invisible(output_dir)
+}
+```
+
 ### `gen_qmd_qstnr`
 
 ```{r}
 #' Generate Quarto Markdown questionnaire
+#'
+#' Generates a [Quarto Markdown representation][gen_qmd_qstnr] of the input.
 #'
 #' @inheritParams gen_qstnr
 #' @param qstnr Unnested questionnaire tibble as returned by [unnest_qstnr()].
@@ -961,7 +1081,7 @@ htmlize_qstnr <- function(qstnr,
 #'
 #' @return `qstnr`, invisibly.
 #' @family qstnr_gen
-#' @export
+#' @keywords internal
 gen_qmd_qstnr <- function(qstnr,
                           survey_config,
                           lang,

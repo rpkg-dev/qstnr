@@ -5,15 +5,16 @@ editor_options:
 
 # NOTES
 
--   This file is *not* included in the [source package](https://r-pkgs.org/package-structure-state.html#source-package) because of the [`.nopurl` suffix in its
-    filename](https://rpkg.dev/pkgpurl/reference/purl_rmd.html#-rmd-files-excluded-from-purling).
+-   This file is *not* included in the [source package](https://r-pkgs.org/structure.html#sec-source-package) because of the [`.nopurl` suffix in its
+    filename](https://pkgpurl.rpkg.dev/reference/purl_rmd.html#-rmd-files-excluded-from-purling).
 
 -   The chunks below have to be manually executed in order to regenerate the package data.
 
--   Although the datasets below are saved as ["internal data" in `R/sysdata.rda`](https://r-pkgs.org/data.html#data-sysdata), some of them might still be
-    exported and documented (in the main `.Rmd` document), something [not explicitly
-    mentioned](https://coolbutuseless.github.io/2018/12/10/r-packages-internal-and-external-data/) in the book [R
-    Packages](https://r-pkgs.org/data.html#data-data).
+-   Although the datasets below are saved as ["internal data" in `R/sysdata.rda`](https://r-pkgs.org/data.html#sec-data-sysdata), they can still be exported and
+    documented (by documenting the dataset's quoted name in the main `.Rmd` source file -- which only works when the dataset is also `@export`ed), something
+    [not explicitly mentioned](https://coolbutuseless.github.io/2018/12/10/r-packages-internal-and-external-data/) in the book [R
+    Packages](https://r-pkgs.org/data.html#sec-data-data). To do so, you first need to manually add the `export()` directive in the NAMESPACE file since
+    roxygen2 won't add it automatically.
 
 # Define data
 
@@ -65,10 +66,17 @@ notice <- list(mandatory = list(de = "Diese Frage muss zwingend beantwortet und 
 pkg_config <-
   tibble::tibble(key = character(),
                  default_value = list(),
-                 description = character()) %>%
+                 description = character()) |>
   tibble::add_row(key = "global_max_cache_age",
                   default_value = list("1 year"),
-                  description = pkgsnip::md_snip("opt_global_max_cache_age"))
+                  description = pkgsnip::md_snip("opt_global_max_cache_age")) |>
+  tibble::add_row(key = "gcp_key",
+                  default_value = NULL,
+                  description = paste0("[Google Cloud Platform (GCP) Service Account ",
+                                       "Key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) file (in JSON format) to authorize the ",
+                                       "googledrive package to access and manage files on your Google Drive. See the [relevant googledrive ",
+                                       "documentation](https://gargle.r-lib.org/articles/non-interactive-auth.html#provide-a-service-account-token-directly) ",
+                                       "for details."))
 ```
 
 ## `qstnr_cols`

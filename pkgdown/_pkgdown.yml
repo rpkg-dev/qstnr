@@ -31,6 +31,7 @@ reference:
   - unnest_qstnr
   - unnest_qstnr_vals
   - htmlize_qstnr
+  - gen_qstnr_docs
   - gen_qmd_qstnr
 - title: Auxiliary
 - contents:

@@ -16,7 +16,7 @@ htmlize_qstnr(
 )
 }
 \arguments{
-\item{qstnr}{Semi-unnested questionnaire tibble as returned by \code{\link[=gen_qstnr]{gen_qstnr()}}.}
+\item{qstnr}{Semi-unnested questionnaire tibble as returned by \code{\link[=unnest_qstnr]{unnest_qstnr()}}.}
 
 \item{cols}{Column names to convert to HTML. All columns must be of type character. Mustn't overlap with \code{cols_rm_p}.
 \link[dplyr:dplyr_tidy_select]{Tidy selections} are supported.}
@@ -47,6 +47,7 @@ character.
 \seealso{
 Other questionnaire generation functions:
 \code{\link{gen_qmd_qstnr}()},
+\code{\link{gen_qstnr_docs}()},
 \code{\link{gen_qstnr}()},
 \code{\link{unnest_qstnr_vals}()},
 \code{\link{unnest_qstnr}()}

@@ -21,13 +21,15 @@ gen_qmd_qstnr(qstnr, survey_config, lang, path, add_item_ids = TRUE)
 \code{qstnr}, invisibly.
 }
 \description{
-Generate Quarto Markdown questionnaire
+Generates a \link[=gen_qmd_qstnr]{Quarto Markdown representation} of the input.
 }
 \seealso{
 Other questionnaire generation functions:
+\code{\link{gen_qstnr_docs}()},
 \code{\link{gen_qstnr}()},
 \code{\link{htmlize_qstnr}()},
 \code{\link{unnest_qstnr_vals}()},
 \code{\link{unnest_qstnr}()}
 }
 \concept{qstnr_gen}
+\keyword{internal}
