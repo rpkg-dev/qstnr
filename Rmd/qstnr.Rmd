@@ -808,7 +808,7 @@ unnest_qstnr <- function(qstnr) {
 #' `r val_cols |> stringr::str_replace("^values", "value") |> pal::prose_ls(wrap = "\x60")`. Additionally, a column `value_order` is added holding the intended
 #' value order as defined in the questionnaire.
 #'
-#' @param qstnr Semi-unnested questionnaire tibble as returned by [gen_qstnr()].
+#' @param qstnr Semi-unnested questionnaire tibble as returned by [unnest_qstnr()].
 #'
 #' @return `r pkgsnip::return_label("data")`
 #' @family qstnr_gen

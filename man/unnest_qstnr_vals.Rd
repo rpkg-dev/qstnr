@@ -7,7 +7,7 @@
 unnest_qstnr_vals(qstnr)
 }
 \arguments{
-\item{qstnr}{Semi-unnested questionnaire tibble as returned by \code{\link[=gen_qstnr]{gen_qstnr()}}.}
+\item{qstnr}{Semi-unnested questionnaire tibble as returned by \code{\link[=unnest_qstnr]{unnest_qstnr()}}.}
 }
 \value{
 A \link[tibble:tbl_df-class]{tibble}.
