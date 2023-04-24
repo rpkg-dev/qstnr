@@ -1,4 +1,4 @@
-# qstnr: Helps Creating and Maintaining Survey Questionnaires
+# qstnr
 
 <a href="https://cran.r-project.org/package=qstnr" class="pkgdown-release"><img src="https://r-pkg.org/badges/version/qstnr" alt="CRAN Status" /></a>
 
