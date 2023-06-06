@@ -15,7 +15,9 @@
 
         `qstnr::unnest_qstnr_vals()` ensures this implicitly and throws a moderately meaningful error in case of a violation à la:
 
-            ! In row 575, can't recycle input of size 2 to size 3.
+        ```         
+        ! In row 575, can't recycle input of size 2 to size 3.
+        ```
 
     -   if `values` and `value_sets` are provided, the latter contains `"values"` (we can't do that in the schema since the [`contains`
         keyword](https://json-schema.org/understanding-json-schema/reference/array.html?highlight=contains#contains) was only added with draft 6).
@@ -52,6 +54,13 @@
     -   [Publishing R packages with Rust code on CRAN](https://github.com/r-rust/faq)
     -   [rextendr R package](https://extendr.github.io/rextendr/)
     -   [cargo R package](https://github.com/dbdahl/cargo-framework)
+
+-   Have a look at the following R packages and check whether we should take inspiration from them:
+
+    -   [codebook](https://rubenarslan.github.io/codebook/)
+    -   [questionr](https://juba.github.io/questionr/)
+
+-   Should we build some kind of [formr](https://formr.org/) integration? qstnr's functionality would probably be a perfect fit...
 
 ## fundamentals
 
