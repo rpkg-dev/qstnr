@@ -1064,7 +1064,7 @@ common_val_scale <- function(x,
                     values = value_scales)
   
   if ("ordinal_descending" %in% c(x, y) && any(c("interval", "ratio") %in% c(x, y))) {
-    cli::cli_abort("Incompatible value scales {.val {y}} and {.val y} provided.")
+    cli::cli_abort("Incompatible value scales {.val {x}} and {.val {y}} provided.")
     
   } else if (x == "none" && y == "none") {
     return("none")
