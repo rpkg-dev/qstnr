@@ -22,7 +22,7 @@ Imports:
     googledrive (>= 2.1.0),
     httr (>= 1.4.4),
     magrittr (>= 2.0.3),
-    pal (>= 0.0.9093),
+    pal (>= 0.0.9096),
     pkgpins (>= 0.8.0.9000),
     purrr (>= 1.0.1),
     quarto (>= 1.2),

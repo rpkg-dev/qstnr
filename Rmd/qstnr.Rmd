@@ -509,7 +509,7 @@ read_survey_config <- function(path,
   spec_parts <-
     names(survey_config_raw$qstnr) %>%
     intersect(all_spec_parts) %>%
-    pal::order_by(by = all_spec_parts) %>%
+    pal::sort_by(by = all_spec_parts) %>%
     rlang::set_names() %>%
     purrr::map(~ {
       combine_spec_part_srcs(srcs = survey_config_raw$qstnr[[.x]]$source,
