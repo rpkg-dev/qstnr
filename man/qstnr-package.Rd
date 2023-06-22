@@ -22,8 +22,8 @@ Some of qstnr's functionality is controlled via package-specific global configur
 Useful links:
 \itemize{
   \item \url{https://qstnr.rpkg.dev}
-  \item \url{https://gitlab.com/salim_b/r/pkgs/qstnr}
-  \item Report bugs at \url{https://gitlab.com/salim_b/r/pkgs/qstnr/issues}
+  \item \url{https://gitlab.com/rpkg.dev/qstnr}
+  \item Report bugs at \url{https://gitlab.com/rpkg.dev/qstnr/issues}
 }
 
 }
