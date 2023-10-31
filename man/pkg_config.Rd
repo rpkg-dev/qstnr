@@ -3,15 +3,15 @@
 \docType{data}
 \name{pkg_config}
 \alias{pkg_config}
-\title{qstnr package configuration metadata}
+\title{pkgpurl package configuration metadata}
 \format{
-A \link[tibble:tbl_df-class]{tibble} with the columns \code{key}, \code{default_value} and \code{description}.
+A \link[tibble:tbl_df-class]{tibble} with the columns \code{key}, \code{default_value}, and \code{description}.
 }
 \usage{
 pkg_config
 }
 \description{
-A \link[tibble:tbl_df-class]{tibble} with metadata of all possible qstnr package configuration options. See \code{\link[pal:pkg_config_val]{pal::pkg_config_val()}} for more information.
+A \link[tibble:tbl_df-class]{tibble} with metadata of all possible pkgpurl package configuration options. See \code{\link[pal:pkg_config_val]{pal::pkg_config_val()}} for more information.
 }
 \examples{
 qstnr::pkg_config

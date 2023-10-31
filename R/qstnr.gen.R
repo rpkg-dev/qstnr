@@ -441,7 +441,7 @@ htmlize_survey_config <- function(survey_config,
 #'
 #' @param survey_config Survey configuration list as returned by [read_survey_config()].
 #'
-#' @return `r pkgsnip::return_label("data")`
+#' @return `r pkgsnip::return_lbl("tibble")`
 #' @family qstnr_gen
 #' @export
 gen_qstnr <- function(survey_config) {
@@ -557,7 +557,7 @@ gen_qstnr <- function(survey_config) {
 #'
 #' @param qstnr Nested questionnaire tibble as returned by [gen_qstnr()].
 #'
-#' @return `r pkgsnip::return_label("data")`
+#' @return `r pkgsnip::return_lbl("tibble")`
 #' @family qstnr_gen
 #' @export
 unnest_qstnr <- function(qstnr) {
@@ -619,7 +619,7 @@ unnest_qstnr <- function(qstnr) {
 #'
 #' @param qstnr Semi-unnested questionnaire tibble as returned by [unnest_qstnr()].
 #'
-#' @return `r pkgsnip::return_label("data")`
+#' @return `r pkgsnip::return_lbl("tibble")`
 #' @family qstnr_gen
 #' @export
 unnest_qstnr_vals <- function(qstnr) {
@@ -765,7 +765,7 @@ htmlize_qstnr <- function(qstnr,
 #' @param create_g_docs Whether or not to turn the generated files into Google Docs placed under the Google Drive path `g_drive_dir`.
 #' @param g_drive_dir Google Drive path under which to place the generated Google Docs. By default, the file is created in the current user's "My Drive" root
 #'   folder. Ignored if `create_g_docs = FALSE`.
-#' @param quiet `r pkgsnip::param_label("quiet")`
+#' @param quiet `r pkgsnip::param_lbl("quiet")`
 #'
 #' @return `output_dir`, invisibly.
 #' @family qstnr_gen
@@ -1073,7 +1073,7 @@ common_val_scale <- function(x,
     return("nominal")
     
   } else {
-    return(intersect(value_scales_strict, c(x,y))[1L])
+    return(intersect(value_scales_strict, c(x, y))[1L])
   }
 }
 
@@ -1091,7 +1091,7 @@ group_title <- function(survey_config,
                         group_id) {
   
   assert_survey_config(survey_config = survey_config,
-                       els = c("item_groups"))
+                       els = "item_groups")
   
   checkmate::assert_choice(group_id,
                            choices = purrr::map_chr(survey_config$item_groups,
@@ -1138,11 +1138,11 @@ vals <- function(id,
   
 }
 
-#' `r this_pkg` package configuration metadata
+#' `r pkgsnip::title_lbl("pkg_config", pkg = "pkgpurl")`
 #'
-#' A [tibble][tibble::tbl_df] with metadata of all possible `r this_pkg` package configuration options. See [pal::pkg_config_val()] for more information.
+#' `r pkgsnip::description_lbl("pkg_config", pkg = "pkgpurl")`
 #'
-#' @format `r pkgsnip::return_label("data_cols", cols = colnames(pkg_config))`
+#' @format `r pkgsnip::return_lbl("tibble_cols", cols = colnames(pkg_config))`
 #' @export
 #'
 #' @examples
