@@ -54,9 +54,9 @@ optionally uploads it as a Google Doc to the specified <code>g_drive_dir</code>.
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gen_qstnr_docs</span><span class="op">(</span></span>
 <span>  <span class="va">qstnr</span>,</span>
 <span>  <span class="va">survey_config</span>,</span>
+<span>  <span class="va">output_dir</span>,</span>
 <span>  langs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  add_item_ids <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">output_dir</span>,</span>
 <span>  keep_qmd <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  keep_docx <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  create_g_docs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -75,16 +75,16 @@ optionally uploads it as a Google Doc to the specified <code>g_drive_dir</code>.
 <dd><p>Survey configuration list as returned by <code><a href="read_survey_config.html">read_survey_config()</a></code>.</p></dd>
 
 
+<dt>output_dir</dt>
+<dd><p>Directory to write the generated questionnaire files to. A character scalar.</p></dd>
+
+
 <dt>langs</dt>
 <dd><p>Languages in which to output the questionnaire. A subset of <code>survey_config$langs</code> or <code>NULL</code> for all languages present.</p></dd>
 
 
 <dt>add_item_ids</dt>
 <dd><p>Whether or not to add questionnaire item identifiers next to the question texts.</p></dd>
-
-
-<dt>output_dir</dt>
-<dd><p>Directory to write the generated questionnaire files to. A character scalar.</p></dd>
 
 
 <dt>keep_qmd</dt>

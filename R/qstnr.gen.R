@@ -109,14 +109,14 @@ combine_spec_part_srcs <- function(srcs,
     
     src_type <- names(srcs[[i]])
     src_content <- switch(EXPR = src_type,
-                          "expr" = spec_part_expr(expr = srcs[[i]]$expr),
-                          "file" = spec_part_file(file = srcs[[i]]$file,
-                                                  dir = dir,
-                                                  spec_part = spec_part,
-                                                  validate = validate),
-                          "url"  = spec_part_url(url = srcs[[i]]$url,
-                                                 spec_part = spec_part,
-                                                 validate = validate))
+                          expr = spec_part_expr(expr = srcs[[i]]$expr),
+                          file = spec_part_file(file = srcs[[i]]$file,
+                                                dir = dir,
+                                                spec_part = spec_part,
+                                                validate = validate),
+                          url  = spec_part_url(url = srcs[[i]]$url,
+                                               spec_part = spec_part,
+                                               validate = validate))
     result %<>% purrr::list_modify(!!!src_content)
   }
   
@@ -130,7 +130,7 @@ emph_md <- function(x,
     purrr::map_chr(\(x) {
       
       x %>%
-        stringr::str_split(pattern = "\n") %>%
+        stringr::str_split(pattern = stringr::fixed("\n")) %>%
         purrr::map(\(x2) {
           x2 %>%
             stringr::str_replace_all(pattern = paste0(stringr::str_escape(emph), "(.*)", stringr::str_escape(emph)),
@@ -758,8 +758,8 @@ htmlize_qstnr <- function(qstnr,
 #' optionally uploads it as a Google Doc to the specified `g_drive_dir`.
 #'
 #' @inheritParams gen_qmd_qstnr
-#' @param langs Languages in which to output the questionnaire. A subset of `survey_config$langs` or `NULL` for all languages present.
 #' @param output_dir Directory to write the generated questionnaire files to. A character scalar.
+#' @param langs Languages in which to output the questionnaire. A subset of `survey_config$langs` or `NULL` for all languages present.
 #' @param keep_qmd Whether to keep or delete the intermediate generated Quarto Markdown files.
 #' @param keep_docx Whether to keep or delete the intermediate generated Microsoft Word files.
 #' @param create_g_docs Whether or not to turn the generated files into Google Docs placed under the Google Drive path `g_drive_dir`.
@@ -772,9 +772,9 @@ htmlize_qstnr <- function(qstnr,
 #' @export
 gen_qstnr_docs <- function(qstnr,
                            survey_config,
+                           output_dir,
                            langs = NULL,
                            add_item_ids = TRUE,
-                           output_dir,
                            keep_qmd = TRUE,
                            keep_docx = FALSE,
                            create_g_docs = TRUE,
@@ -937,7 +937,10 @@ gen_qmd_qstnr <- function(qstnr,
               q_id <- paste0("^`", k3$id, "`^")
               
               # layout is conditional on whether the question is part of a block or not
-              if (!is_question_block) {
+              if (is_question_block) {
+                question <- c(paste0("- ", q_text, " ", q_id[add_item_ids]))
+                
+              } else {
                 question <- c(paste0(q_text, "  "[add_item_ids]),
                               q_id[add_item_ids],
                               "",
@@ -945,8 +948,6 @@ gen_qmd_qstnr <- function(qstnr,
                               "",
                               notice_mandatory[d3$is_mandatory],
                               notice_multiple_answers[d3$allow_multiple_answers])
-              } else {
-                question <- c(paste0("- ", q_text, " ", q_id[add_item_ids]))
                 
                 if (!is_question_block_compact) {
                   question %<>% c(paste0("  - ", unlist(d3$values)))
@@ -971,7 +972,7 @@ gen_qmd_qstnr <- function(qstnr,
       
       pretty_group <-
         k1$group_id |>
-        stringr::str_replace_all("_", " ") |>
+        stringr::str_replace_all(stringr::fixed("_"), " ") |>
         stringr::str_to_title() |>
         emph_md(emph = "**")
       

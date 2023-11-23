@@ -7,9 +7,9 @@
 gen_qstnr_docs(
   qstnr,
   survey_config,
+  output_dir,
   langs = NULL,
   add_item_ids = TRUE,
-  output_dir,
   keep_qmd = TRUE,
   keep_docx = FALSE,
   create_g_docs = TRUE,
@@ -22,11 +22,11 @@ gen_qstnr_docs(
 
 \item{survey_config}{Survey configuration list as returned by \code{\link[=read_survey_config]{read_survey_config()}}.}
 
+\item{output_dir}{Directory to write the generated questionnaire files to. A character scalar.}
+
 \item{langs}{Languages in which to output the questionnaire. A subset of \code{survey_config$langs} or \code{NULL} for all languages present.}
 
 \item{add_item_ids}{Whether or not to add questionnaire item identifiers next to the question texts.}
-
-\item{output_dir}{Directory to write the generated questionnaire files to. A character scalar.}
 
 \item{keep_qmd}{Whether to keep or delete the intermediate generated Quarto Markdown files.}
 

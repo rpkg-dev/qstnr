@@ -54,9 +54,13 @@
 <p><code><a href="reference/unnest_qstnr_vals.html">qstnr::unnest_qstnr_vals()</a></code> ensures this implicitly and throws a moderately meaningful error in case of a violation à la:</p>
 <pre><code>! In row 575, can't recycle input of size 2 to size 3.</code></pre>
 </li>
-<li><p>if <code>values</code> and <code>value_sets</code> are provided, the latter contains <code>"values"</code> (we can’t do that in the schema since the <a href="https://json-schema.org/understanding-json-schema/reference/array.html?highlight=contains#contains" class="external-link"><code>contains</code> keyword</a> was only added with draft 6).</p></li>
+<li><p>if <code>values</code> and <code>value_sets</code> are provided, the latter contains <code>"values"</code> (we can’t do that in the schema (yet) since the <a href="https://json-schema.org/understanding-json-schema/reference/array.html?highlight=contains#contains" class="external-link"><code>contains</code> keyword</a> was only added with draft 6).</p></li>
 <li><p><code>iterators</code> are sensible. the schema only demands an array of arrays – technically anything could be in those level-2 arrays…</p></li>
 </ul></li>
+<li>
+<p>Taplo uses <a href="https://github.com/Stranger6667/jsonschema-rs" class="external-link">jsonschema-rs</a> under the hood which (as of 2023-11) supports JSON Schema up to Draft 7, so we should be able to use more than just Draft 4 features… -&gt; test this!</p>
+<p>Furthermore, implementation of the latest drafts <a href="https://github.com/Stranger6667/jsonschema-rs/issues/44" class="external-link">2019-09</a> and <a href="https://github.com/Stranger6667/jsonschema-rs/issues/195" class="external-link">2020-12</a> is ongoing. Once this is completed (and can be properly used in taplo), we should consider porting our schemas to the latest draft iteration.</p>
+</li>
 <li>
 <p>write documentation</p>
 <ul><li>general questionnaire principles
@@ -68,9 +72,10 @@
 <li>iterators defined via the <code>i</code> array are referrable in inline R code by appending the iterator index (starting by <code>1</code> as it is the convention for vectors in R), i.e. the first iterator is <code>i1</code>, the second <code>i2</code> etc.</li>
 </ul></li>
 </ul></li>
+<li><p>submit schemas to <a href="https://www.schemastore.org/json/" class="external-link">JSON Schema Store</a>? cf. <a href="https://taplo.tamasfe.dev/configuration/developing-schemas.html#publishing" class="external-link uri">https://taplo.tamasfe.dev/configuration/developing-schemas.html#publishing</a></p></li>
 <li>
 <p>publish stable release</p>
-<ul><li>replace all occurrences of <code>https://qstnr.rpkg.dev/dev/</code> with <code>https://qstnr.rpkg.dev/</code> in schemas (and elsewhere) -&gt; change default to <code>schema_url(dev = FALSE)</code>
+<ul><li>replace all occurrences of <code>https://qstnr.rpkg.dev/dev/</code> with <code>https://qstnr.rpkg.dev/</code> in schemas (and elsewhere) -&gt; change default to <code>schema_url(dev = FALSE)</code> <em>thanks to our HTTP redirects we can actually do this already!</em>
 </li>
 <li>submit to CRAN</li>
 </ul></li>
@@ -89,8 +94,22 @@
 <ul><li><a href="https://rubenarslan.github.io/codebook/" class="external-link">codebook</a></li>
 <li><a href="https://juba.github.io/questionr/" class="external-link">questionr</a></li>
 </ul></li>
-<li><p>Should we build some kind of <a href="https://formr.org/" class="external-link">formr</a> integration? qstnr’s functionality would probably be a perfect fit…</p></li>
-</ul><div class="section level2">
+<li>
+<p>integrate with suitable open-source survey “servers”. candidates include:</p>
+<ul><li>
+<a href="https://www.limesurvey.org/blog/product-news/914-limesurvey-6" class="external-link">LimeSurvey 6</a>
+<ul><li>still sucks massively: PHP app based on LAMP stack; terrible community both in technical and organizational terms; awful dev experience due to basically <a href="https://manual.limesurvey.org/index.php?search=API" class="external-link">unusable/undocumented APIs</a>)</li>
+<li>to sum up: LimeSurvey has design flaws beyond repairability and is not intended to be used by programmers but only targets non-programmatic usage</li>
+</ul></li>
+<li>
+<a href="https://formbricks.com/" class="external-link"><strong>Formbricks</strong></a>!
+<ul><li>offers <a href="https://formbricks.com/docs/api/client/overview" class="external-link">REST APIs</a> incl. the management API’s <a href="https://formbricks.com/docs/api/management/surveys" class="external-link">survey sub-API</a> that i.a. offers an <a href="https://formbricks.com/docs/api/management/surveys#create-survey" class="external-link">endpoint to create surveys</a>; this might not be enough for our use case, though (create the <em>whole</em> survey (incl. routing and everything) from data submitted via API)</li>
+<li>development is very active and fast, but currently Formbricks still lacks a few mandatory features I think -&gt; need to thoroughly investigate/test!</li>
+</ul></li>
+<li>see this <a href="https://formbricks.com/blog/best-open-source-survey-software-2023" class="external-link">short overview</a> for 3 more OSS projects (of which none matches what we want 😐)</li>
+</ul></li>
+</ul><p>Should we build some kind of <a href="https://formr.org/" class="external-link">formr</a> integration? qstnr’s functionality would probably be a perfect fit…</p>
+<div class="section level2">
 <h2 id="fundamentals">fundamentals<a class="anchor" aria-label="anchor" href="#fundamentals"></a></h2>
 <ul><li>
 <p>make <code>value_sets</code> part “directionless” by</p>
