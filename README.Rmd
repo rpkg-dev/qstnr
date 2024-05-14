@@ -56,7 +56,7 @@ pkgsnip::md_snip(id = "pkg_config",
                  pkg = "qstnr")
 cat("\n\n::: {.table-wide}\n ")
 pal::print_pkg_config("qstnr")
-cat("\n :::")
+cat("\n:::")
 ```
 
 ## Development

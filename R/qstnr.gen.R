@@ -2,7 +2,7 @@
 # See `README.md#r-markdown-format` for more information on the literate programming approach used applying the R Markdown format.
 
 # qstnr: Helps Creating and Maintaining Survey Questionnaires
-# Copyright (C) 2023 Salim Brüggemann
+# Copyright (C) 2024 Salim Brüggemann
 # 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free
 # Software Foundation, either version 3 of the License, or any later version.
@@ -199,7 +199,7 @@ gen_qstnr_rows <- function(item,
                    gen_qstnr_rows(item = item,
                                   i = i + 1L,
                                   i_list = i_list)
-                 }) %>%
+                 }) |>
       purrr::list_rbind()
     
   } else {
@@ -213,7 +213,7 @@ gen_qstnr_rows <- function(item,
                    gen_qstnr_row(.item = item,
                                  !!!i_list)
                    
-                 }) %>%
+                 }) |>
       purrr::list_rbind()
   }
   
@@ -344,7 +344,7 @@ read_survey_config <- function(path,
   spec_parts <-
     names(survey_config_raw$qstnr) %>%
     intersect(all_spec_parts) %>%
-    pal::sort_by(by = all_spec_parts) %>%
+    pal::arrange_by(by = all_spec_parts) %>%
     rlang::set_names() %>%
     purrr::map(~ {
       combine_spec_part_srcs(srcs = survey_config_raw$qstnr[[.x]]$source,

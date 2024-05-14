@@ -25,11 +25,11 @@ Generates a \link[=gen_qmd_qstnr]{Quarto Markdown representation} of the input.
 }
 \seealso{
 Other questionnaire generation functions:
-\code{\link{gen_qstnr_docs}()},
 \code{\link{gen_qstnr}()},
+\code{\link{gen_qstnr_docs}()},
 \code{\link{htmlize_qstnr}()},
-\code{\link{unnest_qstnr_vals}()},
-\code{\link{unnest_qstnr}()}
+\code{\link{unnest_qstnr}()},
+\code{\link{unnest_qstnr_vals}()}
 }
 \concept{qstnr_gen}
 \keyword{internal}

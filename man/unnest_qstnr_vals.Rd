@@ -22,8 +22,8 @@ value order as defined in the questionnaire.
 \seealso{
 Other questionnaire generation functions:
 \code{\link{gen_qmd_qstnr}()},
-\code{\link{gen_qstnr_docs}()},
 \code{\link{gen_qstnr}()},
+\code{\link{gen_qstnr_docs}()},
 \code{\link{htmlize_qstnr}()},
 \code{\link{unnest_qstnr}()}
 }

@@ -316,7 +316,7 @@ gen_qstnr_rows <- function(item,
                    gen_qstnr_rows(item = item,
                                   i = i + 1L,
                                   i_list = i_list)
-                 }) %>%
+                 }) |>
       purrr::list_rbind()
     
   } else {
@@ -330,7 +330,7 @@ gen_qstnr_rows <- function(item,
                    gen_qstnr_row(.item = item,
                                  !!!i_list)
                    
-                 }) %>%
+                 }) |>
       purrr::list_rbind()
   }
   
@@ -509,7 +509,7 @@ read_survey_config <- function(path,
   spec_parts <-
     names(survey_config_raw$qstnr) %>%
     intersect(all_spec_parts) %>%
-    pal::sort_by(by = all_spec_parts) %>%
+    pal::arrange_by(by = all_spec_parts) %>%
     rlang::set_names() %>%
     purrr::map(~ {
       combine_spec_part_srcs(srcs = survey_config_raw$qstnr[[.x]]$source,

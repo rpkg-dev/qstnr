@@ -1,8 +1,8 @@
-pandoc: 3.1.9
-pkgdown: 2.0.7.9000
-pkgdown_sha: 4c33449dac026695bd44a40969a22980bb5d3a76
+pandoc: '3.2'
+pkgdown: 2.0.9.9000
+pkgdown_sha: e407acece26815c3c776effba39bffde68382142
 articles: {}
-last_built: 2023-11-23T19:16Z
+last_built: 2024-05-14T19:21Z
 urls:
   reference: https://qstnr.rpkg.dev/reference
   article: https://qstnr.rpkg.dev/articles

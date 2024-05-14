@@ -47,9 +47,9 @@ character.
 \seealso{
 Other questionnaire generation functions:
 \code{\link{gen_qmd_qstnr}()},
-\code{\link{gen_qstnr_docs}()},
 \code{\link{gen_qstnr}()},
-\code{\link{unnest_qstnr_vals}()},
-\code{\link{unnest_qstnr}()}
+\code{\link{gen_qstnr_docs}()},
+\code{\link{unnest_qstnr}()},
+\code{\link{unnest_qstnr_vals}()}
 }
 \concept{qstnr_gen}

@@ -13,8 +13,8 @@ qstnr provides a framework to create and maintain survey questionnaires written 
 
 Some of qstnr's functionality is controlled via package-specific global configuration which can either be set via \href{https://rdrr.io/r/base/options.html}{R options} or \href{https://en.wikipedia.org/wiki/Environment_variable}{environment variables} (the former take precedence). This configuration includes:\tabular{llll}{
    \strong{Description} \tab \strong{R option} \tab \strong{Environment variable} \tab \strong{Default value} \cr
-   Maximal timespan to preserve the package's \href{https://pkgpins.rpkg.dev/}{pkgpins} cache. Cache entries older than this will be deleted upon package loading. \tab \code{qstnr.global_max_cache_age} \tab \code{QSTNR_GLOBAL_MAX_CACHE_AGE} \tab \code{"1 year"} \cr
-   \href{https://cloud.google.com/iam/docs/creating-managing-service-account-keys}{Google Cloud Platform (GCP) Service Account Key} file (in JSON format) to authorize the googledrive package to access and manage files on your Google Drive. See the \href{https://gargle.r-lib.org/articles/non-interactive-auth.html#provide-a-service-account-token-directly}{relevant googledrive documentation} for details. \tab \code{qstnr.gcp_key} \tab \code{QSTNR_GCP_KEY} \tab  \cr
+   Maximal timespan to preserve the package's \href{https://pkgpins.rpkg.dev/}{pkgpins} cache. Cache entries older than this will be deleted upon package loading. \tab \code{qstnr.global_max_cache_age} \tab \code{R_QSTNR_GLOBAL_MAX_CACHE_AGE} \tab \code{"1 year"} \cr
+   \href{https://cloud.google.com/iam/docs/creating-managing-service-account-keys}{Google Cloud Platform (GCP) Service Account Key} file (in JSON format) to authorize the googledrive package to access and manage files on your Google Drive. See the \href{https://gargle.r-lib.org/articles/non-interactive-auth.html#provide-a-service-account-token-directly}{relevant googledrive documentation} for details. \tab \code{qstnr.gcp_key} \tab \code{R_QSTNR_GCP_KEY} \tab  \cr
 }
 }
 
