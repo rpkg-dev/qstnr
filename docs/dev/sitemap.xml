@@ -1,60 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/TODO.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/index.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/as_int_vals.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/common_val_scale.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/gen_qmd_qstnr.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/gen_qstnr.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/gen_qstnr_docs.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/group_title.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/htmlize_qstnr.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/htmlize_survey_config.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/pkg_config.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/qstnr-package.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/read_survey_config.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/unnest_qstnr.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/unnest_qstnr_vals.html</loc>
-  </url>
-  <url>
-    <loc>https://qstnr.rpkg.dev/dev/reference/val_set.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://qstnr.rpkg.dev/dev/LICENSE.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/TODO.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/authors.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/index.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/as_int_vals.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/common_val_scale.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/gen_qmd_qstnr.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/gen_qstnr.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/gen_qstnr_docs.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/group_title.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/htmlize_qstnr.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/htmlize_survey_config.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/index.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/pkg_config.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/qstnr-package.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/read_survey_config.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/unnest_qstnr.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/unnest_qstnr_vals.html</loc></url>
+<url><loc>https://qstnr.rpkg.dev/dev/reference/val_set.html</loc></url>
 </urlset>
+
