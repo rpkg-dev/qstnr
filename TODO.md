@@ -27,10 +27,10 @@
 -   Taplo uses [jsonschema-rs](https://github.com/Stranger6667/jsonschema-rs) under the hood which (as of 2023-11) supports JSON Schema up to Draft 7, so we
     should be able to use more than just Draft 4 features... -> test this!
     
-    Furthermore, implementation of the latest drafts [2019-09](https://github.com/Stranger6667/jsonschema-rs/issues/44) and
-    [2020-12](https://github.com/Stranger6667/jsonschema-rs/issues/195) is ongoing. Once this is completed (and can be properly used in taplo), we should
-    consider porting our schemas to the latest draft iteration.
-    
+    Furthermore, jsonschema-rs already partially supports the JSON Schema Drafts 2019-09 and 2020-12. Once
+    [tamasfe/taplo#498](https://github.com/tamasfe/taplo/pull/498) is merged (or Taplo has [switched to
+    boon](https://github.com/tamasfe/taplo/issues/497#issuecomment-2158519200) instead), we should be able to use (supported) features from these newer JSON
+    Schema Drafts and consider porting our schemas to the latest draft iteration.
 
 -   write documentation
 
