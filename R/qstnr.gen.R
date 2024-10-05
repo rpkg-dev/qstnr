@@ -845,8 +845,7 @@ gen_qstnr_docs <- function(qstnr,
     }
     
     # upload questionnaire DOCX files to Google Drive (and convert to Google Docs)
-    googledrive::drive_auth(path = pal::pkg_config_val(key = "gcp_key",
-                                                       pkg = this_pkg))
+    googledrive::drive_auth(path = pal::pkg_config_val(key = "gcp_key"))
     
     fs::path(output_dir, glue::glue("qstnr.{langs}.docx")) |>
       purrr::walk(\(f) {
@@ -1007,8 +1006,8 @@ gen_qmd_qstnr <- function(qstnr,
 #' @family aux
 #' @export
 as_int_vals <- function(var,
-                        qstnr = pal::pkg_config_val(key = "cur_qstnr",
-                                                    pkg = this_pkg)) {
+                        qstnr = pal::pkg_config_val(key = "cur_qstnr")) {
+  
   var_id <- attr(x = var,
                  which = "id",
                  exact = TRUE)

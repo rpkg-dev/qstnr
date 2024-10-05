@@ -4,10 +4,7 @@
 \alias{as_int_vals}
 \title{Convert question values to codes}
 \usage{
-as_int_vals(
-  var,
-  qstnr = pal::pkg_config_val(key = "cur_qstnr", pkg = this_pkg)
-)
+as_int_vals(var, qstnr = pal::pkg_config_val(key = "cur_qstnr"))
 }
 \arguments{
 \item{var}{Variable holding the question values. A character vector with an \code{id} and a \code{lang} attribute.}
