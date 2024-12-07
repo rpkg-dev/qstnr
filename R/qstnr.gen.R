@@ -613,8 +613,8 @@ unnest_qstnr <- function(qstnr) {
 #' @description
 #' Unnests a semi-unnested qstnr tibble as returned by [unnest_qstnr()] into one row per question `lang`, `id` and `value`.
 #' 
-#' The columns `r val_cols <- qstnr_cols |> stringr::str_subset("^values"); val_cols |> pal::prose_ls(wrap = "\x60")` will thereby become
-#' `r val_cols |> stringr::str_replace("^values", "value") |> pal::prose_ls(wrap = "\x60")`. Additionally, a column `value_order` is added holding the intended
+#' The columns `r val_cols <- qstnr_cols |> stringr::str_subset("^values"); val_cols |> pal::enum_str(wrap = "\x60")` will thereby become
+#' `r val_cols |> stringr::str_replace("^values", "value") |> pal::enum_str(wrap = "\x60")`. Additionally, a column `value_order` is added holding the intended
 #' value order as defined in the questionnaire.
 #'
 #' @param qstnr Semi-unnested questionnaire tibble as returned by [unnest_qstnr()].
@@ -961,7 +961,7 @@ gen_qmd_qstnr <- function(qstnr,
             ""[is_question_block],
             questions,
             ""[is_question_block_compact],
-            paste0("Es kann jeweils mit ", pal::prose_ls(unlist(d2$values[1L]), last_sep = " oder ", wrap = '"'),
+            paste0("Es kann jeweils mit ", pal::enum_str(unlist(d2$values[1L]), sep2 = " oder ", wrap = '"'),
                    " geantwortet werden.")[is_question_block_compact],
             ""[is_question_block],
             notice_mandatory[is_question_block && d2$is_mandatory[1L]],
