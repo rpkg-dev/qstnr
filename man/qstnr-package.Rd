@@ -23,12 +23,12 @@ Useful links:
 \itemize{
   \item \url{https://qstnr.rpkg.dev}
   \item \url{https://gitlab.com/rpkg.dev/qstnr}
-  \item Report bugs at \url{https://gitlab.com/rpkg.dev/qstnr/issues}
+  \item Report bugs at \url{https://gitlab.com/rpkg.dev/qstnr/-/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Salim Brüggemann \email{salim-b@pm.me} (\href{https://orcid.org/0000-0002-5329-5987}{ORCID})
+\strong{Maintainer}: Salim Brüggemann \email{salim@rpkg.dev} (\href{https://orcid.org/0000-0002-5329-5987}{ORCID})
 
 }
 \keyword{internal}
