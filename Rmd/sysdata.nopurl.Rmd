@@ -18,6 +18,23 @@ editor_options:
 
 # Define data
 
+## `funky_config`
+
+```{r}
+funky_config <-
+  funky::ptype_config |>
+  tibble::add_row(key = "global_max_cache_age",
+                  default_value = list("1 year"),
+                  description = pkgsnip::md_snip("opt_global_max_cache_age")) |>
+  tibble::add_row(key = "gcp_key",
+                  default_value = NULL,
+                  description = paste0("[Google Cloud Platform (GCP) Service Account ",
+                                       "Key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) file (in JSON format) to authorize the ",
+                                       "googledrive package to access and manage files on your Google Drive. See the [relevant googledrive ",
+                                       "documentation](https://gargle.r-lib.org/articles/non-interactive-auth.html#provide-a-service-account-token-directly) ",
+                                       "for details."))
+```
+
 ## `item_keys`
 
 Supported qstnr specification part keys.
@@ -58,25 +75,6 @@ notice <- list(mandatory = list(de = "Diese Frage muss zwingend beantwortet und 
                                        en = "More than one answer is possible for this question.",
                                        fr = "Il y a plus d'une réponse possible à cette question.",
                                        it = "Per questa domanda è possibile più di una risposta."))
-```
-
-## `pkg_config`
-
-```{r}
-pkg_config <-
-  tibble::tibble(key = character(),
-                 default_value = list(),
-                 description = character()) |>
-  tibble::add_row(key = "global_max_cache_age",
-                  default_value = list("1 year"),
-                  description = pkgsnip::md_snip("opt_global_max_cache_age")) |>
-  tibble::add_row(key = "gcp_key",
-                  default_value = NULL,
-                  description = paste0("[Google Cloud Platform (GCP) Service Account ",
-                                       "Key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) file (in JSON format) to authorize the ",
-                                       "googledrive package to access and manage files on your Google Drive. See the [relevant googledrive ",
-                                       "documentation](https://gargle.r-lib.org/articles/non-interactive-auth.html#provide-a-service-account-token-directly) ",
-                                       "for details."))
 ```
 
 ## `qstnr_cols`
@@ -145,9 +143,9 @@ Save all the small data objects as a single internal file `R/sysdata.rda`. Note 
 to package users.
 
 ```{r}
-usethis::use_data(item_keys,
+usethis::use_data(funky_config,
+                  item_keys,
                   notice,
-                  pkg_config,
                   qstnr_cols,
                   spec_parts,
                   survey_config_keys,

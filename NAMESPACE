@@ -2,12 +2,12 @@
 
 export(as_int_vals)
 export(common_val_scale)
+export(funky_config)
 export(gen_qstnr)
 export(gen_qstnr_docs)
 export(group_title)
 export(htmlize_qstnr)
 export(htmlize_survey_config)
-export(pkg_config)
 export(read_survey_config)
 export(unnest_qstnr)
 export(unnest_qstnr_vals)

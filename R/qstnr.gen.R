@@ -2,7 +2,7 @@
 # See `README.md#r-markdown-format` for more information on the literate programming approach used applying the R Markdown format.
 
 # qstnr: Helps Creating and Maintaining Survey Questionnaires
-# Copyright (C) 2024 Salim Brüggemann
+# Copyright (C) 2025 Salim Brüggemann
 # 
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free
 # Software Foundation, either version 3 of the License, or any later version.
@@ -45,7 +45,7 @@ utils::globalVariables(names = c(".",
   # clear pkgpins cache
   tryCatch(expr = pkgpins::clear_cache(board = pkgpins::board(pkg = pkgname,
                                                               pkg_versioned = FALSE),
-                                       max_age = pal::pkg_config_val(key = "global_max_cache_age",
+                                       max_age = funky::config_val(key = "global_max_cache_age",
                                                                      pkg = pkgname)),
            error = function(e) cli::cli_alert_warning(text = "Failed to clear pkgpins cache on load of {.pkg {pkgname}}. Error message: {e$message}"))
 }
@@ -845,7 +845,7 @@ gen_qstnr_docs <- function(qstnr,
     }
     
     # upload questionnaire DOCX files to Google Drive (and convert to Google Docs)
-    googledrive::drive_auth(path = pal::pkg_config_val(key = "gcp_key"))
+    googledrive::drive_auth(path = funky::config_val(key = "gcp_key"))
     
     fs::path(output_dir, glue::glue("qstnr.{langs}.docx")) |>
       purrr::walk(\(f) {
@@ -1006,7 +1006,7 @@ gen_qmd_qstnr <- function(qstnr,
 #' @family aux
 #' @export
 as_int_vals <- function(var,
-                        qstnr = pal::pkg_config_val(key = "cur_qstnr")) {
+                        qstnr = funky::config_val(key = "cur_qstnr")) {
   
   var_id <- attr(x = var,
                  which = "id",
@@ -1138,13 +1138,13 @@ vals <- function(id,
   
 }
 
-#' `r pkgsnip::title_lbl("pkg_config", pkg = "pkgpurl")`
+#' `r pkgsnip::title_lbl("funky_config", pkg = "pkgpurl")`
 #'
-#' `r pkgsnip::description_lbl("pkg_config", pkg = "pkgpurl")`
+#' `r pkgsnip::description_lbl("funky_config", pkg = "pkgpurl")`
 #'
-#' @format `r pkgsnip::return_lbl("tibble_cols", cols = colnames(pkg_config))`
+#' @format `r pkgsnip::return_lbl("tibble_cols", cols = colnames(funky_config))`
 #' @export
 #'
 #' @examples
-#' qstnr::pkg_config
-"pkg_config"
+#' qstnr::funky_config
+"funky_config"

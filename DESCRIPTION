@@ -18,6 +18,7 @@ Imports:
     commonmark (>= 1.9.0),
     dplyr (>= 1.0.9),
     fs (>= 1.6.1),
+    funky (>= 0.0.9000),
     glue (>= 1.6.2),
     googledrive (>= 2.1.0),
     httr (>= 1.4.4),
@@ -36,6 +37,7 @@ Suggests:
     testthat (>= 3.0.0),
     utils
 Remotes:
+    gitlab::rpkg.dev/funky,
     gitlab::rpkg.dev/pal,
     gitlab::rpkg.dev/pkgpins,
     gitlab::rpkg.dev/pkgsnip

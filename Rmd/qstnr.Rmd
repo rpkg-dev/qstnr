@@ -91,7 +91,7 @@ utils::globalVariables(names = c(".",
   # clear pkgpins cache
   tryCatch(expr = pkgpins::clear_cache(board = pkgpins::board(pkg = pkgname,
                                                               pkg_versioned = FALSE),
-                                       max_age = pal::pkg_config_val(key = "global_max_cache_age",
+                                       max_age = funky::config_val(key = "global_max_cache_age",
                                                                      pkg = pkgname)),
            error = function(e) cli::cli_alert_warning(text = "Failed to clear pkgpins cache on load of {.pkg {pkgname}}. Error message: {e$message}"))
 }
@@ -1044,7 +1044,7 @@ gen_qstnr_docs <- function(qstnr,
     }
     
     # upload questionnaire DOCX files to Google Drive (and convert to Google Docs)
-    googledrive::drive_auth(path = pal::pkg_config_val(key = "gcp_key"))
+    googledrive::drive_auth(path = funky::config_val(key = "gcp_key"))
     
     fs::path(output_dir, glue::glue("qstnr.{langs}.docx")) |>
       purrr::walk(\(f) {
@@ -1217,7 +1217,7 @@ TODO: Rethink and finish this.
 #' @family aux
 #' @export
 as_int_vals <- function(var,
-                        qstnr = pal::pkg_config_val(key = "cur_qstnr")) {
+                        qstnr = funky::config_val(key = "cur_qstnr")) {
   
   var_id <- attr(x = var,
                  which = "id",
@@ -1368,17 +1368,17 @@ vals <- function(id,
 
 ## Miscellaneous
 
-### `pkg_config`
+### `funky_config`
 
 ```{r}
-#' `r pkgsnip::title_lbl("pkg_config", pkg = "pkgpurl")`
+#' `r pkgsnip::title_lbl("funky_config", pkg = "pkgpurl")`
 #'
-#' `r pkgsnip::description_lbl("pkg_config", pkg = "pkgpurl")`
+#' `r pkgsnip::description_lbl("funky_config", pkg = "pkgpurl")`
 #'
-#' @format `r pkgsnip::return_lbl("tibble_cols", cols = colnames(pkg_config))`
+#' @format `r pkgsnip::return_lbl("tibble_cols", cols = colnames(funky_config))`
 #' @export
 #'
 #' @examples
-#' qstnr::pkg_config
-"pkg_config"
+#' qstnr::funky_config
+"funky_config"
 ```

@@ -24,4 +24,4 @@ reference:
   - group_title
   - val_set
 - title: Miscellaneous
-- contents: pkg_config
+- contents: funky_config
